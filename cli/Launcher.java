@@ -18,8 +18,11 @@ public class Launcher {
 			container.acceptNewAgent(names.get(0), new agents.PlayerAgent()).start();
 			container.acceptNewAgent(names.get(1), new agents.PlayerAgent()).start();
 			container.acceptNewAgent(names.get(2), new agents.PlayerAgent()).start();
-			
+
 			container.acceptNewAgent("Board", new agents.GameAgent()).start();
+
+			container.acceptNewAgent(names.get(3), new agents.PlayerAgent()).start();
+			container.acceptNewAgent(names.get(4), new agents.PlayerAgent()).start();
 		} catch (StaleProxyException e) {
 			e.printStackTrace();
 		}
