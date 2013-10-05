@@ -38,6 +38,14 @@ public class PlayerAgent extends Agent {
 		}
 	}
 
+	protected void takeDown() {
+		try {
+			DFService.deregister(this);
+		} catch(FIPAException e) {
+			e.printStackTrace();
+		}
+	}
+
 	
 	/**
 	 * Inner class FourStepBehaviour
