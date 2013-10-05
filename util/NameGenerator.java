@@ -1,0 +1,25 @@
+package util;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class NameGenerator {
+	// declares an array of integers
+	private static ArrayList<String> names = new ArrayList<String>(); 
+
+	private static void populate() {
+		names.add("João");
+		names.add("Maria");
+		names.add("Manuel");
+		names.add("António");
+		names.add("Idalina");
+		names.add("Zé");
+	}
+
+	public static ArrayList<String> randomName(int range) {
+		populate();
+		Collections.shuffle(names);
+		return (ArrayList<String>) names;
+	}
+
+}
