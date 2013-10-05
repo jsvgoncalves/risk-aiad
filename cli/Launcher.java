@@ -2,6 +2,7 @@ package cli;
 
 import java.util.ArrayList;
 
+import util.R;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.StaleProxyException;
@@ -11,7 +12,8 @@ public class Launcher {
 	public static void main(String[] args) {
 		jade.core.Runtime runtime = jade.core.Runtime.instance();
 		Profile profile = new ProfileImpl();
-		profile.setParameter("gui", "true");
+		profile.setParameter(R.GUI_CONFIG, R.GUI_ON);
+		profile.setParameter(R.PORT_CONFIG, R.PORT);
 		jade.wrapper.AgentContainer container = runtime.createMainContainer(profile);
 		try {
 			ArrayList<String> names = util.NameGenerator.randomName(3);
