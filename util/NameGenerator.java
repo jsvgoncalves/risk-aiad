@@ -8,12 +8,12 @@ public class NameGenerator {
 	private static ArrayList<String> names = new ArrayList<String>(); 
 
 	private static void populate() {
-		names.add("João");
+		names.add("Joao");
 		names.add("Maria");
 		names.add("Manuel");
-		names.add("António");
+		names.add("Antonio");
 		names.add("Idalina");
-		names.add("Zé");
+		names.add("Ze");
 	}
 
 	public static ArrayList<String> randomName(int range) {
