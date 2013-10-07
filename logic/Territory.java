@@ -4,19 +4,32 @@ import java.util.ArrayList;
 
 public class Territory {
 
-	String name;
-	ArrayList<Territory> adjacent;
+	String name, key;
+	ArrayList<Territory> adjacents = new ArrayList<Territory>();
 	
-	public Territory (String name) {
+	public Territory (String name, String key) {
 		this.name = name;
+		this.key = key;
 	}
 	
 	public boolean setAdjacent(Territory t) {
-		adjacent.add(t);
+		if(adjacents.contains(t)) {
+			return true;
+		}
+		adjacents.add(t);
+		t.setAdjacent(this);
 		return true;
 	}
 	
 	public ArrayList<Territory> getAdjacents() {
-		return adjacent;
+		return adjacents;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getKey() {
+		return key;
 	}
 }
