@@ -4,16 +4,13 @@ import java.util.HashMap;
 
 public class Board {
 	static HashMap<String, Territory> territories = new HashMap<String, Territory>();
-	private static Board instance;
+	private static Board instance = new Board();
 
 	/**
 	 * Singleton
 	 * @return
 	 */
 	public static Board getInstance() {
-		if(instance == null) {
-			instance = new Board();
-		}
 		return instance;
 	}
 	
