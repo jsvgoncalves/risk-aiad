@@ -3,7 +3,8 @@ package logic;
 import java.util.HashMap;
 
 public class Board {
-	static HashMap<String, Territory> territories = new HashMap<String, Territory>();
+	HashMap<String, Territory> territories = new HashMap<String, Territory>();
+
 	private static Board instance = new Board();
 
 	/**
@@ -39,5 +40,10 @@ public class Board {
 
 		IBE.setAdjacent(UKR);
 		
+	}
+	
+	@Override
+	public String toString() {
+		return territories.toString();
 	}
 }

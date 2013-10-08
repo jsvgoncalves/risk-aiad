@@ -14,8 +14,9 @@ public class PlayerAgent extends Agent {
 //	private MessageTemplate template = MessageTemplate.and(
 //			MessageTemplate.MatchPerformative(ACLMessage.QUERY_IF),
 //			MessageTemplate.MatchOntology("presence") );
-	private MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.QUERY_IF);
-
+	private MessageTemplate query_if_template = MessageTemplate.MatchPerformative(ACLMessage.QUERY_IF);
+	private MessageTemplate proposal_template = MessageTemplate.MatchPerformative(ACLMessage.PROPOSE);
+	private MessageTemplate inform_template = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 	/**
 	 * 
 	 */
@@ -62,26 +63,39 @@ public class PlayerAgent extends Agent {
 		public void action() {
 			
 			
-			ACLMessage msg = myAgent.receive(template);
-			if (msg != null) { // The message should match the template.
-				//System.out.println("Received QUERY_IF message from agent " + msg.getSender().getName());
-				ACLMessage reply = msg.createReply();
-				if ("alive".equals(msg.getContent())) {
+			ACLMessage query_if_msg = myAgent.receive(query_if_template);
+			ACLMessage proposal_msg = myAgent.receive(proposal_template);
+			ACLMessage inform_msg = myAgent.receive(inform_template);
+			
+			if (query_if_msg != null) { // The message should match the template.
+				ACLMessage reply = query_if_msg.createReply();
+				if ("alive".equals(query_if_msg.getContent())) {
 					reply.setPerformative(ACLMessage.INFORM);
 					reply.setContent("alive");
 					System.out.println(getLocalName() + ": I just said I'm alive.");
-				}
-				else if("play".equals(msg.getContent())) {
-					reply.setPerformative(ACLMessage.INFORM);
-					reply.setContent("I don't know how :(");
-					System.out.println(getLocalName() + ": they say I should play now.");
 				}
 				else {
 					reply.setPerformative(ACLMessage.NOT_UNDERSTOOD);
 					reply.setContent("malformed");
 				}
 				myAgent.send(reply);
-				
+			} else if(proposal_msg != null) {
+				ACLMessage reply = proposal_msg.createReply();
+				if("play".equals(proposal_msg.getContent())) {
+					reply.setPerformative(ACLMessage.INFORM);
+					reply.setContent("I don't know how :(");
+					System.out.println(getLocalName() + ": they say I should play now.");
+				}
+				myAgent.send(reply);
+			}
+			else if(inform_msg != null) {
+				ACLMessage reply = inform_msg.createReply();
+				if("play".equals(inform_msg.getContent())) {
+					reply.setPerformative(ACLMessage.INFORM);
+					reply.setContent("I don't know how :(");
+					System.out.println(getLocalName() + ": they say I should play now.");
+				}
+				myAgent.send(reply);
 			}
 			else {
 				block();

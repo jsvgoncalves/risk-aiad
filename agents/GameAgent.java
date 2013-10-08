@@ -2,6 +2,7 @@ package agents;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
 import util.R;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
@@ -12,6 +13,7 @@ import jade.domain.FIPAAgentManagement.SearchConstraints;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.proto.SubscriptionInitiator;
+import logic.Board;
 
 public class GameAgent extends Agent {
 	/**
@@ -24,6 +26,8 @@ public class GameAgent extends Agent {
 	int currentRound = 0;
 	int currentPlayer = 0;
 	int gameStatus = R.GAME_WAITING;
+	
+	Board b;
 
 	protected void setup() {
 		System.out.println("#############");
@@ -74,16 +78,8 @@ public class GameAgent extends Agent {
 		System.out.println("GAME STARTING");
 		System.out.println("#############");
 
+		b = Board.getInstance();
 		addBehaviour(new RoundsBehaviour(this, R.TICK_TIME));
-	}
-	
-	private void prettyPrintOrder() {
-//		System.out.println(players.get(0).getName().toString() + " gets to go first!");
-
-		for (DFAgentDescription player : players) {
-			System.out.println(player.getName().getLocalName() + "");
-		}
-
 	}
 
 	/**
@@ -95,12 +91,21 @@ public class GameAgent extends Agent {
 			currentPlayer = 0;
 		}
 
-		ACLMessage msg = new ACLMessage(ACLMessage.QUERY_IF);
+		ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
 		msg.addReceiver(players.get(currentPlayer).getName());
 		msg.setContent("play");
 		send(msg);
 
 		currentPlayer++;
+	}
+
+	private void prettyPrintOrder() {
+		//System.out.println(players.get(0).getName().toString() + " gets to go first!");
+
+		for (DFAgentDescription player : players) {
+			System.out.println(player.getName().getLocalName() + "");
+		}
+
 	}
 
 	/**
@@ -117,6 +122,9 @@ public class GameAgent extends Agent {
 			// TODO Auto-generated constructor stub
 		}
 
+		/**
+		 * Times out to change game turn.
+		 */
 		protected void onTick() {
 			// For each agent, send him a message to play and wait response or timeout.
 			System.out.println("Round " + currentRound++);
@@ -137,7 +145,6 @@ public class GameAgent extends Agent {
 
 		public SubscriptionBehaviour(Agent a, ACLMessage msg) {
 			super(a, msg);
-			// TODO Auto-generated constructor stub
 		}
 
 		protected void handleInform(ACLMessage inform) {
