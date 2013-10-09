@@ -26,7 +26,7 @@ public class GameAgent extends Agent {
 	int currentRound = 0;
 	int currentPlayer = 0;
 	int gameStatus = R.GAME_WAITING;
-	
+
 	Board b;
 
 	protected void setup() {
