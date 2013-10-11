@@ -7,6 +7,11 @@ public class Territory {
 	String name, key;
 	ArrayList<Territory> adjacents = new ArrayList<Territory>();
 	
+	int numSoldiers;
+	
+	// Redudant
+	private String player;
+	
 	public Territory (String name, String key) {
 		this.name = name;
 		this.key = key;
@@ -32,4 +37,5 @@ public class Territory {
 	public String getKey() {
 		return key;
 	}
+	
 }
