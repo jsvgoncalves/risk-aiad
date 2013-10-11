@@ -20,10 +20,10 @@ public class PlayRequestInitiator extends AchieveREInitiator {
 	/*
 	 * Use this static method to construct the msg in the constructor
 	 */
-	public static ACLMessage getRequestMessage(String to){
+	public static ACLMessage getRequestMessage(AID to){
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-		request.addReceiver(new AID(to,AID.ISLOCALNAME));
+		request.addReceiver(to);
 		
 		return request;
 	}

@@ -3,9 +3,11 @@ package agents;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import communication.PlayRequestInitiator;
+
 import util.R;
 import jade.core.Agent;
-import jade.core.behaviours.TickerBehaviour;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -79,7 +81,7 @@ public class GameAgent extends Agent {
 		System.out.println("#############");
 
 		b = Board.getInstance();
-		addBehaviour(new RoundsBehaviour(this, R.TICK_TIME));
+		addBehaviour(new RoundsBehaviour(this));
 	}
 
 	/**
@@ -96,6 +98,8 @@ public class GameAgent extends Agent {
 		msg.setContent("play");
 		send(msg);
 
+		addBehaviour(new PlayRequestInitiator(this, PlayRequestInitiator.getRequestMessage(players.get(currentPlayer).getName())));
+		
 		currentPlayer++;
 	}
 
@@ -111,24 +115,22 @@ public class GameAgent extends Agent {
 	/**
 	 * Inner class RoundsBehaviour
 	 */
-	private class RoundsBehaviour extends TickerBehaviour {
+	private class RoundsBehaviour extends CyclicBehaviour {
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 2897444297823568576L;
 
-		public RoundsBehaviour(Agent a, long period) {
-			super(a, period);
-			// TODO Auto-generated constructor stub
+		public RoundsBehaviour(Agent a) {
+			super(a);
 		}
 
-		/**
-		 * Times out to change game turn.
-		 */
-		protected void onTick() {
+		@Override
+		public void action() {
 			// For each agent, send him a message to play and wait response or timeout.
 			System.out.println("Round " + currentRound++);
 			gameTurn();
+			block();
 		}
 
 	}    // END of inner class RoundsBehaviour

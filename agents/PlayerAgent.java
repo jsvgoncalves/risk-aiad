@@ -1,22 +1,22 @@
 package agents;
 
+import communication.PlayRequestResponder;
+
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 
 
 public class PlayerAgent extends Agent {
 //	private MessageTemplate template = MessageTemplate.and(
 //			MessageTemplate.MatchPerformative(ACLMessage.QUERY_IF),
 //			MessageTemplate.MatchOntology("presence") );
-	private MessageTemplate query_if_template = MessageTemplate.MatchPerformative(ACLMessage.QUERY_IF);
-	private MessageTemplate proposal_template = MessageTemplate.MatchPerformative(ACLMessage.PROPOSE);
-	private MessageTemplate inform_template = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+//	private MessageTemplate query_if_template = MessageTemplate.MatchPerformative(ACLMessage.QUERY_IF);
+//	private MessageTemplate proposal_template = MessageTemplate.MatchPerformative(ACLMessage.PROPOSE);
+//	private MessageTemplate inform_template = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 	/**
 	 * 
 	 */
@@ -63,7 +63,9 @@ public class PlayerAgent extends Agent {
 		public void action() {
 			
 			
-			ACLMessage query_if_msg = myAgent.receive(query_if_template);
+			addBehaviour(new PlayRequestResponder(myAgent, PlayRequestResponder.getMessageTemplate()));
+			
+			/*ACLMessage query_if_msg = myAgent.receive(query_if_template);
 			ACLMessage proposal_msg = myAgent.receive(proposal_template);
 			ACLMessage inform_msg = myAgent.receive(inform_template);
 			
@@ -99,7 +101,7 @@ public class PlayerAgent extends Agent {
 			}
 			else {
 				block();
-			}
+			}*/
 			
 		} 
 
