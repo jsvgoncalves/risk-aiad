@@ -148,7 +148,7 @@ public class GameAgent extends Agent {
 		}
 
 		protected void handleInform(ACLMessage inform) {
-
+			
 			try {
 				DFAgentDescription[] results = DFService.decodeNotification(inform.getContent());
 				if (results.length > 0) {
