@@ -27,7 +27,7 @@ public class PlayRequestResponder extends AchieveREResponder {
 		System.out.println("I don't know how to play");
 		//TODO Make play
 		play.setContent("I don't know how to play");
-		
+	
 		return play;
 	}
 
