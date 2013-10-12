@@ -68,6 +68,18 @@ public class Board {
 		Territory AS_CHU = new Territory("Chukotka", "AS_CHU");
 		Territory AS_JAP = new Territory("Japan", "AS_JAP");
 		
+		//OCEANIA
+		Territory OC_BOR = new Territory("Borneo", "OC_BOR");
+		Territory OC_EAS = new Territory("East Indies", "OC_EAS");
+		Territory OC_OUT = new Territory("Outback", "OC_OUT");
+		Territory OC_AUS = new Territory("Eastern Australia", "OC_AUS");
+		Territory OC_NEW = new Territory("New Zealand", "OC_NEW");
+		
+		//ANTARCTICA
+		Territory AN_WIL = new Territory("Wilkes Land", "AN_WIL");
+		Territory AN_QUE = new Territory("Queen Maud Land", "AN_QUE");	
+		Territory AN_MAR = new Territory("Marie Byrd Land", "AN_MAR");
+		
 		/*
 		 * Add
 		 */
@@ -98,6 +110,17 @@ public class Board {
 		territories.put(AS_CHU.getKey(), AS_CHU);
 		territories.put(AS_JAP.getKey(), AS_JAP);
 		
+		//Oceania
+		territories.put(OC_BOR.getKey(), OC_BOR);
+		territories.put(OC_EAS.getKey(), OC_EAS);
+		territories.put(OC_OUT.getKey(), OC_OUT);
+		territories.put(OC_AUS.getKey(), OC_AUS);
+		territories.put(OC_NEW.getKey(), OC_NEW);
+		
+		//Antarctica
+		territories.put(AN_WIL.getKey(), AN_WIL);
+		territories.put(AN_QUE.getKey(), AN_QUE);
+		territories.put(AN_MAR.getKey(), AN_MAR);
 		
 		/*
 		 * Borders
@@ -141,6 +164,19 @@ public class Board {
 		AS_CHI.setAdjacent(AS_JAP);
 		AS_JAP.setAdjacent(AS_MAC);
 		AS_JAP.setAdjacent(AS_CHU);
+		
+		//Oceania
+		OC_BOR.setAdjacent(AS_INO);
+		OC_BOR.setAdjacent(OC_EAS);
+		OC_BOR.setAdjacent(OC_OUT);
+		OC_EAS.setAdjacent(OC_NEW);
+		OC_OUT.setAdjacent(OC_AUS);
+		OC_AUS.setAdjacent(OC_NEW);
+		
+		//Antarctica
+		AN_WIL.setAdjacent(AN_QUE);
+		AN_WIL.setAdjacent(OC_AUS);
+		AN_QUE.setAdjacent(AN_MAR);
 	}
 
 	@Override

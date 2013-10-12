@@ -35,7 +35,6 @@ public class GameAgent extends Agent {
 		System.out.println("#############");
 		System.out.println("WAITING FOR PLAYERS");
 		System.out.println("#############");
-		//waitForPlayers();
 		subscribeDF();
 
 	}
