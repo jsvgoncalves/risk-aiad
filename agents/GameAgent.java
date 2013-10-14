@@ -8,6 +8,7 @@ import communication.PlayRequestInitiator;
 import util.R;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.FSMBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -22,6 +23,8 @@ public class GameAgent extends Agent {
 	 * 
 	 */
 	private static final long serialVersionUID = -8137655407030225340L;
+	
+	private static final String WAITING_STATE = "Waiting for players";
 
 	ArrayList<DFAgentDescription> players = new ArrayList<DFAgentDescription>();
 
@@ -32,14 +35,28 @@ public class GameAgent extends Agent {
 	Board b;
 
 	protected void setup() {
-		System.out.println("#############");
-		System.out.println("WAITING FOR PLAYERS");
-		System.out.println("#############");
-		subscribeDF();
+		
+		printHeadMessage("WAITING FOR PLAYERS");
+		
+		GameAgentBehaviour fsmBehaviour = new GameAgentBehaviour(this);
+		
+		fsmBehaviour.registerFirstState(getSubscriptionBehaviour(), WAITING_STATE);
+		fsmBehaviour.registerState(new RoundsBehaviour(this), "ROUND");
+		
+		//fsmBehaviour.registerDefaultTransition(WAITING_STATE, "ROUND");
+		
+		
+		addBehaviour(fsmBehaviour);
 
 	}
 
-	private void subscribeDF() {
+	private void printHeadMessage(String message) {
+		System.out.println("#############");
+		System.out.println(message);
+		System.out.println("#############");
+	}
+
+	private SubscriptionBehaviour getSubscriptionBehaviour() {
 		// Build the description used as template for the subscription
 		DFAgentDescription template = new DFAgentDescription();
 		ServiceDescription templateSd = new ServiceDescription();
@@ -50,7 +67,7 @@ public class GameAgent extends Agent {
 		// We want to receive 10 results at most
 		//sc.setMaxResults(new Long(10));
 
-		addBehaviour(new SubscriptionBehaviour(this, DFService.createSubscriptionMessage(this, getDefaultDF(), template, sc)));
+		return new SubscriptionBehaviour(this, DFService.createSubscriptionMessage(this, getDefaultDF(), template, sc));
 
 	}
 
@@ -67,17 +84,13 @@ public class GameAgent extends Agent {
 		}
 		gameStatus = R.GAME_LAUNCHING;
 		// Shuffles the players to generate random playing order
-		System.out.println("#############");
-		System.out.println("SHUFFLING PLAYERS");
-		System.out.println("#############");
+		printHeadMessage("SHUFFLING PLAYERS");
 
 		Collections.shuffle(players);
 
 		prettyPrintOrder();
 
-		System.out.println("#############");
-		System.out.println("GAME STARTING");
-		System.out.println("#############");
+		printHeadMessage("GAME STARTING");
 
 		b = Board.getInstance();
 		addBehaviour(new RoundsBehaviour(this));
@@ -109,6 +122,19 @@ public class GameAgent extends Agent {
 			System.out.println(player.getName().getLocalName() + "");
 		}
 
+	}
+	
+	private class GameAgentBehaviour extends FSMBehaviour{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -6646543101529043020L;
+
+		public GameAgentBehaviour(GameAgent gameAgent) {
+			super(gameAgent);
+		}
+		
 	}
 
 	/**
