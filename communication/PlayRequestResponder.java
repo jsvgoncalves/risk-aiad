@@ -24,9 +24,9 @@ public class PlayRequestResponder extends AchieveREResponder {
 	protected ACLMessage handleRequest(ACLMessage request){
 		ACLMessage play = request.createReply();
 		play.setPerformative(ACLMessage.INFORM);
-		System.out.println("I don't know how to play");
+		System.out.println("I don't know how to play!");
 		//TODO Make play
-		play.setContent("I don't know how to play");
+		play.setContent("I don't know how to play!");
 	
 		return play;
 	}

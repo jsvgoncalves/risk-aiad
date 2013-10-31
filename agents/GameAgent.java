@@ -6,6 +6,7 @@ import java.util.Collections;
 import communication.PlayRequestInitiator;
 
 import util.R;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.FSMBehaviour;
@@ -19,14 +20,16 @@ import jade.proto.SubscriptionInitiator;
 import logic.Board;
 
 public class GameAgent extends Agent {
+	private static final String ROUND = "ROUND";
+	private static final String WAITING_STATE = "Waiting for players";
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8137655407030225340L;
 	
-	private static final String WAITING_STATE = "Waiting for players";
 
-	ArrayList<DFAgentDescription> players = new ArrayList<DFAgentDescription>();
+	ArrayList<AID> players = new ArrayList<AID>();
 
 	int currentRound = 0;
 	int currentPlayer = 0;
@@ -41,9 +44,9 @@ public class GameAgent extends Agent {
 		GameAgentBehaviour fsmBehaviour = new GameAgentBehaviour(this);
 		
 		fsmBehaviour.registerFirstState(getSubscriptionBehaviour(), WAITING_STATE);
-		fsmBehaviour.registerState(new RoundsBehaviour(this), "ROUND");
+		fsmBehaviour.registerState(new RoundsBehaviour(this), ROUND);
 		
-		//fsmBehaviour.registerDefaultTransition(WAITING_STATE, "ROUND");
+		fsmBehaviour.registerTransition(WAITING_STATE, ROUND,1);
 		
 		
 		addBehaviour(fsmBehaviour);
@@ -105,12 +108,12 @@ public class GameAgent extends Agent {
 			currentPlayer = 0;
 		}
 
-		ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
+		/*ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
 		msg.addReceiver(players.get(currentPlayer).getName());
 		msg.setContent("play");
-		send(msg);
+		send(msg);*/
 
-		addBehaviour(new PlayRequestInitiator(this, PlayRequestInitiator.getRequestMessage(players.get(currentPlayer).getName())));
+		addBehaviour(new PlayRequestInitiator(this, PlayRequestInitiator.getRequestMessage(players.get(currentPlayer))));
 		
 		currentPlayer++;
 	}
@@ -118,8 +121,8 @@ public class GameAgent extends Agent {
 	private void prettyPrintOrder() {
 		//System.out.println(players.get(0).getName().toString() + " gets to go first!");
 
-		for (DFAgentDescription player : players) {
-			System.out.println(player.getName().getLocalName() + "");
+		for (AID player : players) {
+			System.out.println(player.getLocalName() + "");
 		}
 
 	}
@@ -180,7 +183,7 @@ public class GameAgent extends Agent {
 				DFAgentDescription[] results = DFService.decodeNotification(inform.getContent());
 				if (results.length > 0) {
 					for (int i = 0; i < results.length; ++i) {
-						players.add(results[i]);
+						players.add(results[i].getName());
 					}
 				}
 				// Notifies the game that new players are ready.
@@ -189,6 +192,10 @@ public class GameAgent extends Agent {
 			catch (FIPAException fe) {
 				fe.printStackTrace();
 			}
+		}
+		
+		public int onEnd(){
+			return 1;
 		}
 
 	} // END of inner class SubscriptionBehaviour
