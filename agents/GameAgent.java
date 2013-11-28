@@ -3,7 +3,7 @@ package agents;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import communication.PlayRequestInitiator;
+import communication.RequestInitiator;
 import communication.RequestResponder;
 
 import util.R;
@@ -15,10 +15,7 @@ import jade.core.behaviours.SimpleBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.SearchConstraints;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
-import jade.lang.acl.ACLMessage;
-import jade.proto.SubscriptionInitiator;
 import logic.Board;
 
 public class GameAgent extends Agent {
@@ -74,23 +71,6 @@ public class GameAgent extends Agent {
 		System.out.println("#############");
 	}
 	
-	
-
-	private SubscriptionBehaviour getSubscriptionBehaviour() {
-		// Build the description used as template for the subscription
-		DFAgentDescription template = new DFAgentDescription();
-		ServiceDescription templateSd = new ServiceDescription();
-		templateSd.setType("player");
-		template.addServices(templateSd);
-
-		SearchConstraints sc = new SearchConstraints();
-		// We want to receive 10 results at most
-		//sc.setMaxResults(new Long(10));
-
-		return new SubscriptionBehaviour(this, DFService.createSubscriptionMessage(this, getDefaultDF(), template, sc));
-
-	}
-
 	protected void receivedPlayers() {
 		// If there are the minimum players, start the game
 		if(players.size() >= R.MIN_PLAYERS) {
@@ -125,7 +105,7 @@ public class GameAgent extends Agent {
 			currentPlayer = 0;
 		}
 
-		addBehaviour(new PlayRequestInitiator(this, PlayRequestInitiator.getRequestMessage(players.get(currentPlayer))));
+		addBehaviour(new RequestInitiator(this, RequestInitiator.getPlayMessage(players.get(currentPlayer))));
 		
 		currentPlayer++;
 	}
@@ -193,7 +173,7 @@ public class GameAgent extends Agent {
 
 		@Override
 		public void action() {
-			addBehaviour(new RequestResponder(myAgent,RequestResponder.getWaitingMessage(),players));
+			addBehaviour(new RequestResponder(myAgent,RequestResponder.getMessageTemplate(),players,max));
 		}
 
 		@Override
@@ -207,41 +187,4 @@ public class GameAgent extends Agent {
 		}
 		
 	}
-	
-	/**
-	 * Inner class SubscriptionBehaviour
-	 */
-	private class SubscriptionBehaviour extends SubscriptionInitiator {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = -214667283251111849L;
-
-		public SubscriptionBehaviour(Agent a, ACLMessage msg) {
-			super(a, msg);
-		}
-
-		protected void handleInform(ACLMessage inform) {
-			
-			try {
-				DFAgentDescription[] results = DFService.decodeNotification(inform.getContent());
-				if (results.length > 0) {
-					for (int i = 0; i < results.length; ++i) {
-						players.add(results[i].getName());
-					}
-				}
-				// Notifies the game that new players are ready.
-				receivedPlayers();
-			}
-			catch (FIPAException fe) {
-				fe.printStackTrace();
-			}
-		}
-		
-		public int onEnd(){
-			return 1;
-		}
-
-	} // END of inner class SubscriptionBehaviour
 }

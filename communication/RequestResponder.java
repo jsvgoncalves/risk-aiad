@@ -17,45 +17,54 @@ public class RequestResponder extends AchieveREResponder {
 	 * 
 	 */
 	private static final long serialVersionUID = -7663285688046592434L;
-	
-	private ArrayList<AID> p;
 
-	public RequestResponder(Agent a, MessageTemplate mt, ArrayList<AID> players) {
+	private ArrayList<AID> p;
+	private int maxPlayers;
+
+	public RequestResponder(Agent a, MessageTemplate mt,
+			ArrayList<AID> players, int max) {
 		super(a, mt);
 		p = players;
+		maxPlayers = max;
 	}
-	
-	public static MessageTemplate getWaitingMessage(){
-		return AchieveREResponder.createMessageTemplate(FIPANames.InteractionProtocol.FIPA_REQUEST);
+
+	public static MessageTemplate getMessageTemplate() {
+		return AchieveREResponder
+				.createMessageTemplate(FIPANames.InteractionProtocol.FIPA_REQUEST);
 	}
-	
-	protected ACLMessage handleRequest(ACLMessage request){
-		
+
+	protected ACLMessage handleRequest(ACLMessage request) {
+
 		String content = request.getContent();
-		
-		switch(content){
-			case R.SUBSCRIPTION:
-				return handleSubscriptionRequest(request);
+
+		switch (content) {
+		case R.SUBSCRIPTION:
+			return handleSubscriptionRequest(request);
 		}
-		
+
 		ACLMessage error = request.createReply();
 		error.setPerformative(ACLMessage.FAILURE);
 		error.setContent("Content not valid!");
-		
+
 		return error;
 	}
 
 	private ACLMessage handleSubscriptionRequest(ACLMessage request) {
-		
-		ACLMessage join = request.createReply();
-		join.setPerformative(ACLMessage.INFORM);
-		System.out.println("Joined");
 
-		join.setContent("join");
-		
+		ACLMessage join = request.createReply();
+		if (p.size() < maxPlayers) {
+			join.setPerformative(ACLMessage.INFORM);
+			System.out.println("Joined");
+		}
+		else{
+			join.setPerformative(ACLMessage.FAILURE);
+			System.out.println("Refused");
+		}
+		join.setContent(R.JOIN);
+
 		AID sender = request.getSender();
 		p.add(sender);
-	
+
 		return join;
 	}
 

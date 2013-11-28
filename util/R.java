@@ -22,4 +22,6 @@ public class R {
 	
 	public final static String GAME_AGENT = "Game Agent";
 	public final static String PLAYER_AGENT = "Player Agent";
+	public static final String JOIN = "Join";
+	public static final String PLAY = "Play";
 }

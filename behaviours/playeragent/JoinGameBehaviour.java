@@ -18,20 +18,32 @@ public class JoinGameBehaviour extends SimpleBehaviour {
 	 * 
 	 */
 	private static final long serialVersionUID = 5782880757461631230L;
+	
+	private boolean j;
+	private int i;
 
 	public JoinGameBehaviour(Agent agent) {
 		super(agent);
+		j = false;
+		i=0;
 	}
 
 	@Override
 	public void action() {
 		AID[] gameAgents = getGameAgents();
 		
+		if( i >= gameAgents.length)
+		{
+			j=true;
+			System.out.println("No available games");
+			return;
+		}
 		System.out.println(gameAgents.length);
 		
 		myAgent.addBehaviour(new RequestInitiator(myAgent,
-				RequestInitiator.getJoinMessage(gameAgents[0])));
-
+				RequestInitiator.getJoinMessage(gameAgents[i])));
+		
+		i++;
 	}
 
 	private AID[] getGameAgents() {
@@ -42,8 +54,6 @@ public class JoinGameBehaviour extends SimpleBehaviour {
 		template.addServices(templateSd);
 
 		SearchConstraints sc = new SearchConstraints();
-		// We want to receive 10 results at most
-		// sc.setMaxResults(new Long(10));
 
 		try {
 			DFAgentDescription[] results = DFService.search(myAgent, template,
@@ -61,10 +71,14 @@ public class JoinGameBehaviour extends SimpleBehaviour {
 		
 		return null;
 	}
+	
+	public void joined(){
+		j = true;
+	}
 
 	@Override
 	public boolean done() {
-		return true;
+		return j;
 	}
 
 	@Override

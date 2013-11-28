@@ -14,6 +14,7 @@ public class NameGenerator {
 		names.add("Antonio");
 		names.add("Idalina");
 		names.add("Ze");
+		names.add("Pedro");
 	}
 
 	public static ArrayList<String> randomName(int range) {
