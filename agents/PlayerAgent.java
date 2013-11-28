@@ -6,7 +6,6 @@ import behaviours.playeragent.SensorBehaviour;
 import communication.PlayRequestResponder;
 
 import jade.core.Agent;
-import jade.core.behaviours.FSMBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -18,10 +17,13 @@ public class PlayerAgent extends Agent {
 	 * 
 	 */
 	private static final long serialVersionUID = -5347118089332895954L;
-
-	private static final String SENSOR = "Sensor"; 
 	
 	private PlayRequestResponder responder;
+	private PlayerAgentBehaviours a;
+	
+	public PlayerAgent(PlayerAgentBehaviours a){
+		this.a = a;
+	}
 	
 	protected void setup() {
 		
@@ -40,18 +42,12 @@ public class PlayerAgent extends Agent {
 		
 		System.out.println(getLocalName() + " reporting in.");
 		
-		
-		
-		PlayerAgentBehaviour behaviour = new PlayerAgentBehaviour(this);
-		SensorBehaviour sensor = new SensorBehaviour();
-		responder = new PlayRequestResponder(this, PlayRequestResponder.getMessageTemplate(), sensor);
-		
-		behaviour.registerFirstState(new JoinGameBehaviour(this), R.JOIN);
-		behaviour.registerState(sensor, SENSOR);
-		behaviour.registerTransition(R.JOIN, SENSOR,1);
-		
+		responder = new PlayRequestResponder(this, PlayRequestResponder.getMessageTemplate());
+		SensorBehaviour sensor = new SensorBehaviour(a);
+		responder.setSensor(sensor);
 		addBehaviour(responder);
-		addBehaviour(behaviour);
+		addBehaviour(new JoinGameBehaviour(this));
+		addBehaviour(sensor);
 	}
 
 	protected void takeDown() {
@@ -60,21 +56,5 @@ public class PlayerAgent extends Agent {
 		} catch(FIPAException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	/**
-	 * Inner class PlayerAgentBehaviour
-	 */
-	private class PlayerAgentBehaviour extends FSMBehaviour{
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 591976149860561195L;
-		
-		public PlayerAgentBehaviour(Agent agent){
-			super(agent);
-		}
-		
 	}
 }

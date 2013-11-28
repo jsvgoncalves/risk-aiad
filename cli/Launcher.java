@@ -2,6 +2,8 @@ package cli;
 
 import java.util.ArrayList;
 
+import agents.RandomAgent;
+
 import util.R;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -18,20 +20,20 @@ public class Launcher {
 				.createMainContainer(profile);
 		try {
 			ArrayList<String> names = util.NameGenerator.randomName(3);
-			container.acceptNewAgent(names.get(0), new agents.PlayerAgent())
+			container.acceptNewAgent(names.get(0), new agents.PlayerAgent(new RandomAgent()))
 					.start();
-			container.acceptNewAgent(names.get(1), new agents.PlayerAgent())
+			container.acceptNewAgent(names.get(1), new agents.PlayerAgent(new RandomAgent()))
 					.start();
-			container.acceptNewAgent(names.get(2), new agents.PlayerAgent())
+			container.acceptNewAgent(names.get(2), new agents.PlayerAgent(new RandomAgent()))
 					.start();
 
 			container.acceptNewAgent("Board", new agents.GameAgent()).start();
 
-			container.acceptNewAgent(names.get(3), new agents.PlayerAgent())
+			container.acceptNewAgent(names.get(3), new agents.PlayerAgent(new RandomAgent()))
 					.start();
-			container.acceptNewAgent(names.get(4), new agents.PlayerAgent())
+			container.acceptNewAgent(names.get(4), new agents.PlayerAgent(new RandomAgent()))
 					.start();
-			container.acceptNewAgent(names.get(5), new agents.PlayerAgent())
+			container.acceptNewAgent(names.get(5), new agents.PlayerAgent(new RandomAgent()))
 					.start();
 
 		} catch (StaleProxyException e) {

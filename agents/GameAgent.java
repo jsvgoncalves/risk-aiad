@@ -3,6 +3,10 @@ package agents;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import behaviours.gameagent.AtackBehaviour;
+import behaviours.gameagent.GameFortify;
+import behaviours.gameagent.PositionSoldiers;
+
 import communication.RequestInitiator;
 import communication.RequestResponder;
 
@@ -26,7 +30,6 @@ public class GameAgent extends Agent {
 	 * 
 	 */
 	private static final long serialVersionUID = -8137655407030225340L;
-	
 
 	ArrayList<AID> players = new ArrayList<AID>();
 
@@ -37,7 +40,7 @@ public class GameAgent extends Agent {
 	Board b;
 
 	protected void setup() {
-		
+
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
@@ -46,21 +49,20 @@ public class GameAgent extends Agent {
 		dfd.addServices(sd);
 		try {
 			DFService.register(this, dfd);
-		} catch(FIPAException e) {
+		} catch (FIPAException e) {
 			e.printStackTrace();
 		}
-		
-		
+
 		printHeadMessage("WAITING FOR PLAYERS");
-		
+
 		GameAgentBehaviour fsmBehaviour = new GameAgentBehaviour(this);
-		
-		fsmBehaviour.registerFirstState(new WaitingForPlayers(5), WAITING_STATE);
+
+		fsmBehaviour
+				.registerFirstState(new WaitingForPlayers(5), WAITING_STATE);
 		fsmBehaviour.registerState(new RoundsBehaviour(this), ROUND);
-		
-		fsmBehaviour.registerTransition(WAITING_STATE, ROUND,1);
-		
-		
+
+		fsmBehaviour.registerTransition(WAITING_STATE, ROUND, 1);
+
 		addBehaviour(fsmBehaviour);
 
 	}
@@ -70,16 +72,16 @@ public class GameAgent extends Agent {
 		System.out.println(message);
 		System.out.println("#############");
 	}
-	
+
 	protected void receivedPlayers() {
 		// If there are the minimum players, start the game
-		if(players.size() >= R.MIN_PLAYERS) {
+		if (players.size() >= R.MIN_PLAYERS) {
 			startGame();
 		}
 	}
 
 	protected void startGame() {
-		if(gameStatus != R.GAME_WAITING) {
+		if (gameStatus != R.GAME_WAITING) {
 			return;
 		}
 		gameStatus = R.GAME_LAUNCHING;
@@ -101,25 +103,28 @@ public class GameAgent extends Agent {
 	 */
 	protected void gameTurn() {
 
-		if(currentPlayer > players.size() - 1) {
+		if (currentPlayer > players.size() - 1) {
 			currentPlayer = 0;
 		}
 
-		addBehaviour(new RequestInitiator(this, RequestInitiator.getPlayMessage(players.get(currentPlayer))));
-		
+		addBehaviour(new PositionSoldiers(this, players.get(currentPlayer), 1));
+		addBehaviour(new AtackBehaviour(this,players.get(currentPlayer)));
+		addBehaviour(new GameFortify(this, players.get(currentPlayer)));
+
 		currentPlayer++;
 	}
 
 	private void prettyPrintOrder() {
-		//System.out.println(players.get(0).getName().toString() + " gets to go first!");
+		// System.out.println(players.get(0).getName().toString() +
+		// " gets to go first!");
 
 		for (AID player : players) {
 			System.out.println(player.getLocalName() + "");
 		}
 
 	}
-	
-	private class GameAgentBehaviour extends FSMBehaviour{
+
+	private class GameAgentBehaviour extends FSMBehaviour {
 
 		/**
 		 * 
@@ -129,7 +134,7 @@ public class GameAgent extends Agent {
 		public GameAgentBehaviour(GameAgent gameAgent) {
 			super(gameAgent);
 		}
-		
+
 	}
 
 	/**
@@ -147,44 +152,45 @@ public class GameAgent extends Agent {
 
 		@Override
 		public void action() {
-			// For each agent, send him a message to play and wait response or timeout.
+			// For each agent, send him a message to play and wait response or
+			// timeout.
 			System.out.println("Round " + currentRound++);
 			gameTurn();
 			block();
 		}
 
-	}    // END of inner class RoundsBehaviour
+	} // END of inner class RoundsBehaviour
 
-	
 	/**
 	 * Inner class WaitingForPlayers
 	 */
-	private class WaitingForPlayers extends SimpleBehaviour{
-		
+	private class WaitingForPlayers extends SimpleBehaviour {
+
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 6448494715301721314L;
 		private int max;
-		
-		public WaitingForPlayers(int maxPlayers){
-			this.max=maxPlayers;
+
+		public WaitingForPlayers(int maxPlayers) {
+			this.max = maxPlayers;
 		}
 
 		@Override
 		public void action() {
-			addBehaviour(new RequestResponder(myAgent,RequestResponder.getMessageTemplate(),players,max));
+			addBehaviour(new RequestResponder(myAgent,
+					RequestResponder.getMessageTemplate(), players, max));
 		}
 
 		@Override
 		public boolean done() {
 			return players.size() >= max;
 		}
-		
+
 		@Override
-		public int onEnd(){
+		public int onEnd() {
 			return 1;
 		}
-		
+
 	}
 }
