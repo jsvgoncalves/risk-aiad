@@ -16,4 +16,10 @@ public class R {
 	public final static String GUI_CONFIG = "gui";
 	public final static String GUI_ON = "true";
 	public final static String GUI_OFF = "false";
+	
+	//Content of messages
+	public static final String SUBSCRIPTION = "subscription";
+	
+	public final static String GAME_AGENT = "Game Agent";
+	public final static String PLAYER_AGENT = "Player Agent";
 }

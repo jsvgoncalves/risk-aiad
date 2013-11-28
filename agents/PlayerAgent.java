@@ -1,9 +1,12 @@
 package agents;
 
+import util.R;
+import behaviours.playeragent.JoinGameBehaviour;
 import communication.PlayRequestResponder;
 
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.FSMBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -21,22 +24,32 @@ public class PlayerAgent extends Agent {
 	 * 
 	 */
 	private static final long serialVersionUID = -5347118089332895954L; 
+	private static final String JOIN = "Join game";
 	
 	protected void setup() {
-		System.out.println(getLocalName() + " reporting in.");
-		addBehaviour(new PlayBehaviour());
 		
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
 		sd.setName(getName());
-		sd.setType("player");
+		sd.setType(R.PLAYER_AGENT);
 		dfd.addServices(sd);
 		try {
 			DFService.register(this, dfd);
 		} catch(FIPAException e) {
 			e.printStackTrace();
 		}
+		
+		
+		System.out.println(getLocalName() + " reporting in.");
+		
+		//PlayerAgentBehaviour behaviour = new PlayerAgentBehaviour(this);
+		
+		//behaviour.registerFirstState(new JoinGameBehaviour(this), JOIN);
+		
+		
+		//addBehaviour(behaviour);
+		addBehaviour(new JoinGameBehaviour(this));
 	}
 
 	protected void takeDown() {
@@ -45,6 +58,22 @@ public class PlayerAgent extends Agent {
 		} catch(FIPAException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Inner class PlayerAgentBehaviour
+	 */
+	private class PlayerAgentBehaviour extends FSMBehaviour{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 591976149860561195L;
+		
+		public PlayerAgentBehaviour(Agent agent){
+			super(agent);
+		}
+		
 	}
 
 	

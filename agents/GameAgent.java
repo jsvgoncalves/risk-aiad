@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import communication.PlayRequestInitiator;
+import communication.RequestResponder;
 
 import util.R;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.FSMBehaviour;
+import jade.core.behaviours.SimpleBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -39,11 +41,24 @@ public class GameAgent extends Agent {
 
 	protected void setup() {
 		
+		DFAgentDescription dfd = new DFAgentDescription();
+		dfd.setName(getAID());
+		ServiceDescription sd = new ServiceDescription();
+		sd.setName(getName());
+		sd.setType(R.GAME_AGENT);
+		dfd.addServices(sd);
+		try {
+			DFService.register(this, dfd);
+		} catch(FIPAException e) {
+			e.printStackTrace();
+		}
+		
+		
 		printHeadMessage("WAITING FOR PLAYERS");
 		
 		GameAgentBehaviour fsmBehaviour = new GameAgentBehaviour(this);
 		
-		fsmBehaviour.registerFirstState(getSubscriptionBehaviour(), WAITING_STATE);
+		fsmBehaviour.registerFirstState(new WaitingForPlayers(5), WAITING_STATE);
 		fsmBehaviour.registerState(new RoundsBehaviour(this), ROUND);
 		
 		fsmBehaviour.registerTransition(WAITING_STATE, ROUND,1);
@@ -58,6 +73,8 @@ public class GameAgent extends Agent {
 		System.out.println(message);
 		System.out.println("#############");
 	}
+	
+	
 
 	private SubscriptionBehaviour getSubscriptionBehaviour() {
 		// Build the description used as template for the subscription
@@ -107,11 +124,6 @@ public class GameAgent extends Agent {
 		if(currentPlayer > players.size() - 1) {
 			currentPlayer = 0;
 		}
-
-		/*ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
-		msg.addReceiver(players.get(currentPlayer).getName());
-		msg.setContent("play");
-		send(msg);*/
 
 		addBehaviour(new PlayRequestInitiator(this, PlayRequestInitiator.getRequestMessage(players.get(currentPlayer))));
 		
@@ -163,6 +175,39 @@ public class GameAgent extends Agent {
 
 	}    // END of inner class RoundsBehaviour
 
+	
+	/**
+	 * Inner class WaitingForPlayers
+	 */
+	private class WaitingForPlayers extends SimpleBehaviour{
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 6448494715301721314L;
+		private int max;
+		
+		public WaitingForPlayers(int maxPlayers){
+			this.max=maxPlayers;
+		}
+
+		@Override
+		public void action() {
+			addBehaviour(new RequestResponder(myAgent,RequestResponder.getWaitingMessage(),players));
+		}
+
+		@Override
+		public boolean done() {
+			return players.size() >= max;
+		}
+		
+		@Override
+		public int onEnd(){
+			return 1;
+		}
+		
+	}
+	
 	/**
 	 * Inner class SubscriptionBehaviour
 	 */

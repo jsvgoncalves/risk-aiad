@@ -1,0 +1,14 @@
+* [33m11e5ef3[m[33m ([1;36mHEAD[m[33m, [1;32mtemp[m[33m)[m Added europe and asia
+* [33m4e16443[m[33m ([1;31morigin/logic[m[33m)[m Added territory allocations to board.
+* [33mb4d1e54[m[33m ([1;31morigin/master[m[33m, [1;31morigin/HEAD[m[33m, [1;32mmaster[m[33m)[m Added board to gameAgent. Changed communication.
+* [33mc907cac[m Changed Board singleton to eager initialization.
+* [33m1734380[m Implemented Board and Territory graph.
+* [33m07738d0[m Added configuration constants. Organized imports.
+* [33m2a62a57[m[33m ([1;31morigin/mockup[m[33m)[m GameAgent now waits for player with DF search.
+* [33mb8fbd16[m Player agent now deregisters from DF.
+* [33m83e7854[m Added two more players, default is 5 now.
+* [33mdfb8bc9[m Added constants file R.java
+* [33m9d00b00[m Adicionada GUI do JADE.
+* [33m8007626[m Removed unsafe characters from name generator.
+* [33ma6639b6[m Added initial structure.
+* [33mb71684a[m Initial commit
