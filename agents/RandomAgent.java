@@ -1,27 +1,32 @@
 package agents;
 
-import actions.Action;
+import actions.AtackAction;
+import actions.ContinueAction;
+import actions.DontFortifyAction;
+import actions.FortifyAction;
+import actions.PerformAtackAction;
+import actions.ReceiveAction;
 
 public class RandomAgent extends PlayerAgentBehaviours {
 
 	@Override
-	public Action receiveSoldiers(int n) {
-		return new Action("Received " + n + " soldiers");
+	public ReceiveAction receiveSoldiers(int n) {
+		return new ReceiveAction("Received " + n + " soldiers");
 	}
 
 	@Override
-	public Action atack() {
-		return new Action("Going to atack");
+	public AtackAction atack() {
+		return new PerformAtackAction("Going to atack","From","To");
 	}
 
 	@Override
-	public Action continueAtack(boolean wonLast, int mySoldiers, int hisSoldiers) {
-		return new Action("Continuing atack");
+	public ContinueAction continueAtack(boolean wonLast, int mySoldiers, int hisSoldiers) {
+		return new ContinueAction("Continuing atack", true);
 	}
 
 	@Override
-	public Action fortify() {
-		return new Action("Fortifiying");
+	public FortifyAction fortify() {
+		return new DontFortifyAction("Fortifiying");
 	}
 
 }

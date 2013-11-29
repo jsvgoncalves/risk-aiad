@@ -1,5 +1,6 @@
 package communication;
 
+import behaviours.gameagent.GameAgentFaseBehaviour;
 import actions.Action;
 import util.R;
 import jade.core.AID;
@@ -16,8 +17,16 @@ public class RequestInitiator extends AchieveREInitiator {
 	 */
 	private static final long serialVersionUID = 7797031078781475466L;
 
+	private GameAgentFaseBehaviour b;
+
 	public RequestInitiator(Agent a, ACLMessage msg) {
 		super(a, msg);
+		b = null;
+	}
+
+	public RequestInitiator(Agent a, ACLMessage msg, GameAgentFaseBehaviour b) {
+		super(a, msg);
+		this.b = b;
 	}
 
 	public static ACLMessage getJoinMessage(AID to) {
@@ -37,18 +46,18 @@ public class RequestInitiator extends AchieveREInitiator {
 
 		return request;
 	}
-	
+
 	public static ACLMessage getReceiveMessage(AID to, int n) {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-	
+
 		request.setContent(R.RECEIVE + " " + n);
 		request.addReceiver(to);
 
 		return request;
 	}
-	
-	public static ACLMessage getAtackMessage(AID to){
+
+	public static ACLMessage getAtackMessage(AID to) {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 		request.setContent(R.ATACK);
@@ -57,10 +66,32 @@ public class RequestInitiator extends AchieveREInitiator {
 		return request;
 	}
 
+	public static ACLMessage getFortifyMessage(AID to) {
+		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+		request.setContent(R.FORTIFY);
+		request.addReceiver(to);
+
+		return request;
+	}
+
 	protected void handleInform(ACLMessage inform) {
 		try {
 			Action a = (Action) inform.getContentObject();
-			System.out.println(a.getS());
+			switch (a.getClass().getName()) {
+			case R.RECEIVE_ACTION:
+				handleAction(a);
+				break;
+			case R.PERFORM_ATACK:
+				handleAction(a);
+				break;
+			case R.DONT_FORTIFY:
+				handleAction(a);
+				break;
+			default:
+				System.out.println("Desconhecido");
+				break;
+			}
 		} catch (UnreadableException e) {
 			switch (inform.getContent()) {
 			case R.PLAY:
@@ -73,18 +104,16 @@ public class RequestInitiator extends AchieveREInitiator {
 		}
 	}
 
+	private void handleAction(Action a) {
+		if (b == null)
+			System.out.println("Null behaviour");
+		else
+			b.handleAction(a);	
+	}
+
 	protected void handleFailure(ACLMessage failure) {
 		// TODO Do something with failure
 		System.out.println("Couldn't join!");
-	}
-
-	public static ACLMessage getFortifyMessage(AID to) {
-		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-		request.setContent(R.FORTIFY);
-		request.addReceiver(to);
-
-		return request;
 	}
 
 }

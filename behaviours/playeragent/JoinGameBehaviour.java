@@ -19,17 +19,21 @@ public class JoinGameBehaviour extends SimpleBehaviour {
 	 */
 	private static final long serialVersionUID = 5782880757461631230L;
 	
-	private boolean j;
+	private boolean j, waiting;
 	private int i;
 
 	public JoinGameBehaviour(Agent agent) {
 		super(agent);
 		j = false;
+		waiting = false;
 		i=0;
 	}
 
 	@Override
 	public void action() {
+		if(waiting)
+			return;
+		
 		AID[] gameAgents = getGameAgents();
 		
 		if( i >= gameAgents.length)
@@ -38,11 +42,10 @@ public class JoinGameBehaviour extends SimpleBehaviour {
 			System.out.println("No available games");
 			return;
 		}
-		System.out.println(gameAgents.length);
 		
 		myAgent.addBehaviour(new RequestInitiator(myAgent,
 				RequestInitiator.getJoinMessage(gameAgents[i])));
-		
+		waiting = true;
 		i++;
 	}
 
@@ -79,11 +82,6 @@ public class JoinGameBehaviour extends SimpleBehaviour {
 	@Override
 	public boolean done() {
 		return j;
-	}
-
-	@Override
-	public int onEnd() {
-		return 1;
 	}
 
 }

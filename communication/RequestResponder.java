@@ -54,11 +54,9 @@ public class RequestResponder extends AchieveREResponder {
 		ACLMessage join = request.createReply();
 		if (p.size() < maxPlayers) {
 			join.setPerformative(ACLMessage.INFORM);
-			System.out.println("Joined");
 		}
 		else{
 			join.setPerformative(ACLMessage.FAILURE);
-			System.out.println("Refused");
 		}
 		join.setContent(R.JOIN);
 

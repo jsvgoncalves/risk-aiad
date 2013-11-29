@@ -1,13 +1,13 @@
 package agents;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import behaviours.gameagent.AtackBehaviour;
 import behaviours.gameagent.GameFortify;
+import behaviours.gameagent.NewRoundsBehaviour;
 import behaviours.gameagent.PositionSoldiers;
+import behaviours.gameagent.RequestActionBehaviour;
 
-import communication.RequestInitiator;
 import communication.RequestResponder;
 
 import util.R;
@@ -59,7 +59,7 @@ public class GameAgent extends Agent {
 
 		fsmBehaviour
 				.registerFirstState(new WaitingForPlayers(5), WAITING_STATE);
-		fsmBehaviour.registerState(new RoundsBehaviour(this), ROUND);
+		fsmBehaviour.registerState(new NewRoundsBehaviour(this,players), ROUND);
 
 		fsmBehaviour.registerTransition(WAITING_STATE, ROUND, 1);
 
@@ -73,30 +73,6 @@ public class GameAgent extends Agent {
 		System.out.println("#############");
 	}
 
-	protected void receivedPlayers() {
-		// If there are the minimum players, start the game
-		if (players.size() >= R.MIN_PLAYERS) {
-			startGame();
-		}
-	}
-
-	protected void startGame() {
-		if (gameStatus != R.GAME_WAITING) {
-			return;
-		}
-		gameStatus = R.GAME_LAUNCHING;
-		// Shuffles the players to generate random playing order
-		printHeadMessage("SHUFFLING PLAYERS");
-
-		Collections.shuffle(players);
-
-		prettyPrintOrder();
-
-		printHeadMessage("GAME STARTING");
-
-		b = Board.getInstance();
-		addBehaviour(new RoundsBehaviour(this));
-	}
 
 	/**
 	 * Implements a game turn.
@@ -107,21 +83,11 @@ public class GameAgent extends Agent {
 			currentPlayer = 0;
 		}
 
-		addBehaviour(new PositionSoldiers(this, players.get(currentPlayer), 1));
-		addBehaviour(new AtackBehaviour(this,players.get(currentPlayer)));
-		addBehaviour(new GameFortify(this, players.get(currentPlayer)));
+		addBehaviour(new RequestActionBehaviour(new PositionSoldiers(this, players.get(currentPlayer), 1)));
+		addBehaviour(new RequestActionBehaviour(new AtackBehaviour(this,players.get(currentPlayer))));
+		addBehaviour(new RequestActionBehaviour(new GameFortify(this, players.get(currentPlayer))));
 
 		currentPlayer++;
-	}
-
-	private void prettyPrintOrder() {
-		// System.out.println(players.get(0).getName().toString() +
-		// " gets to go first!");
-
-		for (AID player : players) {
-			System.out.println(player.getLocalName() + "");
-		}
-
 	}
 
 	private class GameAgentBehaviour extends FSMBehaviour {

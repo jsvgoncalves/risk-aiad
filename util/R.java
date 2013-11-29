@@ -27,4 +27,9 @@ public class R {
 	public static final String RECEIVE = "Receive";
 	public static final String ATACK = "Atack";
 	public static final String FORTIFY = "Fortify";
+	public static final String RECEIVE_ACTION = "actions.ReceiveAction";
+	public static final String PERFORM_ATACK = "actions.PerformAtackAction";
+	public static final String DONT_FORTIFY = "actions.DontFortifyAction";
+	public static final Object DONT_ATACK = "actions.DontAtackAction";
+	public static final Object PERFORM_FORTIFICATION = "actions.PerformFortificationAction";
 }

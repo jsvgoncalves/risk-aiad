@@ -1,8 +1,7 @@
 package behaviours.playeragent;
 
-import java.io.Serializable;
-
 import actions.Action;
+import actions.DontFortifyAction;
 import agents.PlayerAgentBehaviours;
 
 import jade.core.behaviours.SimpleBehaviour;
@@ -24,7 +23,7 @@ public class SensorBehaviour extends SimpleBehaviour {
 	public Action respond(){
 		String input = "Ola";
 		
-		Action ret =  new Action(input);
+		Action ret =  new DontFortifyAction(input);
 		return ret;
 	}
 	

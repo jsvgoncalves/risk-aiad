@@ -1,14 +1,17 @@
 package agents;
 
-import actions.Action;
+import actions.AtackAction;
+import actions.ContinueAction;
+import actions.FortifyAction;
+import actions.ReceiveAction;
 
 public abstract class PlayerAgentBehaviours {
 	
-	public abstract Action receiveSoldiers(int n);
+	public abstract ReceiveAction receiveSoldiers(int n);
 	
-	public abstract Action atack();
+	public abstract AtackAction atack();
 	
-	public abstract Action continueAtack(boolean wonLast, int mySoldiers, int hisSoldiers);
+	public abstract ContinueAction continueAtack(boolean wonLast, int mySoldiers, int hisSoldiers);
 	
-	public abstract Action fortify();
+	public abstract FortifyAction fortify();
 }

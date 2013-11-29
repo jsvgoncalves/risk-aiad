@@ -1,32 +1,52 @@
 package behaviours.gameagent;
 
+import util.R;
+import actions.Action;
+import actions.PerformFortificationAction;
+import actions.ValidateAction;
 import communication.RequestInitiator;
 
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.SimpleBehaviour;
 
-public class GameFortify extends SimpleBehaviour {
+public class GameFortify extends GameAgentFaseBehaviour {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1841088529800033879L;
-	private AID to;
 
 	public GameFortify(Agent a, AID to){
-		super(a);
-		this.to = to;
+		super(a,to);
+	}
+
+	public GameFortify(Agent a) {
+		super(a,null);
 	}
 
 	@Override
 	public void action() {
-		myAgent.addBehaviour(new RequestInitiator(myAgent, RequestInitiator.getFortifyMessage(to)));
+		myAgent.addBehaviour(new RequestInitiator(myAgent, RequestInitiator.getFortifyMessage(to),this));
 	}
-
+	
 	@Override
-	public boolean done() {
-		return true;
+	public void handleAction(Action a) {
+		this.action = a;
+		end = true;
+	}
+	
+	@Override
+	public int onEnd() {
+		if (action.getClass().getName().equals(R.DONT_FORTIFY)) {
+			return 1;
+		}
+
+		if (action.getClass().getName().equals(R.PERFORM_FORTIFICATION)
+				&& ValidateAction.validate(null, (PerformFortificationAction) action)) {
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 
 }

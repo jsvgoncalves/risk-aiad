@@ -2,7 +2,7 @@ package actions;
 
 import java.io.Serializable;
 
-public class Action implements Serializable{
+public abstract class Action implements Serializable{
 
 	/**
 	 * 
