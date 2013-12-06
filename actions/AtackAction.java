@@ -4,8 +4,7 @@ import java.io.Serializable;
 
 public abstract class AtackAction extends Action implements Serializable{
 
-	public AtackAction(String s) {
-		super(s);
+	public AtackAction() {
 	}
 
 	/**

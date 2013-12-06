@@ -4,8 +4,7 @@ import java.io.Serializable;
 
 public class DontFortifyAction extends FortifyAction implements Serializable {
 
-	public DontFortifyAction(String s) {
-		super(s);
+	public DontFortifyAction() {
 	}
 
 	/**

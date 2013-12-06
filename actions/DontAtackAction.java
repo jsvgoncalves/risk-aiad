@@ -4,8 +4,7 @@ import java.io.Serializable;
 
 public class DontAtackAction extends AtackAction implements Serializable {
 
-	public DontAtackAction(String s) {
-		super(s);
+	public DontAtackAction() {
 	}
 
 	/**

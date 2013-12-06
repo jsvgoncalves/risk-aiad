@@ -5,6 +5,7 @@ import actions.DontFortifyAction;
 import agents.PlayerAgentBehaviours;
 
 import jade.core.behaviours.SimpleBehaviour;
+import logic.Board;
 
 public class SensorBehaviour extends SimpleBehaviour {
 
@@ -14,6 +15,7 @@ public class SensorBehaviour extends SimpleBehaviour {
 	private static final long serialVersionUID = 6852062724207667965L;
 	
 	private PlayerAgentBehaviours a;
+	private Board b;
 	
 	public SensorBehaviour(PlayerAgentBehaviours a){
 		super();
@@ -21,9 +23,7 @@ public class SensorBehaviour extends SimpleBehaviour {
 	}
 
 	public Action respond(){
-		String input = "Ola";
-		
-		Action ret =  new DontFortifyAction(input);
+		Action ret =  new DontFortifyAction();
 		return ret;
 	}
 	
@@ -38,15 +38,15 @@ public class SensorBehaviour extends SimpleBehaviour {
 	}
 
 	public Action receive(int n) {
-		return a.receiveSoldiers(n);
+		return a.receiveSoldiers(b,n);
 	}
 
 	public Action atack() {
-		return a.atack();
+		return a.atack(b);
 	}
 
 	public Action fortify() {
-		return a.fortify();
+		return a.fortify(b);
 	}
 
 }

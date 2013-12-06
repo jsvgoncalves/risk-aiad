@@ -6,8 +6,7 @@ public class PerformAtackAction extends AtackAction implements Serializable {
 
 	private String from,to;
 	
-	public PerformAtackAction(String s, String from, String to) {
-		super(s);
+	public PerformAtackAction(String from, String to) {
 		this.from = from;
 		this.to = to;
 	}

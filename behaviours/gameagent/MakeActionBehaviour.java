@@ -18,8 +18,7 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 
 	@Override
 	public void action() {
-		//TODO enforce action
-		System.out.println(b.getAction().getS());
+		System.out.println(b.getAction().getClass().getName());
 	}
 
 	@Override

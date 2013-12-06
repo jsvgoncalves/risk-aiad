@@ -7,8 +7,7 @@ public class ReceiveAction extends Action implements Serializable {
 
 	private Hashtable<String,Integer> nSoldiersByTerritory = new Hashtable<String,Integer>();
 	
-	public ReceiveAction(String s) {
-		super(s);
+	public ReceiveAction() {
 	}
 	
 	public void addSoldiersTerritory(int n, String territoryKey){

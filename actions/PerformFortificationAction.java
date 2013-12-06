@@ -7,8 +7,7 @@ public class PerformFortificationAction extends FortifyAction implements Seriali
 	private String from, to;
 	private int n;
 	
-	public PerformFortificationAction(String s, String from, String to, int n) {
-		super(s);
+	public PerformFortificationAction(String from, String to, int n) {
 		this.from = from;
 		this.to = to;
 		this.n = n;

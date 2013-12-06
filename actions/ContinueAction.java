@@ -6,8 +6,7 @@ public class ContinueAction extends Action implements Serializable {
 
 	private boolean c;
 	
-	public ContinueAction(String s, boolean c) {
-		super(s);
+	public ContinueAction(boolean c) {
 		this.c = c;
 	}
 	
