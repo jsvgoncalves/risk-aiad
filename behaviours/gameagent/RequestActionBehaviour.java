@@ -18,6 +18,7 @@ public class RequestActionBehaviour extends FSMBehaviour{
 	private static final String ACTION = "action";
 	
 	private GameAgentFaseBehaviour b;
+	private CheckEndBehaviour check;
 	
 	public RequestActionBehaviour(GameAgentFaseBehaviour behaviour, ArrayList<AID> players){
 		b = behaviour;
@@ -25,9 +26,10 @@ public class RequestActionBehaviour extends FSMBehaviour{
 		b.reset();
 		
 		FinalBehaviour f = new FinalBehaviour(players);
+		check = new CheckEndBehaviour(b);
 		
 		registerFirstState(b, REQUEST);
-		registerState(new CheckEndBehaviour(b), CHECK);
+		registerState(check, CHECK);
 		registerState(new MakeActionBehaviour(b,f), ACTION);
 		registerLastState(f, FINAL);
 		
@@ -35,9 +37,14 @@ public class RequestActionBehaviour extends FSMBehaviour{
 		registerTransition(REQUEST, ACTION, 1); //Se acao valida
 		registerTransition(CHECK, REQUEST, 0); //Se tem mais tentativas
 		registerTransition(CHECK, FINAL, 1); //Se nao tem mais tentativas
-		registerDefaultTransition(ACTION, FINAL);
+		registerTransition(ACTION, REQUEST, MakeActionBehaviour.CONT);
+		registerTransition(ACTION, FINAL, MakeActionBehaviour.FINAL);
 	}
-
+	
+	public void resetCount(){
+		check.resetCount();
+	}
+	
 	public void setPlayer(AID aid) {
 		b.setPlayer(aid);
 	}

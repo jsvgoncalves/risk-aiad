@@ -19,6 +19,7 @@ public class R {
 	
 	//Content of messages
 	public static final String SUBSCRIPTION = "subscription";
+	public static final String UPDATED = "updated";
 	
 	public final static String GAME_AGENT = "Game Agent";
 	public final static String PLAYER_AGENT = "Player Agent";
@@ -33,5 +34,4 @@ public class R {
 	public static final String DONT_FORTIFY = "actions.DontFortifyAction";
 	public static final String DONT_ATACK = "actions.DontAtackAction";
 	public static final String PERFORM_FORTIFICATION = "actions.PerformFortificationAction";
-	
 }

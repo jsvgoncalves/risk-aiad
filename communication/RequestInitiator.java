@@ -1,5 +1,8 @@
 package communication;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import behaviours.gameagent.GameAgentFaseBehaviour;
 import actions.Action;
 import util.R;
@@ -9,6 +12,7 @@ import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 import jade.proto.AchieveREInitiator;
+import logic.Board;
 
 public class RequestInitiator extends AchieveREInitiator {
 
@@ -29,6 +33,22 @@ public class RequestInitiator extends AchieveREInitiator {
 		this.b = b;
 	}
 
+	public static ACLMessage getChangedBoardMessage(ArrayList<AID> players, Board b){
+		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+		
+		try {
+			request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+			request.setContentObject(b);
+			for( AID to: players)
+				request.addReceiver(to);
+			return request;
+		} catch (IOException e) {
+			request.setPerformative(ACLMessage.FAILURE);
+			request.setContent(e.getMessage());
+			return request;
+		}	
+	}
+	
 	public static ACLMessage getJoinMessage(AID to) {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);

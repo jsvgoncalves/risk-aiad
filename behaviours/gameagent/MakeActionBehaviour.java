@@ -18,6 +18,9 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 	 */
 	private static final long serialVersionUID = -1828003215072330114L;
 
+	public static final int FINAL = 0;
+	public static final int CONT = 1;
+
 	private GameAgentFaseBehaviour b;
 	private FinalBehaviour f;
 	private ArrayList<AID> p;
@@ -26,10 +29,6 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 		this.b = behaviour;
 		this.f = fin;
 		p = fin.getPlayers();
-	}
-	
-	public void changedBoard(){
-		f.setChanged();
 	}
 
 	@Override
@@ -58,11 +57,14 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 	}
 
 	private void atackAction() {
+		System.out.println("Atack");
 		myAgent.addBehaviour(new AtackAndContinueFSM(myAgent, b.to,
 				(PerformAtackAction) b.getAction(),p));
+		f.setChanged();
 	}
 
 	private void fortifyAction() {
+		System.out.println("Fortify");
 		PerformFortificationAction action = (PerformFortificationAction) b
 				.getAction();
 
@@ -70,6 +72,7 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 				.removeSoldiers(action.getN());
 		Board.getInstance().getTerritory(action.getFrom())
 				.addSoldiers(action.getN());
+		f.setChanged();
 	}
 
 	private void dontFortify() {
@@ -77,6 +80,7 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 	}
 
 	private void receiveAction() {
+		System.out.println("Receive");
 		ReceiveAction action = (ReceiveAction) b.getAction();
 		Hashtable<String, Integer> soldiers = action.getSoldiersByTerritory();
 
@@ -84,11 +88,21 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 			Board.getInstance().getTerritory(terr)
 					.addSoldiers(soldiers.get(terr));
 		}
+		f.setChanged();
 	}
 
 	@Override
 	public boolean done() {
 		return true;
+	}
+	
+	@Override
+	public int onEnd(){
+		
+		if( b.getAction().getClass().equals(R.PERFORM_ATACK ))
+			return CONT;
+		else
+			return FINAL;
 	}
 
 }

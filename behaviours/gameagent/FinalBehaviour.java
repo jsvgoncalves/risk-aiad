@@ -2,8 +2,12 @@ package behaviours.gameagent;
 
 import java.util.ArrayList;
 
+import communication.RequestInitiator;
+
 import jade.core.AID;
 import jade.core.behaviours.SimpleBehaviour;
+import jade.lang.acl.ACLMessage;
+import logic.Board;
 
 public class FinalBehaviour extends SimpleBehaviour {
 
@@ -19,10 +23,16 @@ public class FinalBehaviour extends SimpleBehaviour {
 		changed=false;
 		this.p = players;
 	}
-	
+
 	@Override
 	public void action() {
-		//TODO Comunicar modifcações a todos os jogadores
+		if(changed){
+			ACLMessage m = RequestInitiator.getChangedBoardMessage(p, Board.getInstance());
+			if( m.getPerformative() == ACLMessage.FAILURE)
+				return;
+			
+			myAgent.addBehaviour(new RequestInitiator(myAgent, m));
+		}
 		System.out.println(changed);
 	}
 
