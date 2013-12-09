@@ -21,19 +21,15 @@ public class RandomAgent extends PlayerAgentBehaviours {
 	}
 
 	/**
-	 * Chooses a 
+	 * Chooses randomly a territory to attack (or don't attack)
 	 * @param b
-	 * @return
+	 * @return PerformAtackAction(from,to) or dontAtackAction
 	 */
 	@Override
 	public AtackAction atack(Board b) {
 		Random r = new Random();
 
-		// FIXME! Obter player correto e retirar daqui os setTerritory
-		b.setTerritoryPlayer("Joao", "EU_IBE");
-		b.setTerritoryPlayer("Joao", "EU_CEN");
-		b.setTerritoryPlayer("Joao", "AS_YAM");
-		ArrayList<String> playerTerritories = b.getPlayerTerritories("Joao");
+		ArrayList<String> playerTerritories = b.getPlayerTerritories(myAgent.getLocalName());
 		// Can't attack without territories
 		if(playerTerritories.size() == 0) {
 			return new DontAtackAction();
@@ -50,16 +46,25 @@ public class RandomAgent extends PlayerAgentBehaviours {
 		ArrayList<Territory> adjacentTerritories = terr.getAdjacents();
 		int to = r.nextInt(adjacentTerritories.size());
 
+		// Return an attack action with (from,to)
 		return new PerformAtackAction(playerTerritories.get(from), adjacentTerritories.get(to).getKey());
 	}
 
 	@Override
 	public ContinueAction continueAtack(Board b,boolean wonLast, int mySoldiers, int hisSoldiers) {
-		return new ContinueAction(false);
+		Random r = new Random();
+		return new ContinueAction(r.nextBoolean());
 	}
 
 	@Override
 	public FortifyAction fortify(Board b) {
+		// Get a random player territory
+		
+		// If random number is equal to size, don't fortify.
+		
+		// Get a random territory with route from the previously selected territory
+		
+		// Choose a random number of soldiers from 1 to size-1
 		return new DontFortifyAction();
 	}
 

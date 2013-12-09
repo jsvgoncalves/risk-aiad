@@ -8,7 +8,7 @@ import actions.ReceiveAction;
 
 public abstract class PlayerAgentBehaviours {
 	
-	private PlayerAgent myAgent;
+	protected PlayerAgent myAgent;
 	
 	public void setPlayerAgent(PlayerAgent agent){
 		myAgent = agent;
