@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
 public class Board implements Serializable{
 	/**
 	 * 
@@ -220,5 +222,44 @@ public class Board implements Serializable{
 		}
 		return playerTerritories;
 
+	}
+	
+	/**
+	 * 
+	 * @param t The territory.
+	 * @param player The player who owns the Territory.
+	 * @return
+	 */
+	public ArrayList<Territory> getReachables(Territory t, String player) {
+		String p = allocations.get(t.getKey());
+		
+		// Check if it is the valid player
+		if (!p.equals(player)) {
+			return new ArrayList<Territory>();
+		}
+		
+		ArrayList<Territory> r = getPlayerAdjacents(t.getKey(), player);
+		
+		
+		return r;
+	}
+
+	/**
+	 * Returns the immediately adjacent territories that belong to the player.
+	 * @param territory_string The territory to check.
+	 * @param player The player.
+	 * @return ArrayList<Territory> with all the territories.
+	 */
+	public ArrayList<Territory> getPlayerAdjacents(String territory_string, String player) {
+		ArrayList<Territory> adj = new ArrayList<Territory>();
+		Territory territory = territories.get(territory_string);
+		for (Territory t : territory.getAdjacents()) {
+			String p = allocations.get(t.getKey());
+			if(player.equals(p)) {
+				adj.add(t);
+			}
+		}
+		
+		return adj;
 	}
 }

@@ -48,16 +48,4 @@ public class Territory {
 		numSoldiers -= n;
 	}
 
-	public ArrayList<Territory> getReachable(Territory t) {
-		ArrayList<Territory> all = new ArrayList<Territory>();
-		
-		
-		for (Territory territory : t.getAdjacents()) {
-			if(! all.contains(territory)) {
-				// TODO
-			}
-		}
-		return all;
-	}
-
 }

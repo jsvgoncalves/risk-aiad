@@ -59,12 +59,28 @@ public class BoardTerritoryTest {
 	}
 	
 	@Test
+	public void testgetPlayerAdjacents() {
+		String player = "Joao";
+		/*
+		 * EU_IBE <-> EU_FR <-> EU_IT   |  AS_JAP
+		 */
+		b.setTerritoryPlayer(player, "EU_IBE");
+		b.setTerritoryPlayer(player, "EU_FR");
+		b.setTerritoryPlayer(player, "AS_JAP");
+		b.setTerritoryPlayer(player, "EU_IT");
+		
+		assertEquals(1, b.getPlayerAdjacents("EU_IBE", player).size());
+		assertEquals(2, b.getPlayerAdjacents("EU_FR", player).size());
+		assertEquals(1, b.getPlayerAdjacents("EU_IT", player).size());
+	}
+	
+	@Test
 	public void testReachables() {
 		// Get all territories
 		HashMap<String, Territory> territories =  b.getTerritories();
-		ArrayList<Territory> reachables = territories.get("EU_IBE").getReachable(territories.get("EU_IBE"));
-		assertTrue(reachables.size() == 1);
-		assertTrue(reachables.get(0).getKey() == "EU_FR");
+//		ArrayList<Territory> reachables = territories.get("EU_IBE").getReachable(territories.get("EU_IBE"));
+//		assertTrue(reachables.size() == 1);
+//		assertTrue(reachables.get(0).getKey() == "EU_FR");
 		fail("Not yet implemented");
 	}
 
