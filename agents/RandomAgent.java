@@ -21,19 +21,15 @@ public class RandomAgent extends PlayerAgentBehaviours {
 	}
 
 	/**
-	 * Chooses a 
+	 * Chooses randomly a territory to attack (or don't attack)
 	 * @param b
-	 * @return
+	 * @return PerformAtackAction(from,to) or dontAtackAction
 	 */
 	@Override
 	public AtackAction atack(Board b) {
 		Random r = new Random();
 
-		// FIXME! Obter player correto e retirar daqui os setTerritory
-		b.setTerritoryPlayer("Joao", "EU_IBE");
-		b.setTerritoryPlayer("Joao", "EU_CEN");
-		b.setTerritoryPlayer("Joao", "AS_YAM");
-		ArrayList<String> playerTerritories = b.getPlayerTerritories("Joao");
+		ArrayList<String> playerTerritories = b.getPlayerTerritories(myAgent.getLocalName());
 		// Can't attack without territories
 		if(playerTerritories.size() == 0) {
 			return new DontAtackAction();
@@ -50,6 +46,7 @@ public class RandomAgent extends PlayerAgentBehaviours {
 		ArrayList<Territory> adjacentTerritories = terr.getAdjacents();
 		int to = r.nextInt(adjacentTerritories.size());
 
+		// Return an attack action with (from,to)
 		return new PerformAtackAction(playerTerritories.get(from), adjacentTerritories.get(to).getKey());
 	}
 
