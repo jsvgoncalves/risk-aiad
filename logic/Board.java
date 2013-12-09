@@ -188,7 +188,7 @@ public class Board {
 		allocations.put(territory, player);
 	}
 
-	public void getPlayerTerritories(String player) {
+	public ArrayList<String> getPlayerTerritories(String player) {
 		ArrayList<String> playerTerritories = new ArrayList<String>();
 		// TODO Auto-generated method stub
 		for(Entry<String, String> e: allocations.entrySet()) {
@@ -196,5 +196,6 @@ public class Board {
 				playerTerritories.add(e.getKey());
 			}
 		}
+		return playerTerritories;
 	}
 }
