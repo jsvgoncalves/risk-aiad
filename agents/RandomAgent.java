@@ -52,11 +52,19 @@ public class RandomAgent extends PlayerAgentBehaviours {
 
 	@Override
 	public ContinueAction continueAtack(Board b,boolean wonLast, int mySoldiers, int hisSoldiers) {
-		return new ContinueAction(false);
+		Random r = new Random();
+		return new ContinueAction(r.nextBoolean());
 	}
 
 	@Override
 	public FortifyAction fortify(Board b) {
+		// Get a random player territory
+		
+		// If random number is equal to size, don't fortify.
+		
+		// Get a random territory with route from the previously selected territory
+		
+		// Choose a random number of soldiers from 1 to size-1
 		return new DontFortifyAction();
 	}
 
