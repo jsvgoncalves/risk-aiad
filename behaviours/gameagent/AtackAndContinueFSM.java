@@ -83,7 +83,6 @@ public class AtackAndContinueFSM extends FSMBehaviour {
 
 		@Override
 		public void action() {
-			System.out.println("Atack");
 			if (!c.willContinue())
 				return;
 

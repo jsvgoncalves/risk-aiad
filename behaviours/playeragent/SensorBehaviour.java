@@ -55,4 +55,8 @@ public class SensorBehaviour extends SimpleBehaviour {
 		return a.continueAtack(b, wonLast, mySoldiers, hisSoldiers);
 	}
 
+	public void updateBoard(Board board) {
+		b = board;
+	}
+
 }

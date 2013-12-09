@@ -16,8 +16,13 @@ public class CheckEndBehaviour extends SimpleBehaviour{
 		b=behaviour;
 	}
 	
+	public void resetCount(){
+		i=0;
+	}
+	
 	@Override
 	public void action() {
+		System.out.println(i);
 		i++;
 	}
 

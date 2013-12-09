@@ -9,7 +9,9 @@ import jade.core.Agent;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
 import jade.proto.AchieveREResponder;
+import logic.Board;
 
 public class PlayRequestResponder extends AchieveREResponder {
 
@@ -35,27 +37,42 @@ public class PlayRequestResponder extends AchieveREResponder {
 
 	protected ACLMessage handleRequest(ACLMessage request) {
 
-		String content = request.getContent();
-		String type = content.split(" ")[0];
+		try {
+			Board board = (Board)request.getContentObject();
+			return handleUpdate(request,board);
+		} catch (UnreadableException e) {
+			String content = request.getContent();
+			String type = content.split(" ")[0];
 
-		switch (type) {
-		case R.PLAY:
-			return handlePlayRequest(request);
-		case R.RECEIVE:
-			return handleReceiveRequest(request);
-		case R.ATACK:
-			return handleAtackRequest(request);
-		case R.FORTIFY:
-			return handleFortifyRequest(request);
-		case R.CONTINUE:
-			return handleContinueRequest(request);
+			switch (type) {
+			case R.PLAY:
+				return handlePlayRequest(request);
+			case R.RECEIVE:
+				return handleReceiveRequest(request);
+			case R.ATACK:
+				return handleAtackRequest(request);
+			case R.FORTIFY:
+				return handleFortifyRequest(request);
+			case R.CONTINUE:
+				return handleContinueRequest(request);
+			}
+
+			ACLMessage error = request.createReply();
+			error.setPerformative(ACLMessage.FAILURE);
+			error.setContent("Content not valid!");
+
+			return error;
 		}
+	}
 
-		ACLMessage error = request.createReply();
-		error.setPerformative(ACLMessage.FAILURE);
-		error.setContent("Content not valid!");
-
-		return error;
+	private ACLMessage handleUpdate(ACLMessage request, Board board) {
+		ACLMessage inform = request.createReply();
+		inform.setPerformative(ACLMessage.INFORM);
+		inform.setContent(R.UPDATED);
+		
+		b.updateBoard(board);
+		
+		return inform;
 	}
 
 	private ACLMessage handleContinueRequest(ACLMessage request) {

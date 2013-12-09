@@ -1,10 +1,16 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-public class Board {
+public class Board implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5291057040352837133L;
+	
 	// List of all territories in the world
 	HashMap<String, Territory> territories = new HashMap<String, Territory>();
 	// List of allocations of every player

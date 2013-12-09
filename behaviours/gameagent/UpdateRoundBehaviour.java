@@ -36,10 +36,13 @@ public class UpdateRoundBehaviour extends SimpleBehaviour {
 		
 		position.setPlayer(players.get(currentPlayer));
 		position.reset();
+		position.resetCount();
 		atack.setPlayer(players.get(currentPlayer));
 		atack.reset();
+		atack.resetCount();
 		fortify.setPlayer(players.get(currentPlayer));
 		fortify.reset();
+		fortify.resetCount();
 		
 		currentPlayer++;
 		if (currentPlayer >= players.size())
