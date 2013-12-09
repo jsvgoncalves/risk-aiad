@@ -58,6 +58,9 @@ public class BoardTerritoryTest {
 		}
 	}
 	
+	/**
+	 * Tests if the method returns the correct immediatly adjacent territories.
+	 */
 	@Test
 	public void testgetPlayerAdjacents() {
 		String player = "Joao";
@@ -72,6 +75,10 @@ public class BoardTerritoryTest {
 		assertEquals(1, b.getPlayerAdjacents("EU_IBE", player).size());
 		assertEquals(2, b.getPlayerAdjacents("EU_FR", player).size());
 		assertEquals(1, b.getPlayerAdjacents("EU_IT", player).size());
+		
+		assertEquals("EU_FR", b.getPlayerAdjacents("EU_IT", player).get(0).getKey());
+		assertEquals("EU_IBE", b.getPlayerAdjacents("EU_FR", player).get(0).getKey());
+		assertEquals("EU_IT", b.getPlayerAdjacents("EU_FR", player).get(1).getKey());
 	}
 	
 	@Test
