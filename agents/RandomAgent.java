@@ -57,6 +57,10 @@ public class RandomAgent extends PlayerAgentBehaviours {
 		return new ContinueAction(r.nextBoolean());
 	}
 
+	
+	/**
+	 * Chooses randomly where to fortify (or don't fortify)
+	 */
 	@Override
 	public FortifyAction fortify(Board b) {
 		// Get a random player territory
@@ -76,6 +80,10 @@ public class RandomAgent extends PlayerAgentBehaviours {
 		// Get a random territory with route from the previously selected territory
 		Territory init = b.getTerritory(playerTerritories.get(from)); // Convert from string to Territory
 		ArrayList<Territory> reachables = b.getReachables(init, myAgent.getLocalName());
+		// If the player doesn't have reachable territories from the init, then don't fortify.
+		if(reachables.size() == 0) {
+			return new DontFortifyAction();
+		}
 		int to = r.nextInt(reachables.size());
 		int amount = r.nextInt(init.getNumSoldiers()) + 1;
 //		rand.nextInt((max - min) + 1) + min;
