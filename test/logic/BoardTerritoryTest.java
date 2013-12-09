@@ -21,20 +21,20 @@ public class BoardTerritoryTest {
 
 	@Test
 	public void test() {
-		Territory IBE = b.getTerritory("IBE");
-		Territory UKR = b.getTerritory("UKR");
+		Territory IBE = b.getTerritory("EU_IBE");
+		Territory UKR = b.getTerritory("AN_WIL");
 		ArrayList<Territory> IBE_adjacents = IBE.getAdjacents();
 		ArrayList<Territory> UKR_adjacents = UKR.getAdjacents();
 		
-		System.out.println("IBE has " + IBE_adjacents.size() + " adjacencies");
-		System.out.println("IBE has adjacent: " + IBE_adjacents.get(0).getKey());
-		System.out.println("UKR has " + UKR_adjacents.size() + " adjacencies");
-		System.out.println("UKR has adjacent: " + UKR_adjacents.get(0).getKey());
+//		System.out.println("IBE has " + IBE_adjacents.size() + " adjacencies");
+//		System.out.println("IBE has adjacent: " + IBE_adjacents.get(0).getKey());
+//		System.out.println("UKR has " + UKR_adjacents.size() + " adjacencies");
+//		System.out.println("UKR has adjacent: " + UKR_adjacents.get(0).getKey());
 		
 		HashMap<String, Territory> territories =  b.getTerritories();
 		
 		for (Territory tt : territories.values()) {
-			System.out.println(tt.getName());
+//			System.out.println(tt.getName());
 		}
 		
 		fail("Not yet implemented");
@@ -56,6 +56,16 @@ public class BoardTerritoryTest {
 				assertTrue(a.getAdjacents().contains(t));
 			}
 		}
+	}
+	
+	@Test
+	public void testReachables() {
+		// Get all territories
+		HashMap<String, Territory> territories =  b.getTerritories();
+		ArrayList<Territory> reachables = territories.get("EU_IBE").getReachable(territories.get("EU_IBE"));
+		assertTrue(reachables.size() == 1);
+		assertTrue(reachables.get(0).getKey() == "EU_FR");
+		fail("Not yet implemented");
 	}
 
 }
