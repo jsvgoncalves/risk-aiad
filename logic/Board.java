@@ -2,37 +2,36 @@ package logic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 public class Board {
 	// List of all territories in the world
 	HashMap<String, Territory> territories = new HashMap<String, Territory>();
 	// List of allocations of every player
-	// T -> P
+	// Territory -> Player
 	private HashMap<String, String> allocations = new HashMap<String, String>();
 
 	private static Board instance = new Board();
 
 	/**
 	 * Singleton
+	 * 
 	 * @return
 	 */
 	public static Board getInstance() {
 		return instance;
 	}
-	
-	private Board () {
+
+	private Board() {
 		initTerritories();
 	}
 
 	public Territory getTerritory(String string) {
 		return territories.get(string);
 	}
-	
+
 	public HashMap<String, Territory> getTerritories() {
 		return territories;
 	}
-
 
 	/**
 	 * Initializes all the territories and their adjacencies
@@ -41,8 +40,8 @@ public class Board {
 		/*
 		 * Territories
 		 */
-		
-		//EUROPE
+
+		// EUROPE
 		Territory EU_IBE = new Territory("Iberia", "EU_IBE");
 		Territory EU_FR = new Territory("France", "EU_FR");
 		Territory EU_IT = new Territory("Italy", "EU_IT");
@@ -53,8 +52,8 @@ public class Board {
 		Territory EU_SCA = new Territory("Scandinavia", "EU_SCA");
 		Territory EU_EAS = new Territory("Eastern Europe", "EU_EAS");
 		Territory EU_RUS = new Territory("European Russia", "EU_RUS");
-		
-		//ASIA
+
+		// ASIA
 		Territory AS_YAM = new Territory("Yamalia", "AS_YAM");
 		Territory AS_STA = new Territory("The Stans", "AS_STA");
 		Territory AS_MEA = new Territory("Middle East", "AS_MEA");
@@ -67,24 +66,24 @@ public class Board {
 		Territory AS_MAC = new Territory("Manchuria", "AS_MAC");
 		Territory AS_CHU = new Territory("Chukotka", "AS_CHU");
 		Territory AS_JAP = new Territory("Japan", "AS_JAP");
-		
-		//OCEANIA
+
+		// OCEANIA
 		Territory OC_BOR = new Territory("Borneo", "OC_BOR");
 		Territory OC_EAS = new Territory("East Indies", "OC_EAS");
 		Territory OC_OUT = new Territory("Outback", "OC_OUT");
 		Territory OC_AUS = new Territory("Eastern Australia", "OC_AUS");
 		Territory OC_NEW = new Territory("New Zealand", "OC_NEW");
-		
-		//ANTARCTICA
+
+		// ANTARCTICA
 		Territory AN_WIL = new Territory("Wilkes Land", "AN_WIL");
-		Territory AN_QUE = new Territory("Queen Maud Land", "AN_QUE");	
+		Territory AN_QUE = new Territory("Queen Maud Land", "AN_QUE");
 		Territory AN_MAR = new Territory("Marie Byrd Land", "AN_MAR");
-		
+
 		/*
 		 * Add
 		 */
-		
-		//EUROPE
+
+		// EUROPE
 		territories.put(EU_IBE.getKey(), EU_IBE);
 		territories.put(EU_FR.getKey(), EU_FR);
 		territories.put(EU_IT.getKey(), EU_IT);
@@ -96,7 +95,7 @@ public class Board {
 		territories.put(EU_EAS.getKey(), EU_EAS);
 		territories.put(EU_RUS.getKey(), EU_RUS);
 
-		//Asia
+		// Asia
 		territories.put(AS_YAM.getKey(), AS_YAM);
 		territories.put(AS_STA.getKey(), AS_STA);
 		territories.put(AS_MEA.getKey(), AS_MEA);
@@ -109,24 +108,24 @@ public class Board {
 		territories.put(AS_INO.getKey(), AS_INO);
 		territories.put(AS_CHU.getKey(), AS_CHU);
 		territories.put(AS_JAP.getKey(), AS_JAP);
-		
-		//Oceania
+
+		// Oceania
 		territories.put(OC_BOR.getKey(), OC_BOR);
 		territories.put(OC_EAS.getKey(), OC_EAS);
 		territories.put(OC_OUT.getKey(), OC_OUT);
 		territories.put(OC_AUS.getKey(), OC_AUS);
 		territories.put(OC_NEW.getKey(), OC_NEW);
-		
-		//Antarctica
+
+		// Antarctica
 		territories.put(AN_WIL.getKey(), AN_WIL);
 		territories.put(AN_QUE.getKey(), AN_QUE);
 		territories.put(AN_MAR.getKey(), AN_MAR);
-		
+
 		/*
 		 * Borders
 		 */
-		
-		//EUROPE
+
+		// EUROPE
 		EU_IBE.setAdjacent(EU_FR);
 		EU_FR.setAdjacent(EU_CEN);
 		EU_FR.setAdjacent(EU_BRI);
@@ -140,8 +139,8 @@ public class Board {
 		EU_SCA.setAdjacent(EU_RUS);
 		EU_BAL.setAdjacent(EU_EAS);
 		EU_EAS.setAdjacent(EU_RUS);
-		
-		//ASIA
+
+		// ASIA
 		AS_YAM.setAdjacent(AS_STA);
 		AS_YAM.setAdjacent(AS_SAK);
 		AS_YAM.setAdjacent(EU_RUS);
@@ -164,16 +163,16 @@ public class Board {
 		AS_CHI.setAdjacent(AS_JAP);
 		AS_JAP.setAdjacent(AS_MAC);
 		AS_JAP.setAdjacent(AS_CHU);
-		
-		//Oceania
+
+		// Oceania
 		OC_BOR.setAdjacent(AS_INO);
 		OC_BOR.setAdjacent(OC_EAS);
 		OC_BOR.setAdjacent(OC_OUT);
 		OC_EAS.setAdjacent(OC_NEW);
 		OC_OUT.setAdjacent(OC_AUS);
 		OC_AUS.setAdjacent(OC_NEW);
-		
-		//Antarctica
+
+		// Antarctica
 		AN_WIL.setAdjacent(AN_QUE);
 		AN_WIL.setAdjacent(OC_AUS);
 		AN_QUE.setAdjacent(AN_MAR);
@@ -188,13 +187,19 @@ public class Board {
 		allocations.put(territory, player);
 	}
 
-	public void getPlayerTerritories(String player) {
-		ArrayList<String> playerTerritories = new ArrayList<String>();
-		// TODO Auto-generated method stub
-		for(Entry<String, String> e: allocations.entrySet()) {
-				if(e.getValue().equals(player)) {
-				playerTerritories.add(e.getKey());
+	public ArrayList<Territory> getPlayerTerritories(String player) {
+		ArrayList<Territory> playerTerritories = new ArrayList<Territory>();
+		for (String ter : territories.keySet()) {
+			if (allocations.get(ter).equals(player)) {
+				playerTerritories.add(territories.get(ter));
 			}
 		}
+		return playerTerritories;
+	}
+	
+	public boolean isPlayersTerritory(String player, String terr){
+		if( allocations.get(terr)==null)
+			return false;
+		return allocations.get(terr).equals(player);
 	}
 }

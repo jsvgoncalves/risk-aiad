@@ -10,6 +10,7 @@ import behaviours.gameagent.RequestActionBehaviour;
 
 import communication.RequestResponder;
 
+import test.logic.BoardTerritoryTest;
 import util.R;
 import jade.core.AID;
 import jade.core.Agent;
@@ -37,8 +38,6 @@ public class GameAgent extends Agent {
 	int currentPlayer = 0;
 	int gameStatus = R.GAME_WAITING;
 
-	Board b;
-
 	protected void setup() {
 
 		DFAgentDescription dfd = new DFAgentDescription();
@@ -52,7 +51,7 @@ public class GameAgent extends Agent {
 		} catch (FIPAException e) {
 			e.printStackTrace();
 		}
-
+		
 		printHeadMessage("WAITING FOR PLAYERS");
 
 		GameAgentBehaviour fsmBehaviour = new GameAgentBehaviour(this);
@@ -83,9 +82,9 @@ public class GameAgent extends Agent {
 			currentPlayer = 0;
 		}
 
-		addBehaviour(new RequestActionBehaviour(new PositionSoldiers(this, players.get(currentPlayer), 1)));
-		addBehaviour(new RequestActionBehaviour(new AtackBehaviour(this,players.get(currentPlayer))));
-		addBehaviour(new RequestActionBehaviour(new GameFortify(this, players.get(currentPlayer))));
+		addBehaviour(new RequestActionBehaviour(new PositionSoldiers(this, players.get(currentPlayer), 1),players));
+		addBehaviour(new RequestActionBehaviour(new AtackBehaviour(this,players.get(currentPlayer)),players));
+		addBehaviour(new RequestActionBehaviour(new GameFortify(this, players.get(currentPlayer)),players));
 
 		currentPlayer++;
 	}

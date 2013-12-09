@@ -8,6 +8,12 @@ import actions.ReceiveAction;
 
 public abstract class PlayerAgentBehaviours {
 	
+	private PlayerAgent myAgent;
+	
+	public PlayerAgentBehaviours(PlayerAgent agent){
+		myAgent = agent;
+	}
+	
 	public abstract ReceiveAction receiveSoldiers(Board b, int n);
 	
 	public abstract AtackAction atack(Board b);

@@ -42,7 +42,7 @@ public class GameFortify extends GameAgentFaseBehaviour {
 		}
 
 		if (action.getClass().getName().equals(R.PERFORM_FORTIFICATION)
-				&& ValidateAction.validate(null, (PerformFortificationAction) action)) {
+				&& ValidateAction.validate((PerformFortificationAction) action, to.getLocalName())) {
 			return 1;
 		} else {
 			return 0;

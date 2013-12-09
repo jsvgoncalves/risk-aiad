@@ -47,6 +47,8 @@ public class PlayRequestResponder extends AchieveREResponder {
 			return handleAtackRequest(request);
 		case R.FORTIFY:
 			return handleFortifyRequest(request);
+		case R.CONTINUE:
+			return handleContinueRequest(request);
 		}
 
 		ACLMessage error = request.createReply();
@@ -54,6 +56,27 @@ public class PlayRequestResponder extends AchieveREResponder {
 		error.setContent("Content not valid!");
 
 		return error;
+	}
+
+	private ACLMessage handleContinueRequest(ACLMessage request) {
+		ACLMessage cont = request.createReply();
+
+		try {
+			String won = request.getContent().split(" ")[1];
+			boolean wonLast = Boolean.parseBoolean(won);
+			String my = request.getContent().split(" ")[2];
+			int mySoldiers = Integer.parseInt(my);
+			String his = request.getContent().split(" ")[3];
+			int hisSoldiers = Integer.parseInt(his);
+			
+			cont.setPerformative(ACLMessage.INFORM);
+			cont.setContentObject(b.cont(wonLast,mySoldiers,hisSoldiers));
+		} catch (IOException e) {
+			cont.setPerformative(ACLMessage.FAILURE);
+			cont.setContent("Could not serialize action!");
+		}
+
+		return cont;
 	}
 
 	private ACLMessage handleFortifyRequest(ACLMessage request) {

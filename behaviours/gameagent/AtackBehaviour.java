@@ -44,7 +44,7 @@ public class AtackBehaviour extends GameAgentFaseBehaviour {
 		}
 
 		if (action.getClass().getName().equals(R.PERFORM_ATACK)
-				&& ValidateAction.validate(null, (PerformAtackAction) action)) {
+				&& ValidateAction.validate((PerformAtackAction) action, to.getLocalName())) {
 			return 1;
 		} else {
 			return 0;

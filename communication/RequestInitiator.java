@@ -71,8 +71,15 @@ public class RequestInitiator extends AchieveREInitiator {
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 		request.setContent(R.FORTIFY);
 		request.addReceiver(to);
-
 		return request;
+	}
+	
+	public static ACLMessage getContinueMessage(AID to) {
+		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+		request.setContent(R.CONTINUE);
+		request.addReceiver(to);
+		return null;
 	}
 
 	protected void handleInform(ACLMessage inform) {
@@ -86,6 +93,15 @@ public class RequestInitiator extends AchieveREInitiator {
 				handleAction(a);
 				break;
 			case R.DONT_FORTIFY:
+				handleAction(a);
+				break;
+			case R.DONT_ATACK:
+				handleAction(a);
+				break;
+			case R.PERFORM_FORTIFICATION:
+				handleAction(a);
+				break;
+			case R.CONTINUE:
 				handleAction(a);
 				break;
 			default:
@@ -112,8 +128,9 @@ public class RequestInitiator extends AchieveREInitiator {
 	}
 
 	protected void handleFailure(ACLMessage failure) {
-		// TODO Do something with failure
 		System.out.println("Couldn't join!");
 	}
+
+	
 
 }

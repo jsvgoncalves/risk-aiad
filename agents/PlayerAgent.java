@@ -43,7 +43,7 @@ public class PlayerAgent extends Agent {
 		System.out.println(getLocalName() + " reporting in.");
 		
 		responder = new PlayRequestResponder(this, PlayRequestResponder.getMessageTemplate());
-		SensorBehaviour sensor = new SensorBehaviour(a);
+		SensorBehaviour sensor = new SensorBehaviour(this,a);
 		responder.setSensor(sensor);
 		addBehaviour(responder);
 		addBehaviour(new JoinGameBehaviour(this));

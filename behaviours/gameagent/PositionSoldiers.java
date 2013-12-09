@@ -42,7 +42,7 @@ public class PositionSoldiers extends GameAgentFaseBehaviour {
 	
 	@Override
 	public int onEnd(){
-		if(ValidateAction.validate(new ArrayList<String>(), n, (ReceiveAction)action)){
+		if(ValidateAction.validate( n, (ReceiveAction)action, to.getLocalName())){
 			return 1;
 		}
 		else{

@@ -1,9 +1,11 @@
 package behaviours.playeragent;
 
+
 import actions.Action;
 import actions.DontFortifyAction;
 import agents.PlayerAgentBehaviours;
 
+import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
 import logic.Board;
 
@@ -17,8 +19,8 @@ public class SensorBehaviour extends SimpleBehaviour {
 	private PlayerAgentBehaviours a;
 	private Board b;
 	
-	public SensorBehaviour(PlayerAgentBehaviours a){
-		super();
+	public SensorBehaviour(Agent my,PlayerAgentBehaviours a){
+		super(my);
 		this.a = a;
 	}
 
@@ -47,6 +49,10 @@ public class SensorBehaviour extends SimpleBehaviour {
 
 	public Action fortify() {
 		return a.fortify(b);
+	}
+
+	public Action cont(boolean wonLast, int mySoldiers, int hisSoldiers) {
+		return a.continueAtack(b, wonLast, mySoldiers, hisSoldiers);
 	}
 
 }
