@@ -2,6 +2,7 @@ package logic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class Board {
 	// List of all territories in the world
@@ -187,8 +188,7 @@ public class Board {
 		allocations.put(territory, player);
 	}
 
-<<<<<<< HEAD
-	public ArrayList<Territory> getPlayerTerritories(String player) {
+	public ArrayList<Territory> getPlayerTerritoriesT(String player) {
 		ArrayList<Territory> playerTerritories = new ArrayList<Territory>();
 		for (String ter : territories.keySet()) {
 			if (allocations.get(ter).equals(player)) {
@@ -202,7 +202,8 @@ public class Board {
 		if( allocations.get(terr)==null)
 			return false;
 		return allocations.get(terr).equals(player);
-=======
+	}
+
 	public ArrayList<String> getPlayerTerritories(String player) {
 		ArrayList<String> playerTerritories = new ArrayList<String>();
 		// TODO Auto-generated method stub
@@ -212,6 +213,6 @@ public class Board {
 			}
 		}
 		return playerTerritories;
->>>>>>> 492af4f6330e20d85bfe4facdfdc49c41a8f98dd
+
 	}
 }
