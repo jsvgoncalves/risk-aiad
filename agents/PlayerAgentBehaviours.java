@@ -10,7 +10,7 @@ public abstract class PlayerAgentBehaviours {
 	
 	private PlayerAgent myAgent;
 	
-	public PlayerAgentBehaviours(PlayerAgent agent){
+	public void setPlayerAgent(PlayerAgent agent){
 		myAgent = agent;
 	}
 	

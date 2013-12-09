@@ -17,7 +17,7 @@ public class SensorBehaviour extends SimpleBehaviour {
 	private static final long serialVersionUID = 6852062724207667965L;
 	
 	private PlayerAgentBehaviours a;
-	private Board b;
+	private Board b = Board.getInstance(); // FIXME! isto provavelmente vai ser passado na comunicação? Mudar isto.
 	
 	public SensorBehaviour(Agent my,PlayerAgentBehaviours a){
 		super(my);

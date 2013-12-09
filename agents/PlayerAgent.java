@@ -23,6 +23,7 @@ public class PlayerAgent extends Agent {
 	
 	public PlayerAgent(PlayerAgentBehaviours a){
 		this.a = a;
+		a.setPlayerAgent(this);
 	}
 	
 	protected void setup() {
