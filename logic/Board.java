@@ -238,10 +238,25 @@ public class Board implements Serializable{
 			return new ArrayList<Territory>();
 		}
 		
-		ArrayList<Territory> r = getPlayerAdjacents(t.getKey(), player);
-		
+		ArrayList<Territory> visited = new ArrayList<Territory>();
+		visited.add(t);
+		ArrayList<Territory> r = getReachablesHelper(t, player, visited);
 		
 		return r;
+	}
+
+	private ArrayList<Territory> getReachablesHelper(Territory territory, String player, ArrayList<Territory> visited) {
+		ArrayList<Territory> adj = getPlayerAdjacents(territory.getKey(), player);
+		ArrayList<Territory> r = new ArrayList<Territory>();
+		for (Territory t : adj) {
+			if(!visited.contains(t)) {
+				visited.add(t);
+				r.add(t);
+				r.addAll(getReachablesHelper(t, player, visited));
+			}
+		}
+		return r;
+		
 	}
 
 	/**
