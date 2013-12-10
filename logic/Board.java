@@ -1,9 +1,12 @@
 package logic;
 
+import jade.core.AID;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Random;
 
 public class Board implements Serializable{
 	/**
@@ -220,5 +223,63 @@ public class Board implements Serializable{
 		}
 		return playerTerritories;
 
+	}
+	
+	public ArrayList<String> getEmptyTerritories(){
+		ArrayList<String> empty = new ArrayList<String>();
+		
+		for(String terr: territories.keySet()){
+			if(allocations.get(terr)==null)
+				empty.add(terr);
+		}
+		
+		return empty;
+	}
+	
+	public int getStartingSoldiersNumber(int numPlayers){
+		return 50 - numPlayers*5;
+	}
+	
+	private int sum(Integer[] a){
+		int sum=0;
+		for(int i=0; i < a.length;i++)
+			sum+=a[i];
+		return sum;
+	}
+
+	public void allocateRandomTerritories(ArrayList<AID> players) {
+		Integer[] availableSoldiers = new Integer[players.size()];
+		
+		for(int n = 0; n < players.size();n++){
+			availableSoldiers[n] = getStartingSoldiersNumber(players.size());
+		}
+		
+		int i=0;
+		while(getEmptyTerritories().size() > 0 ){
+			String terr = getEmptyTerritories().get(0);
+			allocations.put(terr, players.get(i).getLocalName());
+			territories.get(terr).addSoldiers(1);
+			availableSoldiers[i]--;
+			
+			i++;
+			if( i>= players.size() )
+				i=0;
+		}
+		
+		
+		while(sum(availableSoldiers)>0){
+			ArrayList<String> playersTerritories = getPlayerTerritories(players.get(i).getLocalName());
+			
+			Random r = new Random();
+			int pos = r.nextInt(playersTerritories.size());
+			
+			territories.get(playersTerritories.get(pos)).addSoldiers(1);
+			availableSoldiers[i]--;
+			
+			i++;
+			if( i>= players.size() )
+				i=0;
+		}
+		
 	}
 }

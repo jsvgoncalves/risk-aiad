@@ -21,12 +21,14 @@ public class JoinGameBehaviour extends SimpleBehaviour {
 	
 	private boolean j, waiting;
 	private int i;
+	private AID[] gameAgents;
 
 	public JoinGameBehaviour(Agent agent) {
 		super(agent);
 		j = false;
 		waiting = false;
 		i=0;
+		gameAgents = null;
 	}
 
 	@Override
@@ -34,17 +36,19 @@ public class JoinGameBehaviour extends SimpleBehaviour {
 		if(waiting)
 			return;
 		
-		AID[] gameAgents = getGameAgents();
+		if(gameAgents == null){
+			gameAgents = getGameAgents();
+		}
 		
 		if( i >= gameAgents.length)
 		{
-			j=true;
-			System.out.println("No available games");
+			gameAgents=null;
+			i=0;
 			return;
 		}
 		
 		myAgent.addBehaviour(new RequestInitiator(myAgent,
-				RequestInitiator.getJoinMessage(gameAgents[i])));
+				RequestInitiator.getJoinMessage(gameAgents[i]),this));
 		waiting = true;
 		i++;
 	}
@@ -82,6 +86,11 @@ public class JoinGameBehaviour extends SimpleBehaviour {
 	@Override
 	public boolean done() {
 		return j;
+	}
+
+	public void couldntJoin() {
+		waiting=false;
+		j=false;
 	}
 
 }

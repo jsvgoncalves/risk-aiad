@@ -10,18 +10,15 @@ import behaviours.gameagent.RequestActionBehaviour;
 
 import communication.RequestResponder;
 
-import test.logic.BoardTerritoryTest;
 import util.R;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
-import logic.Board;
 
 public class GameAgent extends Agent {
 	private static final String ROUND = "ROUND";
@@ -51,14 +48,15 @@ public class GameAgent extends Agent {
 		} catch (FIPAException e) {
 			e.printStackTrace();
 		}
-		
+
 		printHeadMessage("WAITING FOR PLAYERS");
 
 		GameAgentBehaviour fsmBehaviour = new GameAgentBehaviour(this);
 
 		fsmBehaviour
 				.registerFirstState(new WaitingForPlayers(5), WAITING_STATE);
-		fsmBehaviour.registerState(new NewRoundsBehaviour(this,players), ROUND);
+		fsmBehaviour
+				.registerState(new NewRoundsBehaviour(this, players), ROUND);
 
 		fsmBehaviour.registerTransition(WAITING_STATE, ROUND, 1);
 
@@ -72,7 +70,6 @@ public class GameAgent extends Agent {
 		System.out.println("#############");
 	}
 
-
 	/**
 	 * Implements a game turn.
 	 */
@@ -82,9 +79,12 @@ public class GameAgent extends Agent {
 			currentPlayer = 0;
 		}
 
-		addBehaviour(new RequestActionBehaviour(new PositionSoldiers(this, players.get(currentPlayer), 1),players));
-		addBehaviour(new RequestActionBehaviour(new AtackBehaviour(this,players.get(currentPlayer)),players));
-		addBehaviour(new RequestActionBehaviour(new GameFortify(this, players.get(currentPlayer)),players));
+		addBehaviour(new RequestActionBehaviour(new PositionSoldiers(this,
+				players.get(currentPlayer), 1), players));
+		addBehaviour(new RequestActionBehaviour(new AtackBehaviour(this,
+				players.get(currentPlayer)), players));
+		addBehaviour(new RequestActionBehaviour(new GameFortify(this,
+				players.get(currentPlayer)), players));
 
 		currentPlayer++;
 	}
@@ -101,30 +101,6 @@ public class GameAgent extends Agent {
 		}
 
 	}
-
-	/**
-	 * Inner class RoundsBehaviour
-	 */
-	private class RoundsBehaviour extends CyclicBehaviour {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 2897444297823568576L;
-
-		public RoundsBehaviour(Agent a) {
-			super(a);
-		}
-
-		@Override
-		public void action() {
-			// For each agent, send him a message to play and wait response or
-			// timeout.
-			System.out.println("Round " + currentRound++);
-			gameTurn();
-			block();
-		}
-
-	} // END of inner class RoundsBehaviour
 
 	/**
 	 * Inner class WaitingForPlayers

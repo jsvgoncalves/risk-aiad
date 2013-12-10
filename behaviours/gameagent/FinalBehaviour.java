@@ -33,7 +33,7 @@ public class FinalBehaviour extends SimpleBehaviour {
 			
 			myAgent.addBehaviour(new RequestInitiator(myAgent, m));
 		}
-		System.out.println(changed);
+		
 	}
 
 	@Override

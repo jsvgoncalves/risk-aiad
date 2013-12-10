@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import behaviours.gameagent.GameAgentFaseBehaviour;
+import behaviours.playeragent.JoinGameBehaviour;
 import actions.Action;
 import util.R;
 import jade.core.AID;
@@ -22,15 +23,25 @@ public class RequestInitiator extends AchieveREInitiator {
 	private static final long serialVersionUID = 7797031078781475466L;
 
 	private GameAgentFaseBehaviour b;
+	private JoinGameBehaviour j;
 
 	public RequestInitiator(Agent a, ACLMessage msg) {
 		super(a, msg);
 		b = null;
+		j=null;
 	}
 
 	public RequestInitiator(Agent a, ACLMessage msg, GameAgentFaseBehaviour b) {
 		super(a, msg);
 		this.b = b;
+		j=null;
+	}
+
+	public RequestInitiator(Agent a, ACLMessage msg,
+			JoinGameBehaviour joinGameBehaviour) {
+		super(a,msg);
+		b=null;
+		j=joinGameBehaviour;
 	}
 
 	public static ACLMessage getChangedBoardMessage(ArrayList<AID> players, Board b){
@@ -135,6 +146,7 @@ public class RequestInitiator extends AchieveREInitiator {
 				break;
 			case R.JOIN:
 				System.out.println("Joined with success!");
+				j.joined();
 				break;
 			}
 		}
@@ -148,7 +160,12 @@ public class RequestInitiator extends AchieveREInitiator {
 	}
 
 	protected void handleFailure(ACLMessage failure) {
-		System.out.println("Couldn't join!");
+		//System.out.println("Couldn't join!");
+		switch(failure.getContent()){
+		case R.JOIN:
+			j.couldntJoin();
+			break;
+		}
 	}
 
 	

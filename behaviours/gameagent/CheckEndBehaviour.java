@@ -22,7 +22,6 @@ public class CheckEndBehaviour extends SimpleBehaviour{
 	
 	@Override
 	public void action() {
-		System.out.println(i);
 		i++;
 	}
 
