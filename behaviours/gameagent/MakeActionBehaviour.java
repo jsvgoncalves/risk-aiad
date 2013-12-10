@@ -121,10 +121,15 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 	@Override
 	public int onEnd() {
 
-		if (b.getAction().getClass().equals(R.PERFORM_ATACK))
+		if (b.getAction().getClass().getName().equals(R.PERFORM_ATACK)){
+			b.reset();
+			resetAtack();
 			return CONT;
-		else
+		}
+		else{
 			return FINAL;
+		}
+			
 	}
 
 	public void resetAtack() {

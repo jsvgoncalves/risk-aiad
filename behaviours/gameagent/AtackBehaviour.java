@@ -27,9 +27,11 @@ public class AtackBehaviour extends GameAgentFaseBehaviour {
 
 	@Override
 	public void action() {
-		if (!waiting)
+		
+		if (!waiting){
 			myAgent.addBehaviour(new RequestInitiator(myAgent, RequestInitiator
 					.getAtackMessage(to), this));
+		}
 
 		waiting = true;
 	}
