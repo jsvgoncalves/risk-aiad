@@ -21,8 +21,6 @@ public class NewRoundsBehaviour extends FSMBehaviour {
 
 	public NewRoundsBehaviour(Agent a, ArrayList<AID> players) {
 		super(a);
-
-		Board.getInstance().allocateRandomTerritories(players);
 		
 		RequestActionBehaviour position = new RequestActionBehaviour(
 				new PositionSoldiers(myAgent, 1), players);

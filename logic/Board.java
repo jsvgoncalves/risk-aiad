@@ -251,6 +251,9 @@ public class Board implements Serializable{
 	}
 
 	public void allocateRandomTerritories(ArrayList<AID> players) {
+		
+		System.out.println(players.size());
+		
 		Integer[] availableSoldiers = new Integer[players.size()];
 		
 		for(int n = 0; n < players.size();n++){

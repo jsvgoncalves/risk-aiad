@@ -2,6 +2,7 @@ package agents;
 
 import java.util.ArrayList;
 
+import behaviours.gameagent.AllocateTerritoriesBehaviour;
 import behaviours.gameagent.AtackBehaviour;
 import behaviours.gameagent.GameFortify;
 import behaviours.gameagent.NewRoundsBehaviour;
@@ -23,11 +24,13 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 public class GameAgent extends Agent {
 	private static final String ROUND = "ROUND";
 	private static final String WAITING_STATE = "Waiting for players";
+	private static final String ALLOCATE = "allocate";
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8137655407030225340L;
+
 
 	ArrayList<AID> players = new ArrayList<AID>();
 
@@ -57,11 +60,18 @@ public class GameAgent extends Agent {
 				.registerFirstState(new WaitingForPlayers(5), WAITING_STATE);
 		fsmBehaviour
 				.registerState(new NewRoundsBehaviour(this, players), ROUND);
+		fsmBehaviour.registerState(new AllocateTerritoriesBehaviour(this),
+				ALLOCATE);
 
-		fsmBehaviour.registerTransition(WAITING_STATE, ROUND, 1);
+		fsmBehaviour.registerTransition(WAITING_STATE, ALLOCATE, 1);
+		fsmBehaviour.registerDefaultTransition(ALLOCATE, ROUND);
 
 		addBehaviour(fsmBehaviour);
 
+	}
+
+	public ArrayList<AID> getPlayers() {
+		return players;
 	}
 
 	private void printHeadMessage(String message) {
@@ -112,15 +122,21 @@ public class GameAgent extends Agent {
 		 */
 		private static final long serialVersionUID = 6448494715301721314L;
 		private int max;
+		private boolean added;
 
 		public WaitingForPlayers(int maxPlayers) {
 			this.max = maxPlayers;
+			added=false;
 		}
 
 		@Override
 		public void action() {
+			if(added)
+				return;
 			addBehaviour(new RequestResponder(myAgent,
 					RequestResponder.getMessageTemplate(), players, max));
+			
+			added=true;
 		}
 
 		@Override
