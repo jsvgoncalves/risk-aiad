@@ -1,7 +1,5 @@
 package behaviours.gameagent;
 
-import java.util.ArrayList;
-
 import actions.Action;
 import actions.ReceiveAction;
 import actions.ValidateAction;
@@ -31,13 +29,17 @@ public class PositionSoldiers extends GameAgentFaseBehaviour {
 
 	@Override
 	public void action() {
-		myAgent.addBehaviour(new RequestInitiator(myAgent, RequestInitiator.getReceiveMessage(to, n),this));
+		if(!waiting)
+			myAgent.addBehaviour(new RequestInitiator(myAgent, RequestInitiator.getReceiveMessage(to, n),this));
+		
+		waiting =true;
 	}
 
 	@Override
 	public void handleAction(Action a) {
 		this.action = a;
 		end=true;
+		//waiting =false;
 	}
 	
 	@Override

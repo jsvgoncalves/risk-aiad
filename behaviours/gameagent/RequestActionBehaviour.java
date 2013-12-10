@@ -19,6 +19,7 @@ public class RequestActionBehaviour extends FSMBehaviour{
 	
 	private GameAgentFaseBehaviour b;
 	private CheckEndBehaviour check;
+	private MakeActionBehaviour make;
 	
 	public RequestActionBehaviour(GameAgentFaseBehaviour behaviour, ArrayList<AID> players){
 		b = behaviour;
@@ -27,10 +28,11 @@ public class RequestActionBehaviour extends FSMBehaviour{
 		
 		FinalBehaviour f = new FinalBehaviour(players);
 		check = new CheckEndBehaviour(b);
+		make = new MakeActionBehaviour(b,f);
 		
 		registerFirstState(b, REQUEST);
 		registerState(check, CHECK);
-		registerState(new MakeActionBehaviour(b,f), ACTION);
+		registerState(make, ACTION);
 		registerLastState(f, FINAL);
 		
 		registerTransition(REQUEST, CHECK, 0); //Se acao invalida
@@ -43,6 +45,7 @@ public class RequestActionBehaviour extends FSMBehaviour{
 	
 	public void resetCount(){
 		check.resetCount();
+		make.resetAtack();
 	}
 	
 	public void setPlayer(AID aid) {
