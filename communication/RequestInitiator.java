@@ -105,12 +105,12 @@ public class RequestInitiator extends AchieveREInitiator {
 		return request;
 	}
 	
-	public static ACLMessage getContinueMessage(AID to) {
+	public static ACLMessage getContinueMessage(AID to, boolean wonLast, int mySoldiers, int hisSoldiers) {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-		request.setContent(R.CONTINUE);
+		request.setContent(R.CONTINUE + " " + wonLast + " " + mySoldiers + " " + hisSoldiers);
 		request.addReceiver(to);
-		return null;
+		return request;
 	}
 
 	protected void handleInform(ACLMessage inform) {
@@ -132,7 +132,7 @@ public class RequestInitiator extends AchieveREInitiator {
 			case R.PERFORM_FORTIFICATION:
 				handleAction(a);
 				break;
-			case R.CONTINUE:
+			case R.CONTINUE_ACTION:
 				handleAction(a);
 				break;
 			default:

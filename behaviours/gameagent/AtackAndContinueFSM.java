@@ -3,6 +3,8 @@ package behaviours.gameagent;
 import java.util.ArrayList;
 import java.util.Random;
 
+import util.R;
+
 import communication.RequestInitiator;
 
 import actions.Action;
@@ -27,35 +29,53 @@ public class AtackAndContinueFSM extends FSMBehaviour {
 	private static final long serialVersionUID = 467195171770227699L;
 
 	private ContinueAction c;
+	
+	public boolean e;
+	public ContinueBehaviour cb;
+	public RequestActionBehaviour rc;
 
-	public AtackAndContinueFSM(Agent a, AID to, PerformAtackAction action, ArrayList<AID> players) {
+	public AtackAndContinueFSM(Agent a, AID to, PerformAtackAction action,
+			ArrayList<AID> players) {
 		super(a);
 		c = new ContinueAction(true);
-
+		e=false;
+		cb =new ContinueBehaviour(myAgent, to);
+		rc =new RequestActionBehaviour(cb,players);
+		
 		registerFirstState(new PerformAtack(action), ATACK);
-		registerState(new RequestActionBehaviour(new ContinueBehaviour(myAgent,
-				to),players), REQUEST);
+		registerState(rc,REQUEST);
 		registerLastState(new FinalBehaviour(players), FINAL);
 
 		registerTransition(ATACK, FINAL, END);
 		registerTransition(ATACK, REQUEST, CONTINUE);
 		registerDefaultTransition(REQUEST, ATACK);
 	}
+	
+	@Override
+	public int onEnd(){
+		e=true;
+		return 1;
+	}
 
 	private class ContinueBehaviour extends GameAgentFaseBehaviour {
-
-		protected ContinueBehaviour(Agent a, AID to) {
-			super(a, to);
-		}
-
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 4038928887592038291L;
+		
+		public boolean wonLast;
+		public int mySoldiers;
+		public int hisSoldiers;
+		
+		protected ContinueBehaviour(Agent a, AID to) {
+			super(a, to);
+			wonLast = false;
+			mySoldiers = 0;
+			hisSoldiers =0;
+		}
 
 		@Override
 		public void handleAction(Action a) {
-			System.out.println("Continue");
 			c = (ContinueAction) a;
 			this.action = a;
 			end = true;
@@ -64,7 +84,16 @@ public class AtackAndContinueFSM extends FSMBehaviour {
 		@Override
 		public void action() {
 			myAgent.addBehaviour(new RequestInitiator(myAgent, RequestInitiator
-					.getContinueMessage(to), this));
+					.getContinueMessage(to,wonLast,mySoldiers,hisSoldiers), this));
+		}
+
+		@Override
+		public int onEnd() {
+			
+			if (action.getClass().getName().equals(R.CONTINUE_ACTION)) {
+				return 1;
+			} else
+				return 0;
 		}
 
 	}
@@ -92,14 +121,21 @@ public class AtackAndContinueFSM extends FSMBehaviour {
 
 			p1 = r.nextInt(12) + 1;
 			p2 = r.nextInt(12) + 1;
-			
+
+			System.out.println("Player 1 rolled: " + p1);
+			System.out.println("Player 2 rolled: " + p2);
+
 			if (p1 > p2) {
 				Board.getInstance().getTerritory(action.getTo())
 						.removeSoldiers(1);
+				cb.wonLast = true;
 			} else if (p2 >= p1) {
 				Board.getInstance().getTerritory(action.getFrom())
 						.removeSoldiers(1);
 			}
+			
+			cb.mySoldiers = Board.getInstance().getTerritory(action.getFrom()).getNumSoldiers();
+			cb.hisSoldiers = Board.getInstance().getTerritory(action.getTo()).getNumSoldiers();
 		}
 
 		@Override
@@ -112,10 +148,13 @@ public class AtackAndContinueFSM extends FSMBehaviour {
 			if (Board.getInstance().getTerritory(action.getFrom())
 					.getNumSoldiers() == 1
 					|| Board.getInstance().getTerritory(action.getTo())
-							.getNumSoldiers() == 0 || !c.willContinue())
+							.getNumSoldiers() == 0 || !c.willContinue()) {
 				return END; // FIM
-			else
+			} else{
+				rc.reset();
+				rc.resetCount();
 				return CONTINUE; // Pode continuar
+			}
 		}
 
 	}

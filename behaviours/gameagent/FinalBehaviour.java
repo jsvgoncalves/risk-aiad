@@ -16,12 +16,16 @@ public class FinalBehaviour extends SimpleBehaviour {
 	 */
 	private static final long serialVersionUID = -1109933473079103804L;
 
-	private boolean changed;
+	private boolean changed,aux;
 	private ArrayList<AID> p;
 	
 	public FinalBehaviour(ArrayList<AID> players){
 		changed=false;
 		this.p = players;
+	}
+
+	public FinalBehaviour(ArrayList<AID> players, boolean b) {
+		aux=b;
 	}
 
 	@Override
@@ -33,7 +37,8 @@ public class FinalBehaviour extends SimpleBehaviour {
 			
 			myAgent.addBehaviour(new RequestInitiator(myAgent, m));
 		}
-		
+		if(aux)
+			System.out.println("Final");
 	}
 
 	@Override

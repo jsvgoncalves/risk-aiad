@@ -34,4 +34,5 @@ public class R {
 	public static final String DONT_FORTIFY = "actions.DontFortifyAction";
 	public static final String DONT_ATACK = "actions.DontAtackAction";
 	public static final String PERFORM_FORTIFICATION = "actions.PerformFortificationAction";
+	public static final String CONTINUE_ACTION = "actions.ContinueAction";
 }

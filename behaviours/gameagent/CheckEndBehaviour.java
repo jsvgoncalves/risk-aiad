@@ -33,8 +33,10 @@ public class CheckEndBehaviour extends SimpleBehaviour{
 	@Override
 	public int onEnd(){
 		b.reset();
-		if(i>=3)
+		if(i>=3){
+			System.out.println("Acao invalida");
 			return 1;
+		}
 		else
 			return 0;
 	}

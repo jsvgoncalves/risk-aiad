@@ -77,7 +77,6 @@ public class PlayRequestResponder extends AchieveREResponder {
 
 	private ACLMessage handleContinueRequest(ACLMessage request) {
 		ACLMessage cont = request.createReply();
-
 		try {
 			String won = request.getContent().split(" ")[1];
 			boolean wonLast = Boolean.parseBoolean(won);
@@ -91,6 +90,9 @@ public class PlayRequestResponder extends AchieveREResponder {
 		} catch (IOException e) {
 			cont.setPerformative(ACLMessage.FAILURE);
 			cont.setContent("Could not serialize action!");
+		} catch (ArrayIndexOutOfBoundsException e2){
+			cont.setPerformative(ACLMessage.FAILURE);
+			cont.setContent("Wrong number of parameters");
 		}
 
 		return cont;

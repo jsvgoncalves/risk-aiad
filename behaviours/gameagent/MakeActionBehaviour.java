@@ -24,15 +24,22 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 	private GameAgentFaseBehaviour b;
 	private FinalBehaviour f;
 	private ArrayList<AID> p;
+	AtackAndContinueFSM ata;
 
-	public MakeActionBehaviour(GameAgentFaseBehaviour behaviour, FinalBehaviour fin) {
+	public MakeActionBehaviour(GameAgentFaseBehaviour behaviour,
+			FinalBehaviour fin) {
 		this.b = behaviour;
 		this.f = fin;
 		p = fin.getPlayers();
+		ata=null;
 	}
 
 	@Override
 	public void action() {
+		
+		if(ata!= null)
+			return;
+		
 		switch (b.getAction().getClass().getName()) {
 		case R.RECEIVE_ACTION:
 			receiveAction();
@@ -49,6 +56,9 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 		case R.DONT_ATACK:
 			dontAtack();
 			break;
+		case R.CONTINUE:
+			System.out.println("Make continue");
+			break;
 		}
 	}
 
@@ -57,10 +67,13 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 	}
 
 	private void atackAction() {
-		System.out.println("Atack");
-		myAgent.addBehaviour(new AtackAndContinueFSM(myAgent, b.to,
-				(PerformAtackAction) b.getAction(),p));
-		f.setChanged();
+		System.out.println(((PerformAtackAction) b.getAction()).getFrom()
+				+ " atacks " + ((PerformAtackAction) b.getAction()).getTo());
+
+		ata = new AtackAndContinueFSM(myAgent, b.to,
+				(PerformAtackAction) b.getAction(), p);
+		
+		myAgent.addBehaviour(ata);
 	}
 
 	private void fortifyAction() {
@@ -93,13 +106,20 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 
 	@Override
 	public boolean done() {
-		return true;
+		if(ata!= null){
+			if( ata.e )
+				f.setChanged();
+			
+			return ata.e;
+		}
+		else
+			return true;
 	}
-	
+
 	@Override
-	public int onEnd(){
-		
-		if( b.getAction().getClass().equals(R.PERFORM_ATACK ))
+	public int onEnd() {
+
+		if (b.getAction().getClass().equals(R.PERFORM_ATACK))
 			return CONT;
 		else
 			return FINAL;
