@@ -1,9 +1,13 @@
 package cli;
 
+import gui.BoardGUI;
+
+import java.awt.Dimension;
 import java.util.ArrayList;
 
-import agents.RandomAgent;
+import javax.swing.JFrame;
 
+import agents.RandomAgent;
 import util.R;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -39,6 +43,14 @@ public class Launcher {
 		} catch (StaleProxyException e) {
 			e.printStackTrace();
 		}
+
+		JFrame f = new JFrame("RISK");
+		f.setSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
+		f.setMinimumSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.add(new BoardGUI());
+		
+		f.setVisible(true);
 
 	}
 
