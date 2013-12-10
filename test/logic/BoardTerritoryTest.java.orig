@@ -25,9 +25,12 @@ import util.R;
 public class BoardTerritoryTest {
 
 	Board b;
+<<<<<<< HEAD
+
+=======
 	String player;
 	
-
+>>>>>>> 8e9bd7b2d56673121d9e3214945cf1ec7fd9c1f4
 	@Before
 	public void setUp() throws Exception {
 		b = Board.getInstance();
@@ -44,12 +47,12 @@ public class BoardTerritoryTest {
 
 	@Test
 	public void test() {
+<<<<<<< HEAD
 		
 		
 		Territory IBE = b.getTerritory("EU_IBE");
 		Territory CHI = b.getTerritory("AS_CHI");
 		ArrayList<Territory> IBE_adjacents = IBE.getAdjacents();
-		HashMap<String, Territory> territories =  b.getTerritories();
 		ArrayList<Territory> CHI_adjacents = CHI.getAdjacents();
 
 		System.out.println("IBE has " + IBE_adjacents.size() + " adjacencies");
@@ -58,11 +61,26 @@ public class BoardTerritoryTest {
 		System.out.println("CHI has " + CHI_adjacents.size() + " adjacencies");
 		System.out
 				.println("CHI has adjacent: " + CHI_adjacents.get(0).getKey());
+
+		HashMap<String, Territory> territories = b.getTerritories();
+
+		for (Territory tt : territories.values()) {
+			System.out.println(tt.getName());
+		}
+
+=======
+		Territory IBE = b.getTerritory("EU_IBE");
+		Territory UKR = b.getTerritory("AN_WIL");
+		ArrayList<Territory> IBE_adjacents = IBE.getAdjacents();
+		ArrayList<Territory> UKR_adjacents = UKR.getAdjacents();
+				
+		HashMap<String, Territory> territories =  b.getTerritories();
 		
 //		for (Territory tt : territories.values()) {
 //			System.out.println(tt.getName());
 //		}
-
+		
+>>>>>>> 8e9bd7b2d56673121d9e3214945cf1ec7fd9c1f4
 		fail("Not yet implemented");
 	}
 

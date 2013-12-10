@@ -227,7 +227,7 @@ public class Board implements Serializable{
 
 	}
 	
-	
+<<<<<<< HEAD
 	public ArrayList<String> getEmptyTerritories(){
 		ArrayList<String> empty = new ArrayList<String>();
 		
@@ -284,7 +284,7 @@ public class Board implements Serializable{
 				i=0;
 		}
 		
-	}
+=======
 	/**
 	 * 
 	 * @param t The territory.
@@ -337,5 +337,6 @@ public class Board implements Serializable{
 		}
 		
 		return adj;
+>>>>>>> 8e9bd7b2d56673121d9e3214945cf1ec7fd9c1f4
 	}
 }
