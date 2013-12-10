@@ -15,10 +15,27 @@ import actions.PerformFortificationAction;
 import actions.ReceiveAction;
 
 public class RandomAgent extends PlayerAgentBehaviours {
-
+	Random r = new Random();
+	/**
+	 * Receives soldiers and places them in territories.
+	 */
 	@Override
-	public ReceiveAction receiveSoldiers(Board b,int n) {
-		return new ReceiveAction();
+	public ReceiveAction receiveSoldiers(Board b, int numSoldiers) {
+		ArrayList<String> playerTerritories = b.getPlayerTerritories(myAgent.getLocalName());
+		// Can't place soldiers without territories
+		if(playerTerritories.size() == 0) {
+			return new ReceiveAction();
+		}
+		
+		int index, size = playerTerritories.size();
+		ReceiveAction action = new ReceiveAction();
+
+		// Choose a random territory for each soldier received.
+		for (int i = 0; i < numSoldiers; i++) {
+			index = r.nextInt(size);
+			action.addSoldiersTerritory(1, playerTerritories.get(index));
+		}
+		return action;
 	}
 
 	/**
@@ -28,7 +45,6 @@ public class RandomAgent extends PlayerAgentBehaviours {
 	 */
 	@Override
 	public AtackAction atack(Board b) {
-		Random r = new Random();
 
 		ArrayList<String> playerTerritories = b.getPlayerTerritories(myAgent.getLocalName());
 		// Can't attack without territories
@@ -53,7 +69,6 @@ public class RandomAgent extends PlayerAgentBehaviours {
 
 	@Override
 	public ContinueAction continueAtack(Board b,boolean wonLast, int mySoldiers, int hisSoldiers) {
-		Random r = new Random();
 		return new ContinueAction(r.nextBoolean());
 	}
 
@@ -64,7 +79,6 @@ public class RandomAgent extends PlayerAgentBehaviours {
 	@Override
 	public FortifyAction fortify(Board b) {
 		// Get a random player territory
-		Random r = new Random();
 
 		ArrayList<String> playerTerritories = b.getPlayerTerritories(myAgent.getLocalName());
 		// Can't attack without territories
@@ -72,7 +86,7 @@ public class RandomAgent extends PlayerAgentBehaviours {
 			return new DontFortifyAction();
 		}
 		// If random number is equal to size, don't fortify.
-		int from = r.nextInt(playerTerritories.size() + 1);
+		int from = r.nextInt(playerTerritories.size());
 		// If the random == size, then don't fortify.
 		if(from == playerTerritories.size()) {
 			return new DontFortifyAction();
