@@ -22,19 +22,23 @@ public class AtackBehaviour extends GameAgentFaseBehaviour {
 	}
 
 	public AtackBehaviour(Agent a) {
-		super(a,null);
+		super(a, null);
 	}
 
 	@Override
 	public void action() {
-		myAgent.addBehaviour(new RequestInitiator(myAgent, RequestInitiator
-				.getAtackMessage(to),this));
+		if (!waiting)
+			myAgent.addBehaviour(new RequestInitiator(myAgent, RequestInitiator
+					.getAtackMessage(to), this));
+
+		waiting = true;
 	}
 
 	@Override
 	public void handleAction(Action a) {
 		this.action = a;
 		end = true;
+		//waiting =false;
 	}
 
 	@Override
@@ -44,7 +48,8 @@ public class AtackBehaviour extends GameAgentFaseBehaviour {
 		}
 
 		if (action.getClass().getName().equals(R.PERFORM_ATACK)
-				&& ValidateAction.validate((PerformAtackAction) action, to.getLocalName())) {
+				&& ValidateAction.validate((PerformAtackAction) action,
+						to.getLocalName())) {
 			return 1;
 		} else {
 			return 0;

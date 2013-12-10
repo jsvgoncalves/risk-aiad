@@ -29,7 +29,7 @@ public class AtackAndContinueFSM extends FSMBehaviour {
 	private static final long serialVersionUID = 467195171770227699L;
 
 	private ContinueAction c;
-	
+
 	public boolean e;
 	public ContinueBehaviour cb;
 	public RequestActionBehaviour rc;
@@ -38,22 +38,22 @@ public class AtackAndContinueFSM extends FSMBehaviour {
 			ArrayList<AID> players) {
 		super(a);
 		c = new ContinueAction(true);
-		e=false;
-		cb =new ContinueBehaviour(myAgent, to);
-		rc =new RequestActionBehaviour(cb,players);
-		
+		e = false;
+		cb = new ContinueBehaviour(myAgent, to);
+		rc = new RequestActionBehaviour(cb, players);
+
 		registerFirstState(new PerformAtack(action), ATACK);
-		registerState(rc,REQUEST);
+		registerState(rc, REQUEST);
 		registerLastState(new FinalBehaviour(players), FINAL);
 
 		registerTransition(ATACK, FINAL, END);
 		registerTransition(ATACK, REQUEST, CONTINUE);
 		registerDefaultTransition(REQUEST, ATACK);
 	}
-	
+
 	@Override
-	public int onEnd(){
-		e=true;
+	public int onEnd() {
+		e = true;
 		return 1;
 	}
 
@@ -62,16 +62,16 @@ public class AtackAndContinueFSM extends FSMBehaviour {
 		 * 
 		 */
 		private static final long serialVersionUID = 4038928887592038291L;
-		
+
 		public boolean wonLast;
 		public int mySoldiers;
 		public int hisSoldiers;
-		
+
 		protected ContinueBehaviour(Agent a, AID to) {
 			super(a, to);
 			wonLast = false;
 			mySoldiers = 0;
-			hisSoldiers =0;
+			hisSoldiers = 0;
 		}
 
 		@Override
@@ -79,17 +79,22 @@ public class AtackAndContinueFSM extends FSMBehaviour {
 			c = (ContinueAction) a;
 			this.action = a;
 			end = true;
+			//waiting = false;
 		}
 
 		@Override
 		public void action() {
-			myAgent.addBehaviour(new RequestInitiator(myAgent, RequestInitiator
-					.getContinueMessage(to,wonLast,mySoldiers,hisSoldiers), this));
+			if (!waiting)
+				myAgent.addBehaviour(new RequestInitiator(myAgent,
+						RequestInitiator.getContinueMessage(to, wonLast,
+								mySoldiers, hisSoldiers), this));
+
+			waiting = true;
 		}
 
 		@Override
 		public int onEnd() {
-			
+
 			if (action.getClass().getName().equals(R.CONTINUE_ACTION)) {
 				return 1;
 			} else
@@ -133,9 +138,11 @@ public class AtackAndContinueFSM extends FSMBehaviour {
 				Board.getInstance().getTerritory(action.getFrom())
 						.removeSoldiers(1);
 			}
-			
-			cb.mySoldiers = Board.getInstance().getTerritory(action.getFrom()).getNumSoldiers();
-			cb.hisSoldiers = Board.getInstance().getTerritory(action.getTo()).getNumSoldiers();
+
+			cb.mySoldiers = Board.getInstance().getTerritory(action.getFrom())
+					.getNumSoldiers();
+			cb.hisSoldiers = Board.getInstance().getTerritory(action.getTo())
+					.getNumSoldiers();
 		}
 
 		@Override
@@ -150,7 +157,7 @@ public class AtackAndContinueFSM extends FSMBehaviour {
 					|| Board.getInstance().getTerritory(action.getTo())
 							.getNumSoldiers() == 0 || !c.willContinue()) {
 				return END; // FIM
-			} else{
+			} else {
 				rc.reset();
 				rc.resetCount();
 				return CONTINUE; // Pode continuar

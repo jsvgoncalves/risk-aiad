@@ -26,13 +26,17 @@ public class GameFortify extends GameAgentFaseBehaviour {
 
 	@Override
 	public void action() {
-		myAgent.addBehaviour(new RequestInitiator(myAgent, RequestInitiator.getFortifyMessage(to),this));
+		if(!waiting)
+			myAgent.addBehaviour(new RequestInitiator(myAgent, RequestInitiator.getFortifyMessage(to),this));
+		
+		waiting =true;
 	}
 	
 	@Override
 	public void handleAction(Action a) {
 		this.action = a;
 		end = true;
+		//waiting =false;
 	}
 	
 	@Override

@@ -37,8 +37,10 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 	@Override
 	public void action() {
 		
-		if(ata!= null)
+		if(ata!= null){
 			return;
+		}
+			
 		
 		switch (b.getAction().getClass().getName()) {
 		case R.RECEIVE_ACTION:
@@ -123,6 +125,10 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 			return CONT;
 		else
 			return FINAL;
+	}
+
+	public void resetAtack() {
+		ata=null;
 	}
 
 }

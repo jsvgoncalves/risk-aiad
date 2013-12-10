@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.FSMBehaviour;
-import logic.Board;
 
 public class NewRoundsBehaviour extends FSMBehaviour {
 
