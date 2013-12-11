@@ -54,14 +54,15 @@ public class RequestResponder extends AchieveREResponder {
 		ACLMessage join = request.createReply();
 		if (p.size() < maxPlayers) {
 			join.setPerformative(ACLMessage.INFORM);
+			AID sender = request.getSender();
+			p.add(sender);
 		}
 		else{
 			join.setPerformative(ACLMessage.FAILURE);
 		}
 		join.setContent(R.JOIN);
 
-		AID sender = request.getSender();
-		p.add(sender);
+		
 
 		return join;
 	}

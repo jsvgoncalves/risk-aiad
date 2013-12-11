@@ -33,6 +33,8 @@ public class UpdateRoundBehaviour extends SimpleBehaviour {
 	public void action() {
 		currentRound++;
 		System.out.println("Round " + currentRound);
+		System.out.println("Current Player: " + currentPlayer);
+		System.out.println("Size: " + players.size());
 		
 		position.setPlayer(players.get(currentPlayer));
 		position.reset();

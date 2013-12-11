@@ -30,6 +30,10 @@ public class ValidateAction {
 			return false;
 		}
 
+		Territory from = Board.getInstance().getTerritory(action.getFrom());
+		if( from.getNumSoldiers() <= 1)
+			return false;
+		
 		if (!Board.getInstance().isPlayersTerritory(name, action.getFrom()))
 			return false;
 
