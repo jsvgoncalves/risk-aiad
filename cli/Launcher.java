@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import agents.GameAgent;
 import agents.HumanAgent;
 import agents.RandomAgent;
 import util.R;
@@ -23,23 +24,25 @@ public class Launcher {
 		profile.setParameter(R.PORT_CONFIG, R.PORT);
 		jade.wrapper.AgentContainer container = runtime
 				.createMainContainer(profile);
+		
+		GameAgent gameAgent = new GameAgent();
 		try {
 			ArrayList<String> names = util.NameGenerator.randomName(3);
-			container.acceptNewAgent(names.get(0), new agents.PlayerAgent(new HumanAgent()))
+			container.acceptNewAgent(names.get(0), new agents.PlayerAgent(new RandomAgent()))
 					.start();
 			container.acceptNewAgent(names.get(1), new agents.PlayerAgent(new RandomAgent()))
 					.start();
 			container.acceptNewAgent(names.get(2), new agents.PlayerAgent(new RandomAgent()))
 					.start();
 
-			container.acceptNewAgent("Board", new agents.GameAgent()).start();
+			container.acceptNewAgent("Board", gameAgent).start();
 
 			container.acceptNewAgent(names.get(3), new agents.PlayerAgent(new RandomAgent()))
 					.start();
 			container.acceptNewAgent(names.get(4), new agents.PlayerAgent(new RandomAgent()))
 					.start();
-			container.acceptNewAgent(names.get(5), new agents.PlayerAgent(new RandomAgent()))
-					.start();
+//			container.acceptNewAgent(names.get(5), new agents.PlayerAgent(new RandomAgent()))
+//					.start();
 
 		} catch (StaleProxyException e) {
 			e.printStackTrace();
@@ -49,7 +52,7 @@ public class Launcher {
 		f.setSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
 		f.setMinimumSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.add(new BoardGUI());
+		f.add(new BoardGUI(gameAgent));
 		
 		f.setVisible(true);
 
