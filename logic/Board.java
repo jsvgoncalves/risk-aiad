@@ -90,6 +90,35 @@ public class Board implements Serializable{
 		Territory AN_WIL = new Territory("Wilkes Land", "AN_WIL");
 		Territory AN_QUE = new Territory("Queen Maud Land", "AN_QUE");
 		Territory AN_MAR = new Territory("Marie Byrd Land", "AN_MAR");
+		
+		// AFRICA
+		Territory AF_NIL = new Territory("Nile", "AF_NIL");
+		Territory AF_THE = new Territory("The Horn", "AF_THE");
+		Territory AF_CAP = new Territory("Cape of Good Hope", "AF_CAP");
+		Territory AF_MAD = new Territory("Madagascar", "AF_MAD");
+		Territory AF_ZAI = new Territory("Zaire", "AF_ZAI");
+		Territory AF_MAG = new Territory("Maghreb", "AF_MAG");
+		
+		// SOUTH AMERICA
+		Territory SA_PAR = new Territory("Parana", "SA_PAR");
+		Territory SA_AMA = new Territory("Amazonas", "SA_AMA");
+		Territory SA_BOL = new Territory("Bolivia", "SA_BOL");
+		Territory SA_ARG = new Territory("Argentina", "SA_ARG");
+		Territory SA_PER = new Territory("Peru", "SA_PER");
+		Territory SA_COL = new Territory("Columbia", "SA_COL");
+		
+		// NORTH AMERICA
+		Territory NA_MEX = new Territory("Mexico", "NA_MEX");
+		Territory NA_CAR = new Territory("Caribbean", "NA_CAR");
+		Territory NA_SUN = new Territory("Sunbelt", "NA_SUN");
+		Territory NA_PAC = new Territory("Pacifica", "NA_PAC");
+		Territory NA_PLA = new Territory("Great Plains", "NA_PLA");
+		Territory NA_EAS = new Territory("East Seaboard", "NA_EAS");
+		Territory NA_LAW = new Territory("St Lawrence", "NA_LAW");
+		Territory NA_NUN = new Territory("Nunavut", "NA_NUN");
+		Territory NA_KLO = new Territory("Klondike", "NA_KLO");
+		Territory NA_GRE = new Territory("Greenland", "NA_GRE");
+		
 
 		/*
 		 * Add
@@ -132,7 +161,35 @@ public class Board implements Serializable{
 		territories.put(AN_WIL.getKey(), AN_WIL);
 		territories.put(AN_QUE.getKey(), AN_QUE);
 		territories.put(AN_MAR.getKey(), AN_MAR);
+		
+		// Africa
+		territories.put(AF_NIL.getKey(), AF_NIL);
+		territories.put(AF_THE.getKey(), AF_THE);
+		territories.put(AF_MAD.getKey(), AF_MAD);
+		territories.put(AF_CAP.getKey(), AF_CAP);
+		territories.put(AF_ZAI.getKey(), AF_ZAI);
+		territories.put(AF_MAG.getKey(), AF_MAG);
 
+		// South America
+		territories.put(SA_PAR.getKey(), SA_PAR);
+		territories.put(SA_AMA.getKey(), SA_AMA);
+		territories.put(SA_BOL.getKey(), SA_BOL);
+		territories.put(SA_ARG.getKey(), SA_ARG);
+		territories.put(SA_PER.getKey(), SA_PER);
+		territories.put(SA_COL.getKey(), SA_COL);
+		
+		// North America
+		territories.put(NA_MEX.getKey(), NA_MEX);
+		territories.put(NA_CAR.getKey(), NA_CAR);
+		territories.put(NA_SUN.getKey(), NA_SUN);
+		territories.put(NA_PAC.getKey(), NA_PAC);
+		territories.put(NA_EAS.getKey(), NA_EAS);
+		territories.put(NA_PLA.getKey(), NA_PLA);
+		territories.put(NA_LAW.getKey(), NA_LAW);
+		territories.put(NA_NUN.getKey(), NA_NUN);
+		territories.put(NA_KLO.getKey(), NA_KLO);
+		territories.put(NA_GRE.getKey(), NA_GRE);
+		
 		/*
 		 * Borders
 		 */
@@ -188,6 +245,54 @@ public class Board implements Serializable{
 		AN_WIL.setAdjacent(AN_QUE);
 		AN_WIL.setAdjacent(OC_AUS);
 		AN_QUE.setAdjacent(AN_MAR);
+		
+		// Africa
+		AF_NIL.setAdjacent(AS_ARA);
+		AF_NIL.setAdjacent(AF_THE);
+		AF_NIL.setAdjacent(AF_ZAI);
+		AF_NIL.setAdjacent(AF_MAG);
+		AF_THE.setAdjacent(AF_MAD);
+		AF_THE.setAdjacent(AF_CAP);
+		AF_THE.setAdjacent(AF_ZAI);
+		AF_CAP.setAdjacent(AF_MAD);
+		AF_CAP.setAdjacent(AF_ZAI);
+		AF_CAP.setAdjacent(AN_QUE);
+		AF_ZAI.setAdjacent(AF_MAG);
+		AF_MAG.setAdjacent(EU_IBE);
+		
+		// South America
+		SA_PAR.setAdjacent(AF_MAG);
+		SA_PAR.setAdjacent(SA_AMA);
+		SA_PAR.setAdjacent(SA_BOL);
+		SA_PAR.setAdjacent(SA_ARG);
+		SA_ARG.setAdjacent(SA_BOL);
+		SA_ARG.setAdjacent(AN_MAR);
+		SA_BOL.setAdjacent(SA_AMA);
+		SA_BOL.setAdjacent(SA_PER);
+		SA_COL.setAdjacent(SA_AMA);
+		SA_COL.setAdjacent(SA_PER);
+		
+		// North America
+		NA_MEX.setAdjacent(SA_COL);
+		NA_MEX.setAdjacent(NA_CAR);
+		NA_MEX.setAdjacent(NA_SUN);
+		NA_MEX.setAdjacent(NA_PAC);
+		NA_SUN.setAdjacent(NA_CAR);
+		NA_SUN.setAdjacent(NA_EAS);
+		NA_SUN.setAdjacent(NA_PAC);
+		NA_SUN.setAdjacent(NA_PLA);
+		NA_PLA.setAdjacent(NA_PAC);
+		NA_PLA.setAdjacent(NA_LAW);
+		NA_PLA.setAdjacent(NA_EAS);
+		NA_LAW.setAdjacent(NA_EAS);
+		NA_LAW.setAdjacent(NA_NUN);
+		NA_LAW.setAdjacent(NA_GRE);
+		NA_NUN.setAdjacent(NA_PAC);
+		NA_NUN.setAdjacent(NA_KLO);
+		NA_NUN.setAdjacent(NA_GRE);
+		NA_KLO.setAdjacent(NA_PAC);
+		NA_KLO.setAdjacent(AS_CHU);
+		NA_GRE.setAdjacent(EU_ICE);
 	}
 
 	@Override
