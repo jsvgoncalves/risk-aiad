@@ -58,6 +58,7 @@ public class UpdateRoundBehaviour extends SimpleBehaviour {
 			currentPlayer = 0;
 		}
 		((GameAgent) myAgent).notifyTurnEnded();
+		((GameAgent) myAgent).setCurrentRound(currentRound);
 	}
 
 	@Override

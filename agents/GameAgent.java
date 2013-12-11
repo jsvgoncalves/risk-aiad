@@ -81,27 +81,6 @@ public class GameAgent extends Agent {
 		System.out.println(message);
 		System.out.println("#############");
 	}
-
-	/**
-	 * Implements a game turn.
-	 */
-	// TODO! Metodo não utilizado?
-	protected void gameTurn() {
-
-		if (currentPlayer > players.size() - 1) {
-			currentPlayer = 0;
-		}
-
-		addBehaviour(new RequestActionBehaviour(new PositionSoldiers(this,
-				players.get(currentPlayer), 1), players,this));
-		addBehaviour(new RequestActionBehaviour(new AtackBehaviour(this,
-				players.get(currentPlayer)), players,this));
-		addBehaviour(new RequestActionBehaviour(new GameFortify(this,
-				players.get(currentPlayer)), players,this));
-
-		currentPlayer++;
-//		notifyTurnEnded();
-	}
 	
 	/** 
 	 * Notifies the listeners that a turn has ended
@@ -174,5 +153,13 @@ public class GameAgent extends Agent {
 
 	public Board getBoard() {
 		return board;
+	}
+
+	public void setCurrentRound(int currentRound) {
+		this.currentRound = currentRound;
+	}
+	
+	public int getCurrentRound() {
+		return currentRound;
 	}
 }
