@@ -469,4 +469,13 @@ public class Board implements Serializable{
 	public String getPlayerFromTerritory(Territory t) {
 		return allocations.get(t.getKey());
 	}
+
+	public int getPlayerTotalSoldiers(String player) {
+		int count = 0;
+		ArrayList<Territory> territories = getPlayerTerritoriesT(player);
+		for (Territory territory : territories) {
+			count += territory.getNumSoldiers();
+		}
+		return count;
+	}
 }
