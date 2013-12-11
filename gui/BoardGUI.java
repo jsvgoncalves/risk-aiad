@@ -38,7 +38,7 @@ public class BoardGUI extends JPanel implements Observer{
 		
 		this.setLayout(null);
 		
-		// AMERICA LABELS
+		// NORTH AMERICA LABELS
 		labels.put("NA_NUN", new BoardLabel("1", 167, 126, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
 		this.add(labels.get("NA_NUN"));
 		labels.put("NA_KLO", new BoardLabel("1", 58, 111, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
@@ -111,16 +111,26 @@ public class BoardGUI extends JPanel implements Observer{
 		this.add(labels.get("AS_JAP"));
 		
 		// OCEANIA
-		labels.put("OC_BOR", new BoardLabel("1", 893, 245, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
+		labels.put("OC_BOR", new BoardLabel("1", 769, 403, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
 		this.add(labels.get("OC_BOR"));
-		labels.put("OC_EAS", new BoardLabel("1", 893, 245, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
+		labels.put("OC_EAS", new BoardLabel("1", 862, 393, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
 		this.add(labels.get("OC_EAS"));
-		labels.put("OC_OUT", new BoardLabel("1", 893, 245, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
+		labels.put("OC_OUT", new BoardLabel("1", 847, 468, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
 		this.add(labels.get("OC_OUT"));
-		labels.put("OC_AUS", new BoardLabel("1", 893, 245, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
+		labels.put("OC_AUS", new BoardLabel("1", 761, 476, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
 		this.add(labels.get("OC_AUS"));
-		labels.put("OC_NEW", new BoardLabel("1", 893, 245, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
+		labels.put("OC_NEW", new BoardLabel("1", 939, 500, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
 		this.add(labels.get("OC_NEW"));
+		
+		// ANTARTICA
+		labels.put("AN_WIL", new BoardLabel("1", 830, 620, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
+		this.add(labels.get("AN_WIL"));
+		labels.put("AN_QUE", new BoardLabel("1", 606, 606, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
+		this.add(labels.get("AN_QUE"));
+		labels.put("AN_MAR", new BoardLabel("1", 347, 617, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
+		this.add(labels.get("AN_MAR"));
+		
+		
 	}
 	
 	@Override
