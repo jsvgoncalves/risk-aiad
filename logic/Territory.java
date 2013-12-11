@@ -45,7 +45,15 @@ public class Territory {
 	}
 
 	public void removeSoldiers(int n) {
-		numSoldiers -= n;
+		if (numSoldiers <= 0 )
+			numSoldiers=0;
+		else
+			numSoldiers -= n;
+	}
+
+	public void conquer(Territory tTo) {
+		tTo.addSoldiers(numSoldiers-1);
+		numSoldiers=1;
 	}
 
 }

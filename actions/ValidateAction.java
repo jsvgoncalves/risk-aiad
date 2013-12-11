@@ -35,8 +35,13 @@ public class ValidateAction {
 
 		for (Territory t : Board.getInstance().getTerritory(action.getFrom())
 				.getAdjacents()) {
-			if (t.getKey().equals(action.getTo()))
-				return true;
+			if (t.getKey().equals(action.getTo())){
+				if( t.getNumSoldiers() > 0 )
+					return true;
+				else 
+					return false;
+			}
+				
 		}
 
 		return false;

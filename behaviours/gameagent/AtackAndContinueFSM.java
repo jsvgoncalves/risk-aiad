@@ -79,7 +79,7 @@ public class AtackAndContinueFSM extends FSMBehaviour {
 			c = (ContinueAction) a;
 			this.action = a;
 			end = true;
-			//waiting = false;
+			// waiting = false;
 		}
 
 		@Override
@@ -129,6 +129,7 @@ public class AtackAndContinueFSM extends FSMBehaviour {
 
 			System.out.println("Player 1 rolled: " + p1);
 			System.out.println("Player 2 rolled: " + p2);
+			System.out.println();
 
 			if (p1 > p2) {
 				Board.getInstance().getTerritory(action.getTo())
@@ -155,8 +156,13 @@ public class AtackAndContinueFSM extends FSMBehaviour {
 			if (Board.getInstance().getTerritory(action.getFrom())
 					.getNumSoldiers() == 1
 					|| Board.getInstance().getTerritory(action.getTo())
-							.getNumSoldiers() == 0 || !c.willContinue()) {
+							.getNumSoldiers() == 0) {
+				
+				Board.getInstance().conquer(action.getFrom(),action.getTo());
 				return END; // FIM
+			}
+			if (!c.willContinue()) {
+				return END;
 			} else {
 				rc.reset();
 				rc.resetCount();

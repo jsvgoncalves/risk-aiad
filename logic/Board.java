@@ -358,4 +358,14 @@ public class Board implements Serializable{
 		}
 		return enemyAdjacents;
 	}
+
+	public void conquer(String from, String to) {
+		Territory tFrom = territories.get(from);
+		Territory tTo = territories.get(to);
+		
+		allocations.remove(to);
+		allocations.put(to, allocations.get(from));
+		
+		tFrom.conquer(tTo);
+	}
 }
