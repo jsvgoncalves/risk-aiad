@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import agents.HumanAgent;
 import agents.RandomAgent;
 import util.R;
 import jade.core.Profile;
@@ -24,7 +25,7 @@ public class Launcher {
 				.createMainContainer(profile);
 		try {
 			ArrayList<String> names = util.NameGenerator.randomName(3);
-			container.acceptNewAgent(names.get(0), new agents.PlayerAgent(new RandomAgent()))
+			container.acceptNewAgent(names.get(0), new agents.PlayerAgent(new HumanAgent()))
 					.start();
 			container.acceptNewAgent(names.get(1), new agents.PlayerAgent(new RandomAgent()))
 					.start();
