@@ -1,5 +1,7 @@
 package agents;
 
+import gui.BoardGUI;
+
 import java.util.ArrayList;
 
 import behaviours.gameagent.AllocateTerritoriesBehaviour;
@@ -8,9 +10,7 @@ import behaviours.gameagent.GameFortify;
 import behaviours.gameagent.NewRoundsBehaviour;
 import behaviours.gameagent.PositionSoldiers;
 import behaviours.gameagent.RequestActionBehaviour;
-
 import communication.RequestResponder;
-
 import util.R;
 import jade.core.AID;
 import jade.core.Agent;
@@ -39,6 +39,7 @@ public class GameAgent extends Agent {
 	int currentPlayer = 0;
 	int gameStatus = R.GAME_WAITING;
 	private Board board;
+	private ArrayList<BoardGUI> listeners = new ArrayList<BoardGUI>();
 	
 	protected void setup() {
 
@@ -60,12 +61,9 @@ public class GameAgent extends Agent {
 
 		GameAgentBehaviour fsmBehaviour = new GameAgentBehaviour(this);
 
-		fsmBehaviour
-				.registerFirstState(new WaitingForPlayers(5), WAITING_STATE);
-		fsmBehaviour
-				.registerState(new NewRoundsBehaviour(this, players), ROUND);
-		fsmBehaviour.registerState(new AllocateTerritoriesBehaviour(this),
-				ALLOCATE);
+		fsmBehaviour.registerFirstState(new WaitingForPlayers(5), WAITING_STATE);
+		fsmBehaviour.registerState(new AllocateTerritoriesBehaviour(this), ALLOCATE);
+		fsmBehaviour.registerState(new NewRoundsBehaviour(this, players), ROUND);
 
 		fsmBehaviour.registerTransition(WAITING_STATE, ALLOCATE, 1);
 		fsmBehaviour.registerDefaultTransition(ALLOCATE, ROUND);
@@ -87,6 +85,7 @@ public class GameAgent extends Agent {
 	/**
 	 * Implements a game turn.
 	 */
+	// TODO! Metodo não utilizado?
 	protected void gameTurn() {
 
 		if (currentPlayer > players.size() - 1) {
@@ -101,6 +100,23 @@ public class GameAgent extends Agent {
 				players.get(currentPlayer)), players,this));
 
 		currentPlayer++;
+//		notifyTurnEnded();
+	}
+	
+	/** 
+	 * Notifies the listeners that a turn has ended
+	 */
+	public void notifyTurnEnded() {
+
+		for (BoardGUI listener : listeners) {
+			listener.notifyTurnEnded();
+		}
+		
+	}
+	
+	
+	public void addListener(BoardGUI boardGUI) {
+		this.listeners.add(boardGUI);
 	}
 
 	private class GameAgentBehaviour extends FSMBehaviour {
@@ -113,6 +129,7 @@ public class GameAgent extends Agent {
 		public GameAgentBehaviour(GameAgent gameAgent) {
 			super(gameAgent);
 		}
+		
 
 	}
 

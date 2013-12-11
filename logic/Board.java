@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import util.R;
+
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 public class Board implements Serializable{
@@ -42,71 +44,72 @@ public class Board implements Serializable{
 		 * Territories
 		 */
 
+
 		// EUROPE
-		Territory EU_IBE = new Territory("Iberia", "EU_IBE");
-		Territory EU_FR = new Territory("France", "EU_FR");
-		Territory EU_IT = new Territory("Italy", "EU_IT");
-		Territory EU_CEN = new Territory("CEN Europe", "EU_CEN");
-		Territory EU_BAL = new Territory("Balkans", "EU_BAL");
-		Territory EU_BRI = new Territory("British Isles", "EU_BRI");
-		Territory EU_ICE = new Territory("Iceland", "EU_ICE");
-		Territory EU_SCA = new Territory("Scandinavia", "EU_SCA");
-		Territory EU_EAS = new Territory("Eastern Europe", "EU_EAS");
-		Territory EU_RUS = new Territory("European Russia", "EU_RUS");
+		Territory EU_IBE = new Territory("Iberia", R.EU_IBE_KEY);
+		Territory EU_FR = new Territory("France", R.EU_FR_KEY);
+		Territory EU_IT = new Territory("Italy", R.EU_IT_KEY);
+		Territory EU_CEN = new Territory("CEN Europe", R.EU_CEN_KEY);
+		Territory EU_BAL = new Territory("Balkans", R.EU_BAL_KEY);
+		Territory EU_BRI = new Territory("British Isles", R.EU_BRI_KEY);
+		Territory EU_ICE = new Territory("Iceland", R.EU_ICE_KEY);
+		Territory EU_SCA = new Territory("Scandinavia", R.EU_SCA_KEY);
+		Territory EU_EAS = new Territory("Eastern Europe", R.EU_EAS_KEY);
+		Territory EU_RUS = new Territory("European Russia", R.EU_RUS_KEY);
 
 		// ASIA
-		Territory AS_YAM = new Territory("Yamalia", "AS_YAM");
-		Territory AS_STA = new Territory("The Stans", "AS_STA");
-		Territory AS_MEA = new Territory("Middle East", "AS_MEA");
-		Territory AS_ARA = new Territory("Arabia", "AS_ARA");
-		Territory AS_SAK = new Territory("Sakha", "AS_SAK");
-		Territory AS_MON = new Territory("Mongolia", "AS_MON");
-		Territory AS_CHI = new Territory("China", "AS_CHI");
-		Territory AS_IND = new Territory("India", "AS_IND");
-		Territory AS_INO = new Territory("Indochina", "AS_INO");
-		Territory AS_MAC = new Territory("Manchuria", "AS_MAC");
-		Territory AS_CHU = new Territory("Chukotka", "AS_CHU");
-		Territory AS_JAP = new Territory("Japan", "AS_JAP");
+		Territory AS_YAM = new Territory("Yamalia", R.AS_YAM_KEY);
+		Territory AS_STA = new Territory("The Stans", R.AS_STA_KEY);
+		Territory AS_MEA = new Territory("Middle East", R.AS_MEA_KEY);
+		Territory AS_ARA = new Territory("Arabia", R.AS_ARA_KEY);
+		Territory AS_SAK = new Territory("Sakha", R.AS_SAK_KEY);
+		Territory AS_MON = new Territory("Mongolia", R.AS_MON_KEY);
+		Territory AS_CHI = new Territory("China", R.AS_CHI_KEY);
+		Territory AS_IND = new Territory("India", R.AS_IND_KEY);
+		Territory AS_INO = new Territory("Indochina", R.AS_INO_KEY);
+		Territory AS_MAC = new Territory("Manchuria", R.AS_MAC_KEY);
+		Territory AS_CHU = new Territory("Chukotka", R.AS_CHU_KEY);
+		Territory AS_JAP = new Territory("Japan", R.AS_JAP_KEY);
 
 		// OCEANIA
-		Territory OC_BOR = new Territory("Borneo", "OC_BOR");
-		Territory OC_EAS = new Territory("East Indies", "OC_EAS");
-		Territory OC_OUT = new Territory("Outback", "OC_OUT");
-		Territory OC_AUS = new Territory("Eastern Australia", "OC_AUS");
-		Territory OC_NEW = new Territory("New Zealand", "OC_NEW");
+		Territory OC_BOR = new Territory("Borneo", R.OC_BOR_KEY);
+		Territory OC_EAS = new Territory("East Indies", R.OC_EAS_KEY);
+		Territory OC_OUT = new Territory("Outback", R.OC_OUT_KEY);
+		Territory OC_AUS = new Territory("Eastern Australia", R.OC_AUS_KEY);
+		Territory OC_NEW = new Territory("New Zealand", R.OC_NEW_KEY);
 
 		// ANTARCTICA
-		Territory AN_WIL = new Territory("Wilkes Land", "AN_WIL");
-		Territory AN_QUE = new Territory("Queen Maud Land", "AN_QUE");
-		Territory AN_MAR = new Territory("Marie Byrd Land", "AN_MAR");
-		
+		Territory AN_WIL = new Territory("Wilkes Land", R.AN_WIL_KEY);
+		Territory AN_QUE = new Territory("Queen Maud Land", R.AN_QUE_KEY);
+		Territory AN_MAR = new Territory("Marie Byrd Land", R.AN_MAR_KEY);
+
 		// AFRICA
-		Territory AF_NIL = new Territory("Nile", "AF_NIL");
-		Territory AF_THE = new Territory("The Horn", "AF_THE");
-		Territory AF_CAP = new Territory("Cape of Good Hope", "AF_CAP");
-		Territory AF_MAD = new Territory("Madagascar", "AF_MAD");
-		Territory AF_ZAI = new Territory("Zaire", "AF_ZAI");
-		Territory AF_MAG = new Territory("Maghreb", "AF_MAG");
-		
+		Territory AF_NIL = new Territory("Nile", R.AF_NIL_KEY);
+		Territory AF_THE = new Territory("The Horn", R.AF_THE_KEY);
+		Territory AF_CAP = new Territory("Cape of Good Hope", R.AF_CAP_KEY);
+		Territory AF_MAD = new Territory("Madagascar", R.AF_MAD_KEY);
+		Territory AF_ZAI = new Territory("Zaire", R.AF_ZAI_KEY);
+		Territory AF_MAG = new Territory("Maghreb", R.AF_MAG_KEY);
+
 		// SOUTH AMERICA
-		Territory SA_PAR = new Territory("Parana", "SA_PAR");
-		Territory SA_AMA = new Territory("Amazonas", "SA_AMA");
-		Territory SA_BOL = new Territory("Bolivia", "SA_BOL");
-		Territory SA_ARG = new Territory("Argentina", "SA_ARG");
-		Territory SA_PER = new Territory("Peru", "SA_PER");
-		Territory SA_COL = new Territory("Columbia", "SA_COL");
-		
+		Territory SA_PAR = new Territory("Parana", R.SA_PAR_KEY);
+		Territory SA_AMA = new Territory("Amazonas", R.SA_AMA_KEY);
+		Territory SA_BOL = new Territory("Bolivia", R.SA_BOL_KEY);
+		Territory SA_ARG = new Territory("Argentina", R.SA_ARG_KEY);
+		Territory SA_PER = new Territory("Peru", R.SA_PER_KEY);
+		Territory SA_COL = new Territory("Columbia", R.SA_COL_KEY);
+
 		// NORTH AMERICA
-		Territory NA_MEX = new Territory("Mexico", "NA_MEX");
-		Territory NA_CAR = new Territory("Caribbean", "NA_CAR");
-		Territory NA_SUN = new Territory("Sunbelt", "NA_SUN");
-		Territory NA_PAC = new Territory("Pacifica", "NA_PAC");
-		Territory NA_PLA = new Territory("Great Plains", "NA_PLA");
-		Territory NA_EAS = new Territory("East Seaboard", "NA_EAS");
-		Territory NA_LAW = new Territory("St Lawrence", "NA_LAW");
-		Territory NA_NUN = new Territory("Nunavut", "NA_NUN");
-		Territory NA_KLO = new Territory("Klondike", "NA_KLO");
-		Territory NA_GRE = new Territory("Greenland", "NA_GRE");
+		Territory NA_MEX = new Territory("Mexico", R.NA_MEX_KEY);
+		Territory NA_CAR = new Territory("Caribbean", R.NA_CAR_KEY);
+		Territory NA_SUN = new Territory("Sunbelt", R.NA_SUN_KEY);
+		Territory NA_PAC = new Territory("Pacifica", R.NA_PAC_KEY);
+		Territory NA_PLA = new Territory("Great Plains", R.NA_PLA_KEY);
+		Territory NA_EAS = new Territory("East Seaboard", R.NA_EAS_KEY);
+		Territory NA_LAW = new Territory("St Lawrence", R.NA_LAW_KEY);
+		Territory NA_NUN = new Territory("Nunavut", R.NA_NUN_KEY);
+		Territory NA_KLO = new Territory("Klondike", R.NA_KLO_KEY);
+		Territory NA_GRE = new Territory("Greenland", R.NA_GRE_KEY);
 		
 
 		/*
@@ -461,5 +464,9 @@ public class Board implements Serializable{
 		allocations.put(to, allocations.get(from));
 		
 		tFrom.conquer(tTo);
+	}
+
+	public String getPlayerFromTerritory(Territory t) {
+		return allocations.get(t.getKey());
 	}
 }

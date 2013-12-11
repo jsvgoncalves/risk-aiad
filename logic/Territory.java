@@ -60,5 +60,10 @@ public class Territory implements Serializable {
 		tTo.addSoldiers(numSoldiers-1);
 		numSoldiers=1;
 	}
+	
+	@Override
+	public String toString() {
+		return key;
+	}
 
 }

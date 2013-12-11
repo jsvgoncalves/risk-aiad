@@ -54,8 +54,10 @@ public class UpdateRoundBehaviour extends SimpleBehaviour {
 		fortify.resetCount();
 		
 		currentPlayer++;
-		if (currentPlayer >= players.size())
+		if (currentPlayer >= players.size()) {
 			currentPlayer = 0;
+		}
+		((GameAgent) myAgent).notifyTurnEnded();
 	}
 
 	@Override
