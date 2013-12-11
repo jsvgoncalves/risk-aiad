@@ -30,7 +30,7 @@ public class BoardTerritoryTest {
 
 	@Before
 	public void setUp() throws Exception {
-		b = Board.getInstance();
+		b = new Board();
 		player = "Joao";
 		b.setTerritoryPlayer(player, "EU_RUS");
 		b.setTerritoryPlayer(player, "EU_CEN");
@@ -118,6 +118,8 @@ public class BoardTerritoryTest {
 	@Test
 	public void testRandomAllocation() {
 
+		Board board = new Board();
+		
 		ArrayList<AID> players = new ArrayList<AID>();
 
 		jade.core.Runtime runtime = jade.core.Runtime.instance();
@@ -146,17 +148,17 @@ public class BoardTerritoryTest {
 			players.add(d.getAID());
 			players.add(e.getAID());
 
-			Board.getInstance().allocateRandomTerritories(players);
+			board.allocateRandomTerritories(players);
 
-			assertTrue(Board.getInstance().getEmptyTerritories().size() == 0);
+			assertTrue(board.getEmptyTerritories().size() == 0);
 			
-			ArrayList<Territory> territories = Board.getInstance().getPlayerTerritoriesT(a.getLocalName());
+			ArrayList<Territory> territories = board.getPlayerTerritoriesT(a.getLocalName());
 			int sum = 0;
 			for(Territory t:territories){
 				sum+=t.getNumSoldiers();
 			}
 		
-			assertTrue(sum == Board.getInstance().getStartingSoldiersNumber(players.size()));
+			assertTrue(sum == board.getStartingSoldiersNumber(players.size()));
 			
 		} catch (StaleProxyException e) {
 			fail();

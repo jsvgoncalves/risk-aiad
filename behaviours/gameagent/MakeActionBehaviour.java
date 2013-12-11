@@ -6,8 +6,10 @@ import java.util.Hashtable;
 import actions.PerformAtackAction;
 import actions.PerformFortificationAction;
 import actions.ReceiveAction;
+import agents.GameAgent;
 import util.R;
 import jade.core.AID;
+import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
 import logic.Board;
 
@@ -25,13 +27,16 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 	private FinalBehaviour f;
 	private ArrayList<AID> p;
 	AtackAndContinueFSM ata;
+	private Board bo;
 
 	public MakeActionBehaviour(GameAgentFaseBehaviour behaviour,
-			FinalBehaviour fin) {
+			FinalBehaviour fin, Agent a) {
+		super(a);
 		this.b = behaviour;
 		this.f = fin;
 		p = fin.getPlayers();
 		ata=null;
+		bo = ((GameAgent)myAgent).getBoard();
 	}
 
 	@Override
@@ -83,9 +88,9 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 		PerformFortificationAction action = (PerformFortificationAction) b
 				.getAction();
 
-		Board.getInstance().getTerritory(action.getFrom())
+		bo.getTerritory(action.getFrom())
 				.removeSoldiers(action.getN());
-		Board.getInstance().getTerritory(action.getFrom())
+		bo.getTerritory(action.getFrom())
 				.addSoldiers(action.getN());
 		f.setChanged();
 	}
@@ -100,7 +105,7 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 		Hashtable<String, Integer> soldiers = action.getSoldiersByTerritory();
 
 		for (String terr : soldiers.keySet()) {
-			Board.getInstance().getTerritory(terr)
+			bo.getTerritory(terr)
 					.addSoldiers(soldiers.get(terr));
 		}
 		f.setChanged();

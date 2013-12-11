@@ -4,6 +4,7 @@ import util.R;
 import actions.Action;
 import actions.PerformFortificationAction;
 import actions.ValidateAction;
+import agents.GameAgent;
 import communication.RequestInitiator;
 
 import jade.core.AID;
@@ -46,7 +47,7 @@ public class GameFortify extends GameAgentFaseBehaviour {
 		}
 
 		if (action.getClass().getName().equals(R.PERFORM_FORTIFICATION)
-				&& ValidateAction.validate((PerformFortificationAction) action, to.getLocalName())) {
+				&& ValidateAction.validate((PerformFortificationAction) action, to.getLocalName(),((GameAgent)myAgent).getBoard())) {
 			return 1;
 		} else {
 			return 0;

@@ -22,18 +22,7 @@ public class Board implements Serializable{
 	// Territory -> Player
 	private HashMap<String, String> allocations = new HashMap<String, String>();
 
-	private static Board instance = new Board();
-
-	/**
-	 * Singleton
-	 * 
-	 * @return
-	 */
-	public static Board getInstance() {
-		return instance;
-	}
-
-	private Board() {
+	public Board() {
 		initTerritories();
 	}
 

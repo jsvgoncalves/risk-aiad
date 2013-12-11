@@ -7,37 +7,37 @@ import logic.Territory;
 
 public class ValidateAction {
 	public static boolean validate(int availableSoldiers, ReceiveAction action,
-			String name) {
+			String name, Board b) {
 
 		Hashtable<String, Integer> s = action.getSoldiersByTerritory();
 		int soma = 0;
 		for (String terr : s.keySet()) {
 			soma += s.get(terr);
 
-			if (!Board.getInstance().isPlayersTerritory(name, terr))
+			if (!b.isPlayersTerritory(name, terr))
 				return false;
 
-			if (Board.getInstance().getTerritory(terr) == null)
+			if (b.getTerritory(terr) == null)
 				return false;
 		}
 
 		return soma == availableSoldiers;
 	}
 
-	public static boolean validate(PerformAtackAction action, String name) {
-		if (Board.getInstance().getTerritory(action.getFrom()) == null
-				|| Board.getInstance().getTerritory(action.getTo()) == null) {
+	public static boolean validate(PerformAtackAction action, String name, Board b) {
+		if (b.getTerritory(action.getFrom()) == null
+				|| b.getTerritory(action.getTo()) == null) {
 			return false;
 		}
 
-		Territory from = Board.getInstance().getTerritory(action.getFrom());
+		Territory from = b.getTerritory(action.getFrom());
 		if( from.getNumSoldiers() <= 1)
 			return false;
 		
-		if (!Board.getInstance().isPlayersTerritory(name, action.getFrom()))
+		if (!b.isPlayersTerritory(name, action.getFrom()))
 			return false;
 
-		for (Territory t : Board.getInstance().getTerritory(action.getFrom())
+		for (Territory t : b.getTerritory(action.getFrom())
 				.getAdjacents()) {
 			if (t.getKey().equals(action.getTo())){
 				if( t.getNumSoldiers() > 0 )
@@ -52,17 +52,17 @@ public class ValidateAction {
 	}
 
 	public static boolean validate(PerformFortificationAction action,
-			String name) {
+			String name, Board b) {
 
-		if (!Board.getInstance().isPlayersTerritory(name, action.getFrom())
-				&& !Board.getInstance()
+		if (!b.isPlayersTerritory(name, action.getFrom())
+				&& !b
 						.isPlayersTerritory(name, action.getTo()))
 			return false;
 
-		for (Territory t : Board.getInstance().getTerritory(action.getFrom())
+		for (Territory t : b.getTerritory(action.getFrom())
 				.getAdjacents()) {
 			if (t.getKey().equals(action.getTo())
-					&& Board.getInstance().getTerritory(action.getFrom())
+					&& b.getTerritory(action.getFrom())
 							.getNumSoldiers() >= action.getN())
 				return true;
 		}

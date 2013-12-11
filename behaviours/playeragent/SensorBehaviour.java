@@ -3,6 +3,7 @@ package behaviours.playeragent;
 
 import actions.Action;
 import actions.DontFortifyAction;
+import agents.PlayerAgent;
 import agents.PlayerAgentBehaviours;
 
 import jade.core.Agent;
@@ -17,11 +18,13 @@ public class SensorBehaviour extends SimpleBehaviour {
 	private static final long serialVersionUID = 6852062724207667965L;
 	
 	private PlayerAgentBehaviours a;
-	private Board b = Board.getInstance(); // FIXME! isto provavelmente vai ser passado na comunicação? Mudar isto.
+	private Board b; // FIXME! isto provavelmente vai ser passado na comunicação? Mudar isto.
 	
 	public SensorBehaviour(Agent my,PlayerAgentBehaviours a){
 		super(my);
 		this.a = a;
+		
+		b = ((PlayerAgent)my).getBoard();
 	}
 
 	public Action respond(){

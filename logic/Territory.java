@@ -1,9 +1,14 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Territory {
+public class Territory implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4852948895519742685L;
 	String name, key;
 	ArrayList<Territory> adjacents = new ArrayList<Territory>();
 

@@ -22,11 +22,11 @@ public class NewRoundsBehaviour extends FSMBehaviour {
 		super(a);
 		
 		RequestActionBehaviour position = new RequestActionBehaviour(
-				new PositionSoldiers(myAgent, 1), players);
+				new PositionSoldiers(myAgent, 1), players,a);
 		RequestActionBehaviour atack = new RequestActionBehaviour(
-				new AtackBehaviour(myAgent), players);
+				new AtackBehaviour(myAgent), players,a);
 		RequestActionBehaviour fortify = new RequestActionBehaviour(
-				new GameFortify(myAgent), players);
+				new GameFortify(myAgent), players,a);
 
 		registerFirstState(new UpdateRoundBehaviour(myAgent, players, position,
 				atack, fortify), UPDATE);

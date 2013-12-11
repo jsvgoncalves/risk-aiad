@@ -3,6 +3,7 @@ package behaviours.gameagent;
 import java.util.ArrayList;
 
 import jade.core.AID;
+import jade.core.Agent;
 import jade.core.behaviours.FSMBehaviour;
 
 public class RequestActionBehaviour extends FSMBehaviour{
@@ -21,14 +22,15 @@ public class RequestActionBehaviour extends FSMBehaviour{
 	private CheckEndBehaviour check;
 	private MakeActionBehaviour make;
 	
-	public RequestActionBehaviour(GameAgentFaseBehaviour behaviour, ArrayList<AID> players){
+	public RequestActionBehaviour(GameAgentFaseBehaviour behaviour, ArrayList<AID> players, Agent a){
+		super(a);
 		b = behaviour;
 		
 		b.reset();
 		
-		FinalBehaviour f = new FinalBehaviour(players);
+		FinalBehaviour f = new FinalBehaviour(players,a);
 		check = new CheckEndBehaviour(b);
-		make = new MakeActionBehaviour(b,f);
+		make = new MakeActionBehaviour(b,f,a);
 		
 		registerFirstState(b, REQUEST);
 		registerState(check, CHECK);

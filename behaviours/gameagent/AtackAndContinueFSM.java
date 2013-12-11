@@ -10,6 +10,7 @@ import communication.RequestInitiator;
 import actions.Action;
 import actions.ContinueAction;
 import actions.PerformAtackAction;
+import agents.GameAgent;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.FSMBehaviour;
@@ -40,11 +41,11 @@ public class AtackAndContinueFSM extends FSMBehaviour {
 		c = new ContinueAction(true);
 		e = false;
 		cb = new ContinueBehaviour(myAgent, to);
-		rc = new RequestActionBehaviour(cb, players);
+		rc = new RequestActionBehaviour(cb, players,a);
 
-		registerFirstState(new PerformAtack(action), ATACK);
+		registerFirstState(new PerformAtack(action,myAgent), ATACK);
 		registerState(rc, REQUEST);
-		registerLastState(new FinalBehaviour(players), FINAL);
+		registerLastState(new FinalBehaviour(players,myAgent), FINAL);
 
 		registerTransition(ATACK, FINAL, END);
 		registerTransition(ATACK, REQUEST, CONTINUE);
@@ -110,9 +111,12 @@ public class AtackAndContinueFSM extends FSMBehaviour {
 		 */
 		private static final long serialVersionUID = -9167059621407144090L;
 		private PerformAtackAction action;
-
-		public PerformAtack(PerformAtackAction action) {
+		private Board b;
+		
+		public PerformAtack(PerformAtackAction action, Agent a) {
+			super(a);
 			this.action = action;
+			b = ((GameAgent)a).getBoard();
 		}
 
 		@Override
@@ -132,17 +136,17 @@ public class AtackAndContinueFSM extends FSMBehaviour {
 			System.out.println();
 
 			if (p1 > p2) {
-				Board.getInstance().getTerritory(action.getTo())
+				b.getTerritory(action.getTo())
 						.removeSoldiers(1);
 				cb.wonLast = true;
 			} else if (p2 >= p1) {
-				Board.getInstance().getTerritory(action.getFrom())
+				b.getTerritory(action.getFrom())
 						.removeSoldiers(1);
 			}
 
-			cb.mySoldiers = Board.getInstance().getTerritory(action.getFrom())
+			cb.mySoldiers = b.getTerritory(action.getFrom())
 					.getNumSoldiers();
-			cb.hisSoldiers = Board.getInstance().getTerritory(action.getTo())
+			cb.hisSoldiers = b.getTerritory(action.getTo())
 					.getNumSoldiers();
 		}
 
@@ -153,12 +157,12 @@ public class AtackAndContinueFSM extends FSMBehaviour {
 
 		@Override
 		public int onEnd() {
-			if (Board.getInstance().getTerritory(action.getFrom())
+			if (b.getTerritory(action.getFrom())
 					.getNumSoldiers() == 1
-					|| Board.getInstance().getTerritory(action.getTo())
+					|| b.getTerritory(action.getTo())
 							.getNumSoldiers() == 0) {
 				
-				Board.getInstance().conquer(action.getFrom(),action.getTo());
+				b.conquer(action.getFrom(),action.getTo());
 				return END; // FIM
 			}
 			if (!c.willContinue()) {

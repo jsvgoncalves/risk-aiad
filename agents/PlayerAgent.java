@@ -10,6 +10,7 @@ import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+import logic.Board;
 
 
 public class PlayerAgent extends Agent {
@@ -20,10 +21,16 @@ public class PlayerAgent extends Agent {
 	
 	private PlayRequestResponder responder;
 	private PlayerAgentBehaviours a;
+	protected Board board;
 	
 	public PlayerAgent(PlayerAgentBehaviours a){
 		this.a = a;
 		a.setPlayerAgent(this);
+		board= new Board();
+	}
+	
+	public Board getBoard(){
+		return board;
 	}
 	
 	protected void setup() {

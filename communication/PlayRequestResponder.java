@@ -35,11 +35,10 @@ public class PlayRequestResponder extends AchieveREResponder {
 				.createMessageTemplate(FIPANames.InteractionProtocol.FIPA_REQUEST);
 	}
 
-	protected ACLMessage handleRequest(ACLMessage request) {
-
+	protected ACLMessage handleRequest(ACLMessage request) {		
 		try {
-			Board board = (Board)request.getContentObject();
-			return handleUpdate(request,board);
+			Board board = (Board) request.getContentObject();
+			return handleUpdate(request, board);
 		} catch (UnreadableException e) {
 			String content = request.getContent();
 			String type = content.split(" ")[0];
@@ -69,9 +68,9 @@ public class PlayRequestResponder extends AchieveREResponder {
 		ACLMessage inform = request.createReply();
 		inform.setPerformative(ACLMessage.INFORM);
 		inform.setContent(R.UPDATED);
-		
+
 		b.updateBoard(board);
-		
+
 		return inform;
 	}
 
@@ -84,13 +83,13 @@ public class PlayRequestResponder extends AchieveREResponder {
 			int mySoldiers = Integer.parseInt(my);
 			String his = request.getContent().split(" ")[3];
 			int hisSoldiers = Integer.parseInt(his);
-			
+
 			cont.setPerformative(ACLMessage.INFORM);
-			cont.setContentObject(b.cont(wonLast,mySoldiers,hisSoldiers));
+			cont.setContentObject(b.cont(wonLast, mySoldiers, hisSoldiers));
 		} catch (IOException e) {
 			cont.setPerformative(ACLMessage.FAILURE);
 			cont.setContent("Could not serialize action!");
-		} catch (ArrayIndexOutOfBoundsException e2){
+		} catch (ArrayIndexOutOfBoundsException e2) {
 			cont.setPerformative(ACLMessage.FAILURE);
 			cont.setContent("Wrong number of parameters");
 		}

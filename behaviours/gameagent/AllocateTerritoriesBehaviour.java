@@ -19,7 +19,7 @@ public class AllocateTerritoriesBehaviour extends SimpleBehaviour {
 
 	@Override
 	public void action() {
-		Board.getInstance().allocateRandomTerritories(a.getPlayers());
+		a.getBoard().allocateRandomTerritories(a.getPlayers());
 	}
 
 	@Override

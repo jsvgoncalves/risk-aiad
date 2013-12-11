@@ -2,6 +2,10 @@ package behaviours.gameagent;
 
 import java.util.ArrayList;
 
+import communication.RequestInitiator;
+
+import agents.GameAgent;
+
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
@@ -31,6 +35,9 @@ public class UpdateRoundBehaviour extends SimpleBehaviour {
 
 	@Override
 	public void action() {
+		
+		myAgent.addBehaviour(new RequestInitiator(myAgent, RequestInitiator.getChangedBoardMessage(players, ((GameAgent)myAgent).getBoard())));
+		
 		currentRound++;
 		System.out.println("Round " + currentRound);
 		System.out.println("Current Player: " + currentPlayer);

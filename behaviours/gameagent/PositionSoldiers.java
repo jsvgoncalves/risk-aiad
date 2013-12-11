@@ -3,6 +3,7 @@ package behaviours.gameagent;
 import actions.Action;
 import actions.ReceiveAction;
 import actions.ValidateAction;
+import agents.GameAgent;
 import communication.RequestInitiator;
 
 import jade.core.AID;
@@ -44,7 +45,7 @@ public class PositionSoldiers extends GameAgentFaseBehaviour {
 	
 	@Override
 	public int onEnd(){
-		if(ValidateAction.validate( n, (ReceiveAction)action, to.getLocalName())){
+		if(ValidateAction.validate( n, (ReceiveAction)action, to.getLocalName(), ((GameAgent)myAgent).getBoard())){
 			return 1;
 		}
 		else{

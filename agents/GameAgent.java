@@ -20,6 +20,7 @@ import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+import logic.Board;
 
 public class GameAgent extends Agent {
 	private static final String ROUND = "ROUND";
@@ -37,7 +38,8 @@ public class GameAgent extends Agent {
 	int currentRound = 0;
 	int currentPlayer = 0;
 	int gameStatus = R.GAME_WAITING;
-
+	private Board board;
+	
 	protected void setup() {
 
 		DFAgentDescription dfd = new DFAgentDescription();
@@ -52,6 +54,8 @@ public class GameAgent extends Agent {
 			e.printStackTrace();
 		}
 
+		board = new Board();
+		
 		printHeadMessage("WAITING FOR PLAYERS");
 
 		GameAgentBehaviour fsmBehaviour = new GameAgentBehaviour(this);
@@ -90,11 +94,11 @@ public class GameAgent extends Agent {
 		}
 
 		addBehaviour(new RequestActionBehaviour(new PositionSoldiers(this,
-				players.get(currentPlayer), 1), players));
+				players.get(currentPlayer), 1), players,this));
 		addBehaviour(new RequestActionBehaviour(new AtackBehaviour(this,
-				players.get(currentPlayer)), players));
+				players.get(currentPlayer)), players,this));
 		addBehaviour(new RequestActionBehaviour(new GameFortify(this,
-				players.get(currentPlayer)), players));
+				players.get(currentPlayer)), players,this));
 
 		currentPlayer++;
 	}
@@ -149,5 +153,9 @@ public class GameAgent extends Agent {
 			return 1;
 		}
 
+	}
+
+	public Board getBoard() {
+		return board;
 	}
 }

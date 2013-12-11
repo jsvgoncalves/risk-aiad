@@ -2,9 +2,12 @@ package behaviours.gameagent;
 
 import java.util.ArrayList;
 
+import agents.GameAgent;
+
 import communication.RequestInitiator;
 
 import jade.core.AID;
+import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
 import logic.Board;
@@ -19,19 +22,22 @@ public class FinalBehaviour extends SimpleBehaviour {
 	private boolean changed,aux;
 	private ArrayList<AID> p;
 	
-	public FinalBehaviour(ArrayList<AID> players){
+	public FinalBehaviour(ArrayList<AID> players, Agent a){
+		super(a);
 		changed=false;
 		this.p = players;
 	}
 
-	public FinalBehaviour(ArrayList<AID> players, boolean b) {
+	public FinalBehaviour(ArrayList<AID> players, boolean b, Agent a) {
+		super(a);
+		this.p = players;
 		aux=b;
 	}
 
 	@Override
 	public void action() {
 		if(changed){
-			ACLMessage m = RequestInitiator.getChangedBoardMessage(p, Board.getInstance());
+			ACLMessage m = RequestInitiator.getChangedBoardMessage(p, ((GameAgent)myAgent).getBoard());
 			if( m.getPerformative() == ACLMessage.FAILURE)
 				return;
 			

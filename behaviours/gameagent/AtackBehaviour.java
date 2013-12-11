@@ -5,6 +5,7 @@ import util.R;
 import actions.Action;
 import actions.PerformAtackAction;
 import actions.ValidateAction;
+import agents.GameAgent;
 import communication.RequestInitiator;
 
 import jade.core.AID;
@@ -51,7 +52,7 @@ public class AtackBehaviour extends GameAgentFaseBehaviour {
 
 		if (action.getClass().getName().equals(R.PERFORM_ATACK)
 				&& ValidateAction.validate((PerformAtackAction) action,
-						to.getLocalName())) {
+						to.getLocalName(), ((GameAgent)myAgent).getBoard())) {
 			return 1;
 		} else {
 			return 0;
