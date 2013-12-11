@@ -12,29 +12,28 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import logic.Board;
 
-
 public class PlayerAgent extends Agent {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5347118089332895954L;
-	
+
 	private PlayRequestResponder responder;
 	private PlayerAgentBehaviours a;
 	protected Board board;
-	
-	public PlayerAgent(PlayerAgentBehaviours a){
+
+	public PlayerAgent(PlayerAgentBehaviours a) {
 		this.a = a;
 		a.setPlayerAgent(this);
-		board= new Board();
+		board = new Board();
 	}
-	
-	public Board getBoard(){
+
+	public Board getBoard() {
 		return board;
 	}
-	
+
 	protected void setup() {
-		
+
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
@@ -43,15 +42,15 @@ public class PlayerAgent extends Agent {
 		dfd.addServices(sd);
 		try {
 			DFService.register(this, dfd);
-		} catch(FIPAException e) {
+		} catch (FIPAException e) {
 			e.printStackTrace();
 		}
-		
-		
+
 		System.out.println(getLocalName() + " reporting in.");
-		
-		responder = new PlayRequestResponder(this, PlayRequestResponder.getMessageTemplate());
-		SensorBehaviour sensor = new SensorBehaviour(this,a);
+
+		responder = new PlayRequestResponder(this,
+				PlayRequestResponder.getMessageTemplate());
+		SensorBehaviour sensor = new SensorBehaviour(this, a);
 		responder.setSensor(sensor);
 		addBehaviour(responder);
 		addBehaviour(new JoinGameBehaviour(this));
@@ -61,7 +60,7 @@ public class PlayerAgent extends Agent {
 	protected void takeDown() {
 		try {
 			DFService.deregister(this);
-		} catch(FIPAException e) {
+		} catch (FIPAException e) {
 			e.printStackTrace();
 		}
 	}

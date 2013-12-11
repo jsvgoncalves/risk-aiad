@@ -1,6 +1,7 @@
 package behaviours.playeragent;
 
 
+import perceptions.Perception;
 import actions.Action;
 import actions.DontFortifyAction;
 import agents.PlayerAgent;
@@ -60,6 +61,10 @@ public class SensorBehaviour extends SimpleBehaviour {
 
 	public void updateBoard(Board board) {
 		b = board;
+	}
+
+	public void addPerception(Perception p) {
+	
 	}
 
 }

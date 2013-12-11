@@ -2,6 +2,8 @@ package communication;
 
 import java.io.IOException;
 
+import perceptions.Perception;
+
 import behaviours.playeragent.SensorBehaviour;
 import util.R;
 
@@ -37,8 +39,16 @@ public class PlayRequestResponder extends AchieveREResponder {
 
 	protected ACLMessage handleRequest(ACLMessage request) {		
 		try {
-			Board board = (Board) request.getContentObject();
-			return handleUpdate(request, board);
+			Object obj = request.getContentObject();
+			if( obj.getClass().getName().equals(R.BOARD_CLASS)){
+				Board board = (Board) request.getContentObject();
+				return handleUpdate(request, board);
+			}
+			else if( obj.getClass().getSuperclass().getName().equals(R.PERCEPTION_CLASS)){
+				Perception p = (Perception) request.getContentObject();
+				return handlePerception(request,p);
+			}
+			
 		} catch (UnreadableException e) {
 			String content = request.getContent();
 			String type = content.split(" ")[0];
@@ -55,13 +65,22 @@ public class PlayRequestResponder extends AchieveREResponder {
 			case R.CONTINUE:
 				return handleContinueRequest(request);
 			}
-
-			ACLMessage error = request.createReply();
-			error.setPerformative(ACLMessage.FAILURE);
-			error.setContent("Content not valid!");
-
-			return error;
 		}
+		ACLMessage error = request.createReply();
+		error.setPerformative(ACLMessage.FAILURE);
+		error.setContent("Content not valid!");
+
+		return error;
+	}
+
+	private ACLMessage handlePerception(ACLMessage request, Perception p) {
+		ACLMessage inform = request.createReply();
+		inform.setPerformative(ACLMessage.INFORM);
+		inform.setContent(R.UPDATED);
+
+		b.addPerception(p);
+
+		return inform;
 	}
 
 	private ACLMessage handleUpdate(ACLMessage request, Board board) {

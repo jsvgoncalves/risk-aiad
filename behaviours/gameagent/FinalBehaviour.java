@@ -38,8 +38,10 @@ public class FinalBehaviour extends SimpleBehaviour {
 	public void action() {
 		if(changed){
 			ACLMessage m = RequestInitiator.getChangedBoardMessage(p, ((GameAgent)myAgent).getBoard());
-			if( m.getPerformative() == ACLMessage.FAILURE)
+			if( m.getPerformative() == ACLMessage.FAILURE){
+				System.err.println(m.getContent());
 				return;
+			}
 			
 			myAgent.addBehaviour(new RequestInitiator(myAgent, m));
 		}

@@ -35,4 +35,6 @@ public class R {
 	public static final String DONT_ATACK = "actions.DontAtackAction";
 	public static final String PERFORM_FORTIFICATION = "actions.PerformFortificationAction";
 	public static final String CONTINUE_ACTION = "actions.ContinueAction";
+	public static final Object BOARD_CLASS = "logic.Board";
+	public static final Object PERCEPTION_CLASS = "perceptions.Perception";
 }
