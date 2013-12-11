@@ -50,7 +50,7 @@ public class HumanAgent extends PlayerAgentBehaviours {
 		
 		// Choose an adjacent territory to attack.
 		Territory terr = b.getTerritory(playerTerritories.get(from));
-		ArrayList<Territory> adjacentTerritories = terr.getAdjacents();
+		ArrayList<Territory> adjacentTerritories = b.getEnemyAdjacents(terr, myAgent.getLocalName());
 		System.err.println("Enter the territory to attack:");
 		for (int i = 0; i < adjacentTerritories.size(); i++) {
 			System.err.println(i + 1 + " - " + adjacentTerritories.get(i).getKey() + " ( " + 

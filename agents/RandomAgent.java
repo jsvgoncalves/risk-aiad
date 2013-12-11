@@ -59,7 +59,7 @@ public class RandomAgent extends PlayerAgentBehaviours {
 
 		// Choose an adjacent territory to attack.
 		Territory terr = b.getTerritory(playerTerritories.get(from));
-		ArrayList<Territory> adjacentTerritories = terr.getAdjacents();
+		ArrayList<Territory> adjacentTerritories = b.getEnemyAdjacents(terr, myAgent.getLocalName());
 		int to = r.nextInt(adjacentTerritories.size());
 
 		// Return an attack action with (from,to)

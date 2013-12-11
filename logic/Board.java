@@ -341,4 +341,21 @@ public class Board implements Serializable{
 		
 		return adj;
 	}
+
+	/**
+	 * Returns a list of the adjacent enemy territories.
+	 * @param terr The territory to look.
+	 * @param player The owner of the territory.
+	 * @return ArrayList<Terrritory>.
+	 */
+	public ArrayList<Territory> getEnemyAdjacents(Territory terr, String player) {
+		ArrayList<Territory> enemyAdjacents = new ArrayList<Territory>();
+		for (Territory territory : terr.getAdjacents()) {
+			String playerFromT = allocations.get(territory.getKey());
+			if(! playerFromT.equals(player) ) {
+				enemyAdjacents.add(territory);
+			}
+		}
+		return enemyAdjacents;
+	}
 }
