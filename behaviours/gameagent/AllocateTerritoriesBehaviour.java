@@ -24,6 +24,7 @@ public class AllocateTerritoriesBehaviour extends SimpleBehaviour {
 
 	@Override
 	public boolean done() {
+		((GameAgent) myAgent).notifyGameStarted();
 		return true;
 	}
 

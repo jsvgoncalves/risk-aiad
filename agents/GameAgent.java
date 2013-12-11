@@ -93,6 +93,16 @@ public class GameAgent extends Agent {
 		
 	}
 	
+	/** 
+	 * Notifies the listeners that the game has started
+	 */
+	public void notifyGameStarted() {
+
+		for (BoardGUI listener : listeners) {
+			listener.notifyGameStarted();
+		}
+		
+	}
 	
 	public void addListener(BoardGUI boardGUI) {
 		this.listeners.add(boardGUI);

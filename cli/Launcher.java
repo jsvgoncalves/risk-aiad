@@ -27,6 +27,19 @@ public class Launcher {
 		
 		GameAgent gameAgent = new GameAgent();
 		try {
+			container.acceptNewAgent("Board", gameAgent).start();
+		} catch (StaleProxyException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		JFrame f = new JFrame("RISK");
+		f.setSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
+		f.setMinimumSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.add(new BoardGUI(gameAgent));
+		
+		try {
 			ArrayList<String> names = util.NameGenerator.randomName(3);
 			container.acceptNewAgent(names.get(0), new agents.PlayerAgent(new RandomAgent()))
 					.start();
@@ -34,8 +47,6 @@ public class Launcher {
 					.start();
 			container.acceptNewAgent(names.get(2), new agents.PlayerAgent(new RandomAgent()))
 					.start();
-
-			container.acceptNewAgent("Board", gameAgent).start();
 
 			container.acceptNewAgent(names.get(3), new agents.PlayerAgent(new RandomAgent()))
 					.start();
@@ -48,11 +59,7 @@ public class Launcher {
 			e.printStackTrace();
 		}
 
-		JFrame f = new JFrame("RISK");
-		f.setSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
-		f.setMinimumSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.add(new BoardGUI(gameAgent));
+		
 		
 		f.setVisible(true);
 

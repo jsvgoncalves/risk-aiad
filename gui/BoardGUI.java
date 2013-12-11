@@ -24,18 +24,23 @@ import logic.Board;
 import logic.Territory;
 
 public class BoardGUI extends JPanel{
+	private static final long serialVersionUID = 8906083247845612415L;
+	
 	public static final int PANEL_WIDTH = 1004;
 	public static final int PANEL_HEIGHT= 659;
 	private static final int LABEL_WIDTH = 29;
 	private static final int LABEL_HEIGHT = 20;
 	private static final Color LABEL_BORDER_COLOR = Color.gray;
 	
+	// The labels from the territories.
 	private HashMap<String, BoardLabel> labels = new HashMap<String, BoardLabel>();
+	// Contains all the available color Strings.
 	private ArrayList<String> colors = new ArrayList<String>();
+	// Maps the players to a color.
 	private HashMap<String, String> playerColors = new HashMap<String, String>();
-	
-	private static final long serialVersionUID = 8906083247845612415L;
+	// Board background image
 	private BufferedImage board_img;
+	// The current gameAgent being observed.
 	private GameAgent gameAgent;
 	
 	public BoardGUI(GameAgent gameAgent) {
@@ -51,9 +56,7 @@ public class BoardGUI extends JPanel{
 		
 		this.setLayout(null);
 		
-		initPlayerColors();
 		initBoardLabels();
-		updateAllTerritories();
 		gameAgent.addListener(this);
 		
 		
@@ -67,8 +70,9 @@ public class BoardGUI extends JPanel{
 		colors.add("purple");
 		colors.add("red");
 		colors.add("yellow");
-		
+		System.err.println("Setting colors.");
 		ArrayList<AID> players = gameAgent.getPlayers();
+		System.err.println("Players count: " + players.size());
 		for (int i = 0; i < players.size(); i++) {
 			System.err.println(players.get(i).getLocalName() + " is " + colors.get(i));
 			playerColors.put(players.get(i).getLocalName(), colors.get(i));
@@ -218,7 +222,30 @@ public class BoardGUI extends JPanel{
 		}
 	}
 
+	public void notifyGameStarted() {
+		initPlayerColors();
+	}
+	/**
+	 * Method called by the GameAgent observable.
+	 */
 	public void notifyTurnEnded() {
 		updateAllTerritories();
+		printCSV();
+	}
+
+	/** 
+	 * Every round prints a nice CSV formatted output
+	 */
+	private void printCSV() {
+		Board b = gameAgent.getBoard();
+		ArrayList<AID> players = gameAgent.getPlayers();
+		System.err.println("## STATS ##");
+		System.err.print(gameAgent.getCurrentRound());
+		for (int i = 0; i < players.size(); i++) {
+			System.err.print("," + b.getPlayerTotalSoldiers(players.get(i).getLocalName()));
+		}
+		System.err.println("");
+		System.err.println("## /STATS ##");
+		
 	}
 }
