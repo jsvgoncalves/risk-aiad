@@ -21,15 +21,25 @@ public class PlayerAgent extends Agent {
 	private PlayRequestResponder responder;
 	private PlayerAgentBehaviours a;
 	protected Board board;
+	protected int currentRound;
 
 	public PlayerAgent(PlayerAgentBehaviours a) {
 		this.a = a;
 		a.setPlayerAgent(this);
 		board = new Board();
+		currentRound=0;
 	}
 
 	public Board getBoard() {
 		return board;
+	}
+	
+	public void newRound(){
+		currentRound++;
+	}
+	
+	public int getCurrentRound(){
+		return currentRound;
 	}
 
 	protected void setup() {

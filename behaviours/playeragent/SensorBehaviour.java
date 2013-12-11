@@ -44,6 +44,7 @@ public class SensorBehaviour extends SimpleBehaviour {
 	}
 
 	public Action receive(int n) {
+		((PlayerAgent)myAgent).newRound();
 		return a.receiveSoldiers(b,n);
 	}
 
