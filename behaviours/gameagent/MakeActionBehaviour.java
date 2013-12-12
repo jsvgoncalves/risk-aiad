@@ -123,6 +123,7 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 	}
 
 	private void fortifyAction() {
+		//TODO verifica porque e que jogo nao fortifica apesar de entrar aqui
 		System.out.println("Fortify");
 		PerformFortificationAction action = (PerformFortificationAction) b
 				.getAction();
@@ -139,7 +140,7 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 		player=bo.getPlayerFromTerritory(action.getFrom());
 		
 		bo.getTerritory(action.getFrom()).removeSoldiers(action.getN());
-		bo.getTerritory(action.getFrom()).addSoldiers(action.getN());
+		bo.getTerritory(action.getTo()).addSoldiers(action.getN());
 		
 		FortifyPerception perception = new FortifyPerception(from, to, player, initSoldFrom, initSoldTo, movedSold);
 		

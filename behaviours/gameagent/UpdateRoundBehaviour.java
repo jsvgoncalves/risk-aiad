@@ -35,14 +35,21 @@ public class UpdateRoundBehaviour extends SimpleBehaviour {
 
 	@Override
 	public void action() {
-		
-		myAgent.addBehaviour(new RequestInitiator(myAgent, RequestInitiator.getChangedBoardMessage(players, ((GameAgent)myAgent).getBoard())));
-		
+
+		GameAgent agent = (GameAgent) myAgent;
+
+		myAgent.addBehaviour(new RequestInitiator(myAgent, RequestInitiator
+				.getChangedBoardMessage(players, agent.getBoard())));
+
+		if (agent.getBoard().getPlayerTerritories(
+						agent.getAgentNames().get(players.get(currentPlayer))).size() == 0)
+			players.remove(currentPlayer);
+
 		currentRound++;
 		System.out.println("Round " + currentRound);
 		System.out.println("Current Player: " + currentPlayer);
 		System.out.println("Size: " + players.size());
-		
+
 		position.setPlayer(players.get(currentPlayer));
 		position.reset();
 		position.resetCount();
@@ -52,13 +59,13 @@ public class UpdateRoundBehaviour extends SimpleBehaviour {
 		fortify.setPlayer(players.get(currentPlayer));
 		fortify.reset();
 		fortify.resetCount();
-		
+
 		currentPlayer++;
 		if (currentPlayer >= players.size()) {
 			currentPlayer = 0;
 		}
-		((GameAgent) myAgent).notifyTurnEnded();
-		((GameAgent) myAgent).setCurrentRound(currentRound);
+		agent.notifyTurnEnded();
+		agent.setCurrentRound(currentRound);
 	}
 
 	@Override

@@ -43,6 +43,8 @@ public class GameAgent extends Agent {
 	private ArrayList<BoardGUI> listeners = new ArrayList<BoardGUI>();
 	//Maps AID -> agentName
 	private HashMap<AID, String> agentName = new HashMap<AID,String>();
+	//
+	private boolean closed;
 	
 	protected void setup() {
 
@@ -59,6 +61,7 @@ public class GameAgent extends Agent {
 		}
 
 		board = new Board();
+		closed=false;
 		
 		printHeadMessage("WAITING FOR PLAYERS");
 
@@ -75,6 +78,14 @@ public class GameAgent extends Agent {
 
 	}
 
+	public void close(){
+		closed=true;
+	}
+	
+	public boolean isClosed(){
+		return closed;
+	}
+	
 	public ArrayList<AID> getPlayers() {
 		return players;
 	}
@@ -163,6 +174,7 @@ public class GameAgent extends Agent {
 
 		@Override
 		public int onEnd() {
+			closed = true;
 			return 1;
 		}
 

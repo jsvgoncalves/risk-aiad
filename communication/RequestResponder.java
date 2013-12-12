@@ -3,6 +3,8 @@ package communication;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import agents.GameAgent;
+
 import util.R;
 
 import jade.core.AID;
@@ -55,7 +57,7 @@ public class RequestResponder extends AchieveREResponder {
 	private ACLMessage handleSubscriptionRequest(ACLMessage request) {
 
 		ACLMessage join = request.createReply();
-		if (p.size() < maxPlayers) {
+		if (p.size() < maxPlayers && !((GameAgent)myAgent).isClosed()) {
 			join.setPerformative(ACLMessage.INFORM);
 			AID sender = request.getSender();
 			p.add(sender);

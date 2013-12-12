@@ -55,7 +55,7 @@ public class ValidateAction {
 			String name, Board b) {
 
 		if (!b.isPlayersTerritory(name, action.getFrom())
-				&& !b
+				|| !b
 						.isPlayersTerritory(name, action.getTo()))
 			return false;
 

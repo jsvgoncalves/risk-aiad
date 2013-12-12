@@ -198,6 +198,7 @@ public class Board implements Serializable {
 		EU_SCA.setAdjacent(EU_RUS);
 		EU_BAL.setAdjacent(EU_EAS);
 		EU_EAS.setAdjacent(EU_RUS);
+		EU_IT.setAdjacent(EU_BAL);
 
 		// ASIA
 		AS_YAM.setAdjacent(AS_STA);

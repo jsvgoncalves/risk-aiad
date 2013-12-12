@@ -13,61 +13,148 @@ import actions.DontAtackAction;
 import actions.DontFortifyAction;
 import actions.FortifyAction;
 import actions.PerformAtackAction;
+import actions.PerformFortificationAction;
 import actions.ReceiveAction;
 
 public class HumanAgent extends PlayerAgentBehaviours {
 
-	/* (non-Javadoc)
+	Scanner reader = new Scanner(System.in);
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see agents.PlayerAgentBehaviours#receiveSoldiers(logic.Board, int)
 	 */
 	@Override
 	public ReceiveAction receiveSoldiers(Board b, int n) {
-		// TODO Auto-generated method stub
-		return new ReceiveAction();
+		ReceiveAction receive = new ReceiveAction();
+
+		ArrayList<String> playerTerritories = b.getPlayerTerritories(myAgent
+				.getLocalName());
+
+		int sum = 0;
+
+		while (sum < n) {
+			System.err
+					.println("You have " + (n - sum) + " soldiers available!");
+
+			for (int i = 0; i < playerTerritories.size(); i++) {
+				System.err.println(i
+						+ 1
+						+ " - "
+						+ b.getTerritory(playerTerritories.get(i)).getName()
+						+ " ( "
+						+ b.getTerritory(playerTerritories.get(i))
+								.getNumSoldiers() + " ) ");
+			}
+
+			System.err
+					.println("Enter the territory wher you want to put the soldiers:");
+			int from = reader.nextInt();
+
+			int num = n + 1;
+			while (num > n - sum) {
+				System.err.println("Insert soldier's number:");
+				num = reader.nextInt();
+				if (num > n - 1)
+					System.err.println("Invalid number of soldiers!");
+			}
+			sum += num;
+			receive.addSoldiersTerritory(num, playerTerritories.get(from - 1));
+		}
+
+		return receive;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see agents.PlayerAgentBehaviours#atack(logic.Board)
 	 */
 	@Override
 	public AtackAction atack(Board b) {
-		Scanner reader = new Scanner(System.in);
-		ArrayList<String> playerTerritories = b.getPlayerTerritories(myAgent.getLocalName());
-		
+		ArrayList<String> playerTerritories = b.getPlayerTerritories(myAgent
+				.getLocalName());
+
 		System.err.println("0 - Don't attack");
 		for (int i = 0; i < playerTerritories.size(); i++) {
-			System.err.println(i + 1 + " - " + playerTerritories.get(i) + " ( " + 
-					 b.getTerritory(playerTerritories.get(i)).getNumSoldiers() + " )" );
+			System.err.println(i + 1 + " - "
+					+ b.getTerritory(playerTerritories.get(i)).getName()
+					+ " ( "
+					+ b.getTerritory(playerTerritories.get(i)).getNumSoldiers()
+					+ " )");
 		}
-		
+
 		System.err.println("Enter the territory from which to attack:");
 		int from = reader.nextInt();
-		if(from == 0) {
+		if (from == 0) {
 			return new DontAtackAction();
 		}
 		from -= 1; // Adjust index from user input.
-		
+
 		// Choose an adjacent territory to attack.
 		Territory terr = b.getTerritory(playerTerritories.get(from));
-		ArrayList<Territory> adjacentTerritories = b.getEnemyAdjacents(terr, myAgent.getLocalName());
+		ArrayList<Territory> adjacentTerritories = b.getEnemyAdjacents(terr,
+				myAgent.getLocalName());
 		System.err.println("Enter the territory to attack:");
 		for (int i = 0; i < adjacentTerritories.size(); i++) {
-			System.err.println(i + 1 + " - " + adjacentTerritories.get(i).getKey() + " ( " + 
-					 adjacentTerritories.get(i).getNumSoldiers() + " )" );
+			System.err.println(i + 1 + " - "
+					+ adjacentTerritories.get(i).getName() + " ( "
+					+ adjacentTerritories.get(i).getNumSoldiers() + " )");
 		}
 		int to = reader.nextInt();
 		to -= 1;
 		// Return an attack action with (from,to)
-		return new PerformAtackAction(playerTerritories.get(from), adjacentTerritories.get(to).getKey());
+		return new PerformAtackAction(playerTerritories.get(from),
+				adjacentTerritories.get(to).getKey());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see agents.PlayerAgentBehaviours#fortify(logic.Board)
 	 */
 	@Override
 	public FortifyAction fortify(Board b) {
-		// TODO Auto-generated method stub
-		return new DontFortifyAction();
+
+		ArrayList<String> playerTerritories = b.getPlayerTerritories(myAgent
+				.getLocalName());
+
+		System.err.println("0 - Don't fortify");
+
+		for (int i = 0; i < playerTerritories.size(); i++) {
+			System.err.println(i + 1 + " - "
+					+ b.getTerritory(playerTerritories.get(i)).getName()
+					+ " ( "
+					+ b.getTerritory(playerTerritories.get(i)).getNumSoldiers()
+					+ " )");
+		}
+
+		System.err
+				.println("Enter the territory from which you want to move soldiers:");
+		int from = reader.nextInt();
+
+		if (from == 0)
+			return new DontFortifyAction();
+		
+		// Choose an adjacent territory to attack.
+		Territory terr = b.getTerritory(playerTerritories.get(from-1));
+		ArrayList<Territory> adjacentTerritories = b.getPlayerAdjacents(terr.getKey(),
+				myAgent.getLocalName());
+		System.err.println("Enter the territory to move:");
+		for (int i = 0; i < adjacentTerritories.size(); i++) {
+			System.err.println(i + 1 + " - "
+					+ adjacentTerritories.get(i).getName() + " ( "
+					+ adjacentTerritories.get(i).getNumSoldiers() + " )");
+		}
+		int to = reader.nextInt();
+
+		System.err.println("Enter the number of soldiers you want to move:");
+
+		int n = reader.nextInt();
+
+		return new PerformFortificationAction(playerTerritories.get(from - 1),
+				adjacentTerritories.get(to - 1).getKey(), n);
 	}
 
 }
