@@ -115,7 +115,7 @@ public class BoardLabel extends JLabel{
 		int heightt = (int)Math.ceil(height_ratio*height);
 
 		
-		System.err.println(xtemp + ", " + ytemp);
+//		System.err.println(xtemp + ", " + ytemp);
 		this.setLocation(xtemp, ytemp);
 		this.setSize(new Dimension(widtht, heightt));
 		
