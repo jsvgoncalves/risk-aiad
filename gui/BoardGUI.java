@@ -6,9 +6,13 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.event.WindowEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
@@ -43,6 +47,9 @@ public class BoardGUI extends JPanel{
 	// The current gameAgent being observed.
 	private GameAgent gameAgent;
 	
+	PrintWriter writer;
+	
+	
 	public BoardGUI(GameAgent gameAgent) {
 
 		this.gameAgent = gameAgent;
@@ -55,7 +62,12 @@ public class BoardGUI extends JPanel{
 		}
 		
 		this.setLayout(null);
-		
+		try {
+			writer = new PrintWriter("result.csv", "UTF-8");
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		initBoardLabels();
 		gameAgent.addListener(this);
 		
@@ -224,6 +236,14 @@ public class BoardGUI extends JPanel{
 
 	public void notifyGameStarted() {
 		initPlayerColors();
+		
+		Board b = gameAgent.getBoard();
+		writer.println("Round");
+		ArrayList<AID> players = gameAgent.getPlayers();
+		for (int i = 0; i < players.size(); i++) {
+			writer.print("," + players.get(i).getLocalName());
+		}
+		writer.println();
 	}
 	/**
 	 * Method called by the GameAgent observable.
@@ -237,15 +257,19 @@ public class BoardGUI extends JPanel{
 	 * Every round prints a nice CSV formatted output
 	 */
 	private void printCSV() {
+		
 		Board b = gameAgent.getBoard();
 		ArrayList<AID> players = gameAgent.getPlayers();
-		System.err.println("## STATS ##");
-		System.err.print(gameAgent.getCurrentRound());
+		writer.print(gameAgent.getCurrentRound());
 		for (int i = 0; i < players.size(); i++) {
-			System.err.print("," + b.getPlayerTotalSoldiers(players.get(i).getLocalName()));
+			writer.print("," + b.getPlayerTotalSoldiers(players.get(i).getLocalName()));
 		}
-		System.err.println("");
-		System.err.println("## /STATS ##");
+		writer.println("");
+		
+	}
+	
+	public void close() {
+		writer.close();
 		
 	}
 }
