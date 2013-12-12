@@ -44,7 +44,7 @@ public class RandomAgent extends PlayerAgentBehaviours {
 	 */
 	@Override
 	public AtackAction atack(Board b) {
-		ArrayList<String> playerTerritories = b.getPlayerTerritories(myAgent.getLocalName());
+		ArrayList<String> playerTerritories = b.getReadyPlayerTerritories(myAgent.getLocalName());
 		// Can't attack without territories
 		if(playerTerritories.size() == 0) {
 			return new DontAtackAction();
