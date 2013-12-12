@@ -63,10 +63,10 @@ public class ValidateAction {
 				.getAdjacents()) {
 			if (t.getKey().equals(action.getTo())
 					&& b.getTerritory(action.getFrom())
-							.getNumSoldiers() >= action.getN())
+							.getNumSoldiers() > action.getN())
 				return true;
 		}
 
-		return true;
+		return false;
 	}
 }

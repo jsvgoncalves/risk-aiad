@@ -123,7 +123,6 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 	}
 
 	private void fortifyAction() {
-		//TODO verifica porque e que jogo nao fortifica apesar de entrar aqui
 		System.out.println("Fortify");
 		PerformFortificationAction action = (PerformFortificationAction) b
 				.getAction();

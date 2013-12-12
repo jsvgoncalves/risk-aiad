@@ -88,6 +88,10 @@ public class PlayerAgent extends Agent {
 	public void addPerception(Perception p){
 		perceptions.add(p);
 	}
+	
+	public boolean perceptEmpty(){
+		return perceptions.isEmpty();
+	}
 
 	public void setBoard(Board b) {
 		board=b;
