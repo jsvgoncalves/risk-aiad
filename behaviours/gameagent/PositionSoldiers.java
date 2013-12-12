@@ -8,6 +8,7 @@ import communication.RequestInitiator;
 
 import jade.core.AID;
 import jade.core.Agent;
+import logic.Board;
 
 public class PositionSoldiers extends GameAgentFaseBehaviour {
 
@@ -15,21 +16,25 @@ public class PositionSoldiers extends GameAgentFaseBehaviour {
 	 * 
 	 */
 	private static final long serialVersionUID = -2942255668390928078L;
-
 	private int n;
 	
-	public PositionSoldiers(Agent a, AID to, int n){
+	public PositionSoldiers(Agent a, AID to){
 		super(a,to);
-		this.n = n;
+		n=0;
 	}
 
-	public PositionSoldiers(Agent a, int n) {
+	public PositionSoldiers(Agent a) {
 		super(a,null);
-		this.n = n;
+		n=0;
 	}
 
 	@Override
-	public void action() {
+	public void action() {		
+		Board b = ((GameAgent)myAgent).getBoard();
+		String agentName = ((GameAgent)myAgent).getAgentNames().get(to);
+		
+		n = 3 + b.getContinentBonus(agentName);
+		
 		if(!waiting)
 			myAgent.addBehaviour(new RequestInitiator(myAgent, RequestInitiator.getReceiveMessage(to, n),this));
 		

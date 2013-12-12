@@ -60,10 +60,10 @@ public class RequestInitiator extends AchieveREInitiator {
 		}	
 	}
 	
-	public static ACLMessage getJoinMessage(AID to) {
+	public static ACLMessage getJoinMessage(AID to, String agentName) {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-		request.setContent(R.SUBSCRIPTION);
+		request.setContent(R.SUBSCRIPTION + " " + agentName);
 		request.addReceiver(to);
 
 		return request;

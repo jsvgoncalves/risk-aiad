@@ -106,4 +106,19 @@ public class R {
 	public static final String NA_NUN_KEY = "NA_NUN";
 	public static final String NA_KLO_KEY = "NA_KLO";
 	public static final String NA_GRE_KEY = "NA_GRE";
+	
+	public static final String NORTH_AMERICA = "NA";
+	public static final String SOUTH_AMERICA = "SA";
+	public static final String AFRICA = "AF";
+	public static final String ASIA = "AS";
+	public static final String ANTARTICA = "AN";
+	public static final String OCEANIA = "OC";
+	public static final String EUROPE = "EU";
+	public static final int NUM_NORTH_AMERICA=5;
+	public static final int NUM_SOUTH_AMERICA=3;
+	public static final int NUM_AFRICA=3;
+	public static final int NUM_ASIA=8;
+	public static final int NUM_ANTARTICA=1;
+	public static final int NUM_OCEANIA=2;
+	public static final int NUM_EUROPE=5;
 }

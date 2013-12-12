@@ -28,7 +28,6 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 	private GameAgentFaseBehaviour b;
 	private FinalBehaviour f;
 	private ArrayList<AID> p;
-	// AtackAndContinueFSM ata;
 	private Board bo;
 
 	public MakeActionBehaviour(GameAgentFaseBehaviour behaviour,
@@ -37,16 +36,11 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 		this.b = behaviour;
 		this.f = fin;
 		p = fin.getPlayers();
-		// ata=null;
 		bo = ((GameAgent) myAgent).getBoard();
 	}
 
 	@Override
 	public void action() {
-
-		/*
-		 * if(ata!= null){ return; }
-		 */
 
 		switch (b.getAction().getClass().getName()) {
 		case R.RECEIVE_ACTION:
@@ -99,7 +93,7 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 
 		if (p1 > p2) {
 			bo.getTerritory(action.getTo()).removeSoldiers(1);
-			//Verificar se territorio conquistado
+			//Verifica se o territorio e conquistado no metodo conquer
 			bo.conquer(action.getFrom(), action.getTo());
 		} else if (p2 >= p1) {
 			bo.getTerritory(action.getFrom()).removeSoldiers(1);

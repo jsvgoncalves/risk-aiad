@@ -3,6 +3,7 @@ package agents;
 import gui.BoardGUI;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import behaviours.gameagent.AllocateTerritoriesBehaviour;
 import behaviours.gameagent.AtackBehaviour;
@@ -40,6 +41,8 @@ public class GameAgent extends Agent {
 	int gameStatus = R.GAME_WAITING;
 	private Board board;
 	private ArrayList<BoardGUI> listeners = new ArrayList<BoardGUI>();
+	//Maps AID -> agentName
+	private HashMap<AID, String> agentName = new HashMap<AID,String>();
 	
 	protected void setup() {
 
@@ -74,6 +77,10 @@ public class GameAgent extends Agent {
 
 	public ArrayList<AID> getPlayers() {
 		return players;
+	}
+	
+	public HashMap<AID, String> getAgentNames(){
+		return agentName;
 	}
 
 	private void printHeadMessage(String message) {
@@ -144,7 +151,7 @@ public class GameAgent extends Agent {
 			if(added)
 				return;
 			addBehaviour(new RequestResponder(myAgent,
-					RequestResponder.getMessageTemplate(), players, max));
+					RequestResponder.getMessageTemplate(), players,agentName, max));
 			
 			added=true;
 		}

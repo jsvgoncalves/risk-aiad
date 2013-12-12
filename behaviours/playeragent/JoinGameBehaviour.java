@@ -18,7 +18,7 @@ public class JoinGameBehaviour extends SimpleBehaviour {
 	 * 
 	 */
 	private static final long serialVersionUID = 5782880757461631230L;
-	
+
 	private boolean j, waiting;
 	private int i;
 	private AID[] gameAgents;
@@ -27,28 +27,27 @@ public class JoinGameBehaviour extends SimpleBehaviour {
 		super(agent);
 		j = false;
 		waiting = false;
-		i=0;
+		i = 0;
 		gameAgents = null;
 	}
 
 	@Override
 	public void action() {
-		if(waiting)
+		if (waiting)
 			return;
-		
-		if(gameAgents == null){
+
+		if (gameAgents == null) {
 			gameAgents = getGameAgents();
 		}
-		
-		if( i >= gameAgents.length)
-		{
-			gameAgents=null;
-			i=0;
+
+		if (i >= gameAgents.length) {
+			gameAgents = null;
+			i = 0;
 			return;
 		}
-		
-		myAgent.addBehaviour(new RequestInitiator(myAgent,
-				RequestInitiator.getJoinMessage(gameAgents[i]),this));
+
+		myAgent.addBehaviour(new RequestInitiator(myAgent, RequestInitiator
+				.getJoinMessage(gameAgents[i], myAgent.getLocalName()), this));
 		waiting = true;
 		i++;
 	}
@@ -75,11 +74,11 @@ public class JoinGameBehaviour extends SimpleBehaviour {
 		} catch (FIPAException e) {
 			System.out.println(e.getMessage());
 		}
-		
+
 		return null;
 	}
-	
-	public void joined(){
+
+	public void joined() {
 		j = true;
 	}
 
@@ -89,8 +88,8 @@ public class JoinGameBehaviour extends SimpleBehaviour {
 	}
 
 	public void couldntJoin() {
-		waiting=false;
-		j=false;
+		waiting = false;
+		j = false;
 	}
 
 }

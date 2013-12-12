@@ -6,7 +6,6 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
-import jade.domain.JADEAgentManagement.CreateAgent;
 import jade.wrapper.StaleProxyException;
 
 import java.util.ArrayList;

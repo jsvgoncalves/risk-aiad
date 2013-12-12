@@ -7,17 +7,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import util.R;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
-public class Board implements Serializable{
+public class Board implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5291057040352837133L;
-	
+
 	// List of all territories in the world
 	HashMap<String, Territory> territories = new HashMap<String, Territory>();
 	// List of allocations of every player
@@ -43,7 +43,6 @@ public class Board implements Serializable{
 		/*
 		 * Territories
 		 */
-
 
 		// EUROPE
 		Territory EU_IBE = new Territory("Iberia", R.EU_IBE_KEY);
@@ -110,7 +109,6 @@ public class Board implements Serializable{
 		Territory NA_NUN = new Territory("Nunavut", R.NA_NUN_KEY);
 		Territory NA_KLO = new Territory("Klondike", R.NA_KLO_KEY);
 		Territory NA_GRE = new Territory("Greenland", R.NA_GRE_KEY);
-		
 
 		/*
 		 * Add
@@ -153,7 +151,7 @@ public class Board implements Serializable{
 		territories.put(AN_WIL.getKey(), AN_WIL);
 		territories.put(AN_QUE.getKey(), AN_QUE);
 		territories.put(AN_MAR.getKey(), AN_MAR);
-		
+
 		// Africa
 		territories.put(AF_NIL.getKey(), AF_NIL);
 		territories.put(AF_THE.getKey(), AF_THE);
@@ -169,7 +167,7 @@ public class Board implements Serializable{
 		territories.put(SA_ARG.getKey(), SA_ARG);
 		territories.put(SA_PER.getKey(), SA_PER);
 		territories.put(SA_COL.getKey(), SA_COL);
-		
+
 		// North America
 		territories.put(NA_MEX.getKey(), NA_MEX);
 		territories.put(NA_CAR.getKey(), NA_CAR);
@@ -181,7 +179,7 @@ public class Board implements Serializable{
 		territories.put(NA_NUN.getKey(), NA_NUN);
 		territories.put(NA_KLO.getKey(), NA_KLO);
 		territories.put(NA_GRE.getKey(), NA_GRE);
-		
+
 		/*
 		 * Borders
 		 */
@@ -237,7 +235,7 @@ public class Board implements Serializable{
 		AN_WIL.setAdjacent(AN_QUE);
 		AN_WIL.setAdjacent(OC_AUS);
 		AN_QUE.setAdjacent(AN_MAR);
-		
+
 		// Africa
 		AF_NIL.setAdjacent(AS_ARA);
 		AF_NIL.setAdjacent(AF_THE);
@@ -251,7 +249,7 @@ public class Board implements Serializable{
 		AF_CAP.setAdjacent(AN_QUE);
 		AF_ZAI.setAdjacent(AF_MAG);
 		AF_MAG.setAdjacent(EU_IBE);
-		
+
 		// South America
 		SA_PAR.setAdjacent(AF_MAG);
 		SA_PAR.setAdjacent(SA_AMA);
@@ -263,7 +261,7 @@ public class Board implements Serializable{
 		SA_BOL.setAdjacent(SA_PER);
 		SA_COL.setAdjacent(SA_AMA);
 		SA_COL.setAdjacent(SA_PER);
-		
+
 		// North America
 		NA_MEX.setAdjacent(SA_COL);
 		NA_MEX.setAdjacent(NA_CAR);
@@ -305,9 +303,9 @@ public class Board implements Serializable{
 		}
 		return playerTerritories;
 	}
-	
-	public boolean isPlayersTerritory(String player, String terr){
-		if( allocations.get(terr)==null)
+
+	public boolean isPlayersTerritory(String player, String terr) {
+		if (allocations.get(terr) == null)
 			return false;
 		return allocations.get(terr).equals(player);
 	}
@@ -315,141 +313,152 @@ public class Board implements Serializable{
 	public ArrayList<String> getPlayerTerritories(String player) {
 		ArrayList<String> playerTerritories = new ArrayList<String>();
 		// TODO Auto-generated method stub
-		for(Entry<String, String> e: allocations.entrySet()) {
-				if(e.getValue().equals(player)) {
+		for (Entry<String, String> e : allocations.entrySet()) {
+			if (e.getValue().equals(player)) {
 				playerTerritories.add(e.getKey());
 			}
 		}
 		return playerTerritories;
 
 	}
-	
-	
-	public ArrayList<String> getEmptyTerritories(){
+
+	public ArrayList<String> getEmptyTerritories() {
 		ArrayList<String> empty = new ArrayList<String>();
-		
-		for(String terr: territories.keySet()){
-			if(allocations.get(terr)==null)
+
+		for (String terr : territories.keySet()) {
+			if (allocations.get(terr) == null)
 				empty.add(terr);
 		}
-		
+
 		return empty;
 	}
-	
-	public int getStartingSoldiersNumber(int numPlayers){
-		return 50 - numPlayers*5;
+
+	public int getStartingSoldiersNumber(int numPlayers) {
+		return 50 - numPlayers * 5;
 	}
-	
-	private int sum(Integer[] a){
-		int sum=0;
-		for(int i=0; i < a.length;i++)
-			sum+=a[i];
+
+	private int sum(Integer[] a) {
+		int sum = 0;
+		for (int i = 0; i < a.length; i++)
+			sum += a[i];
 		return sum;
 	}
 
 	public void allocateRandomTerritories(ArrayList<AID> players) {
-		
+
 		System.out.println(players.size());
-		
+
 		Integer[] availableSoldiers = new Integer[players.size()];
-		
-		for(int n = 0; n < players.size();n++){
+
+		for (int n = 0; n < players.size(); n++) {
 			availableSoldiers[n] = getStartingSoldiersNumber(players.size());
 		}
-		
-		int i=0;
-		while(getEmptyTerritories().size() > 0 ){
+
+		int i = 0;
+		while (getEmptyTerritories().size() > 0) {
 			String terr = getEmptyTerritories().get(0);
 			allocations.put(terr, players.get(i).getLocalName());
 			territories.get(terr).addSoldiers(1);
 			availableSoldiers[i]--;
-			
+
 			i++;
-			if( i>= players.size() )
-				i=0;
+			if (i >= players.size())
+				i = 0;
 		}
-		
-		
-		while(sum(availableSoldiers)>0){
-			ArrayList<String> playersTerritories = getPlayerTerritories(players.get(i).getLocalName());
-			
+
+		while (sum(availableSoldiers) > 0) {
+			ArrayList<String> playersTerritories = getPlayerTerritories(players
+					.get(i).getLocalName());
+
 			Random r = new Random();
 			int pos = r.nextInt(playersTerritories.size());
-			
+
 			territories.get(playersTerritories.get(pos)).addSoldiers(1);
 			availableSoldiers[i]--;
-			
+
 			i++;
-			if( i>= players.size() )
-				i=0;
+			if (i >= players.size())
+				i = 0;
 		}
-		
+
 	}
+
 	/**
 	 * 
-	 * @param t The territory.
-	 * @param player The player who owns the Territory.
+	 * @param t
+	 *            The territory.
+	 * @param player
+	 *            The player who owns the Territory.
 	 * @return
 	 */
 	public ArrayList<Territory> getReachables(Territory t, String player) {
 		String p = allocations.get(t.getKey());
-		
+
 		// Check if it is the valid player
 		if (!p.equals(player)) {
 			return new ArrayList<Territory>();
 		}
-		
+
 		ArrayList<Territory> visited = new ArrayList<Territory>();
 		visited.add(t);
 		ArrayList<Territory> r = getReachablesHelper(t, player, visited);
-		
+
 		return r;
 	}
 
-	private ArrayList<Territory> getReachablesHelper(Territory territory, String player, ArrayList<Territory> visited) {
-		ArrayList<Territory> adj = getPlayerAdjacents(territory.getKey(), player);
+	private ArrayList<Territory> getReachablesHelper(Territory territory,
+			String player, ArrayList<Territory> visited) {
+		ArrayList<Territory> adj = getPlayerAdjacents(territory.getKey(),
+				player);
 		ArrayList<Territory> r = new ArrayList<Territory>();
 		for (Territory t : adj) {
-			if(!visited.contains(t)) {
+			if (!visited.contains(t)) {
 				visited.add(t);
 				r.add(t);
 				r.addAll(getReachablesHelper(t, player, visited));
 			}
 		}
 		return r;
-		
+
 	}
 
 	/**
 	 * Returns the immediately adjacent territories that belong to the player.
-	 * @param territory_string The territory to check.
-	 * @param player The player.
+	 * 
+	 * @param territory_string
+	 *            The territory to check.
+	 * @param player
+	 *            The player.
 	 * @return ArrayList<Territory> with all the territories.
 	 */
-	public ArrayList<Territory> getPlayerAdjacents(String territory_string, String player) {
+	public ArrayList<Territory> getPlayerAdjacents(String territory_string,
+			String player) {
 		ArrayList<Territory> adj = new ArrayList<Territory>();
 		Territory territory = territories.get(territory_string);
 		for (Territory t : territory.getAdjacents()) {
 			String p = allocations.get(t.getKey());
-			if(player.equals(p)) {
+			if (player.equals(p)) {
 				adj.add(t);
 			}
 		}
-		
+
 		return adj;
 	}
 
 	/**
 	 * Returns a list of the adjacent enemy territories.
-	 * @param terr The territory to look.
-	 * @param player The owner of the territory.
+	 * 
+	 * @param terr
+	 *            The territory to look.
+	 * @param player
+	 *            The owner of the territory.
 	 * @return ArrayList<Terrritory>.
 	 */
 	public ArrayList<Territory> getEnemyAdjacents(Territory terr, String player) {
 		ArrayList<Territory> enemyAdjacents = new ArrayList<Territory>();
 		for (Territory territory : terr.getAdjacents()) {
 			String playerFromT = allocations.get(territory.getKey());
-			if(! playerFromT.equals(player) ) {
+			if (!playerFromT.equals(player)) {
 				enemyAdjacents.add(territory);
 			}
 		}
@@ -459,13 +468,13 @@ public class Board implements Serializable{
 	public void conquer(String from, String to) {
 		Territory tFrom = territories.get(from);
 		Territory tTo = territories.get(to);
-		
-		if(tFrom.getNumSoldiers() <= 1 || tTo.getNumSoldiers() > 0 )
+
+		if (tFrom.getNumSoldiers() <= 1 || tTo.getNumSoldiers() > 0)
 			return;
-		
+
 		allocations.remove(to);
 		allocations.put(to, allocations.get(from));
-		
+
 		tFrom.conquer(tTo);
 	}
 
@@ -480,5 +489,80 @@ public class Board implements Serializable{
 			count += territory.getNumSoldiers();
 		}
 		return count;
+	}
+
+	// Continent tem que ser um que esta guardado em R (ex: R.EUROPE)
+	public ArrayList<String> getContinent(String continent) {
+		ArrayList<String> t = new ArrayList<String>();
+
+		// Procura em todos as chaves dos territorios aqueles que comecam com
+		// continent e sao validos.
+		Pattern pattern = Pattern.compile(continent + "_\\w{3}");
+		for (String terr : territories.keySet()) {
+			Matcher matcher = pattern.matcher(terr);
+			if (matcher.find()) {
+				t.add(matcher.group(0));
+			}
+		}
+		return t;
+	}
+
+	public int getContinentBonus(String player) {
+
+		ArrayList<String> continents = getContinentList();
+
+		int nCont = 0;
+
+		for (String cont : continents) {
+			// Encontra todos os territorios de um dado continente
+			ArrayList<String> terr = getContinent(cont);
+			int n = 0;
+
+			// Encontra os territorios que o player controla no continente cont
+			for (String t : terr) {
+				if (allocations.get(t).equals(player)) {
+					n++;
+				}
+			}
+
+			// Se controlar todos os territorios do continente soma o valor do
+			// continente
+			if (terr.size() == n)
+				nCont += getContinentValue(cont);
+		}
+		return nCont;
+	}
+
+	private ArrayList<String> getContinentList() {
+		ArrayList<String> continents = new ArrayList<String>();
+		continents.add(R.EUROPE);
+		continents.add(R.NORTH_AMERICA);
+		continents.add(R.SOUTH_AMERICA);
+		continents.add(R.ANTARTICA);
+		continents.add(R.ASIA);
+		continents.add(R.AFRICA);
+		continents.add(R.OCEANIA);
+		return continents;
+	}
+
+	// Recebe um continete e devolve o seu valor em numero de soldados
+	private int getContinentValue(String cont) {
+		switch (cont) {
+		case R.AFRICA:
+			return R.NUM_AFRICA;
+		case R.ASIA:
+			return R.NUM_ASIA;
+		case R.EUROPE:
+			return R.NUM_EUROPE;
+		case R.NORTH_AMERICA:
+			return R.NUM_NORTH_AMERICA;
+		case R.SOUTH_AMERICA:
+			return R.NUM_SOUTH_AMERICA;
+		case R.ANTARTICA:
+			return R.NUM_ANTARTICA;
+		case R.OCEANIA:
+			return R.NUM_OCEANIA;
+		}
+		return 0;
 	}
 }
