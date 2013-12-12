@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import agents.AgressiveAgent;
 import agents.GameAgent;
 import agents.HumanAgent;
 import agents.RandomAgent;
@@ -97,7 +98,8 @@ public class Launcher {
 
 			container.acceptNewAgent(names.get(3), new agents.PlayerAgent(new RandomAgent()))
 					.start();
-			container.acceptNewAgent(names.get(4), new agents.PlayerAgent(new HumanAgent()))
+			System.err.println(names.get(4) + " is agressive");
+			container.acceptNewAgent("Biolento", new agents.PlayerAgent(new AgressiveAgent()))
 					.start();
 //			container.acceptNewAgent(names.get(5), new agents.PlayerAgent(new RandomAgent()))
 //					.start();

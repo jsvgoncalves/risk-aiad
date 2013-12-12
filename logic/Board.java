@@ -570,4 +570,23 @@ public class Board implements Serializable {
 	public String getPlayerFromTerritory(String to) {
 		return allocations.get(to);
 	}
+
+	/**
+     * Returns only the player territories with more than 1 soldier.
+     * @param localName
+     * @return
+     */
+    public ArrayList<String> getReadyPlayerTerritories(String player) {
+            ArrayList<String> playerTerritories = new ArrayList<String>();
+            for(Entry<String, String> e: allocations.entrySet()) {
+            		Territory t = getTerritory(e.getKey());
+                    if(	e.getValue().equals(player)
+                    	&& territories.get(t.getKey()).getNumSoldiers() > 1
+                    	&& getEnemyAdjacents(t, player).size() >= 1
+                    		) {
+                            playerTerritories.add(e.getKey());
+                    }
+            }
+            return playerTerritories;
+    }
 }

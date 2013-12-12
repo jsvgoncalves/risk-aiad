@@ -26,7 +26,7 @@ public class BoardLabel extends JLabel{
 		super(s);
 		this.setForeground(Color.white);
 		this.setHorizontalAlignment(JLabel.CENTER);
-		this.setFont(new Font("Arial", Font.BOLD, 20));
+		this.setFont(new Font("Arial", Font.BOLD, 10));
 		this.setLocation(x, y);
 		this.setSize(new Dimension(width, height));
 		this.x = x;
@@ -37,6 +37,7 @@ public class BoardLabel extends JLabel{
 		this.bc = border;
 		loadLabelColors();
 	}
+	
 	BoardLabel(String s, int x, int y, int width, int height){
 		super(s);
 		this.setForeground(Color.white);
@@ -50,6 +51,7 @@ public class BoardLabel extends JLabel{
 		this.height = height;
 		loadLabelColors();
 	}
+	
 	private void loadLabelColors() {
 		try {
 			label_colors.put("blue", ImageIO.read(BoardGUI.class.getResource("res/labels/blue.png")));
@@ -98,29 +100,25 @@ public class BoardLabel extends JLabel{
 		
 		g.drawImage(label_colors.get(playerColor), 0, 0, this.getWidth(), this.getHeight(), this);
 		
-		int xtemp = (int)Math.ceil(((double)this.getParent().getWidth() * x)/BoardGUI.PANEL_WIDTH);
-		int ytemp = (int)Math.ceil(((double)this.getParent().getHeight()* y)/BoardGUI.PANEL_HEIGHT);
+		int xtemp = (int)Math.ceil(((double)this.getParent().getWidth() * x)/(double)(BoardGUI.PANEL_WIDTH));
+		int ytemp = (int)Math.ceil(((double)this.getParent().getHeight()* y)/(double)(BoardGUI.PANEL_HEIGHT));
 	
-		double width_ratio = (((double)this.getParent().getWidth()/BoardGUI.PANEL_WIDTH));
-		double height_ratio = (((double)this.getParent().getHeight()/BoardGUI.PANEL_HEIGHT));
+		double width_ratio = (((double)this.getParent().getWidth()/(double)(BoardGUI.PANEL_WIDTH)));
+		double height_ratio = (((double)this.getParent().getHeight()/(double)(BoardGUI.PANEL_HEIGHT)));
 		double ratio = 1.0;
 		if(width_ratio > height_ratio)
 			ratio = width_ratio/height_ratio;
 		else
 			 ratio = height_ratio/width_ratio;
 		
-		this.setFont(new Font("Arial", Font.BOLD, (int) (10*ratio)));
-	
-		
 		int widtht  = (int)Math.ceil(width_ratio*width);
 		int heightt = (int)Math.ceil(height_ratio*height);
 
+		
+		System.err.println(xtemp + ", " + ytemp);
 		this.setLocation(xtemp, ytemp);
 		this.setSize(new Dimension(widtht, heightt));
-//		g.setColor(bc);
-//		g.fillRoundRect(0, 0, (int)this.getWidth(), (int)this.getHeight(), (int)(10*ratio), (int)(10*ratio));
-//		g.setColor(c);
-//		g.fillRoundRect((int)(1*ratio), (int)(1*ratio), (int)this.getWidth()-2, (int)this.getHeight()-2, (int)(7*ratio), (int)(7*ratio));
+		
 		super.paintComponent(g);
 	}
 }
