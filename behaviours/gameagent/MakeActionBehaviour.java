@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Random;
 
-import actions.Action;
+import perceptions.AtackPerception;
+import perceptions.FortifyPerception;
+import perceptions.ReceivedSoldiersPerception;
+
+import communication.RequestInitiator;
+
 import actions.PerformAtackAction;
 import actions.PerformFortificationAction;
 import actions.ReceiveAction;
@@ -75,11 +80,6 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 		System.out.println(bo.getTerritory(action.getFrom()).getName()
 				+ " atacks " + bo.getTerritory(action.getTo()).getName());
 
-		// ata = new AtackAndContinueFSM(myAgent, b.to,
-		// (PerformAtackAction) b.getAction(), p);
-
-		// myAgent.addBehaviour(ata);
-
 		Random r = new Random();
 		int p1 = 0;
 		int p2 = 0;
@@ -90,15 +90,36 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 		System.out.println("Player 1 rolled: " + p1);
 		System.out.println("Player 2 rolled: " + p2);
 		System.out.println();
+		int initSoldFrom, initSoldTo, finalSoldTo, finalSoldFrom;
+		initSoldFrom = bo.getTerritory(action.getFrom()).getNumSoldiers();
+		initSoldTo = bo.getTerritory(action.getTo()).getNumSoldiers();
 
+		boolean conquer=false;
+		
 		if (p1 > p2) {
 			bo.getTerritory(action.getTo()).removeSoldiers(1);
-			//Verifica se o territorio e conquistado no metodo conquer
-			bo.conquer(action.getFrom(), action.getTo());
+			// Verifica se o territorio e conquistado no metodo conquer
+			conquer = bo.conquer(action.getFrom(), action.getTo());
 		} else if (p2 >= p1) {
 			bo.getTerritory(action.getFrom()).removeSoldiers(1);
 		}
 
+		finalSoldFrom = bo.getTerritory(action.getFrom()).getNumSoldiers();
+		finalSoldTo = bo.getTerritory(action.getTo()).getNumSoldiers();
+
+		//f.setChanged();
+		myAgent.addBehaviour(new RequestInitiator(myAgent, RequestInitiator
+				.getChangedBoardMessage(p, bo)));
+		
+		AtackPerception perception = new AtackPerception(action.getFrom(),
+				action.getTo(), bo.getPlayerFromTerritory(action.getFrom()),
+				bo.getPlayerFromTerritory(action.getTo()), initSoldFrom,
+				initSoldTo, finalSoldFrom, finalSoldTo, conquer);
+
+		myAgent.addBehaviour(new RequestInitiator(myAgent, RequestInitiator
+				.getPerceptionMessage(p,perception)));
+		
+		
 	}
 
 	private void fortifyAction() {
@@ -106,24 +127,51 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 		PerformFortificationAction action = (PerformFortificationAction) b
 				.getAction();
 
+		String from, to, player;
+		int initSoldFrom,initSoldTo, movedSold;
+		movedSold = action.getN();
+		initSoldFrom = bo.getTerritory(action.getFrom()).getNumSoldiers();
+		initSoldTo = bo.getTerritory(action.getTo()).getNumSoldiers();
+		
+		from = action.getFrom();
+		to=action.getTo();
+		
+		player=bo.getPlayerFromTerritory(action.getFrom());
+		
 		bo.getTerritory(action.getFrom()).removeSoldiers(action.getN());
 		bo.getTerritory(action.getFrom()).addSoldiers(action.getN());
-		f.setChanged();
+		
+		FortifyPerception perception = new FortifyPerception(from, to, player, initSoldFrom, initSoldTo, movedSold);
+		
+		f.setChanged(perception);
+		
 	}
 
 	private void dontFortify() {
 		System.out.println("Don't fortify");
+		
 	}
 
 	private void receiveAction() {
 		System.out.println("Receive");
 		ReceiveAction action = (ReceiveAction) b.getAction();
-		Hashtable<String, Integer> soldiers = action.getSoldiersByTerritory();
-
-		for (String terr : soldiers.keySet()) {
-			bo.getTerritory(terr).addSoldiers(soldiers.get(terr));
+		Hashtable<String, Integer> moved = action.getSoldiersByTerritory();
+		Hashtable<String, Integer> initial, finalS;
+		initial = new Hashtable<String,Integer>();
+		finalS = new Hashtable<String, Integer>();
+		
+		String player = null;
+		
+		for (String terr : moved.keySet()) {
+			initial.put(terr, bo.getTerritory(terr).getNumSoldiers());
+			bo.getTerritory(terr).addSoldiers(moved.get(terr));
+			finalS.put(terr, bo.getTerritory(terr).getNumSoldiers());
+			player=bo.getPlayerFromTerritory(terr);
 		}
-		f.setChanged();
+		
+		ReceivedSoldiersPerception perception = new ReceivedSoldiersPerception(player, moved, initial, finalS);
+		f.setChanged(perception);
+		
 	}
 
 	@Override
@@ -134,6 +182,7 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 	@Override
 	public int onEnd() {
 
+		((GameAgent)myAgent).notifyTurnEnded();
 		if (b.getAction().getClass().getName().equals(R.PERFORM_ATACK)) {
 			b.reset();
 			return CONT;

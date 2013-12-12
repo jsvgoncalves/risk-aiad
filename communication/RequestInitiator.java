@@ -3,6 +3,8 @@ package communication;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import perceptions.Perception;
+
 import behaviours.gameagent.GameAgentFaseBehaviour;
 import behaviours.playeragent.JoinGameBehaviour;
 import actions.Action;
@@ -28,38 +30,56 @@ public class RequestInitiator extends AchieveREInitiator {
 	public RequestInitiator(Agent a, ACLMessage msg) {
 		super(a, msg);
 		b = null;
-		j=null;
+		j = null;
 	}
 
 	public RequestInitiator(Agent a, ACLMessage msg, GameAgentFaseBehaviour b) {
 		super(a, msg);
 		this.b = b;
-		j=null;
+		j = null;
 	}
 
 	public RequestInitiator(Agent a, ACLMessage msg,
 			JoinGameBehaviour joinGameBehaviour) {
-		super(a,msg);
-		b=null;
-		j=joinGameBehaviour;
+		super(a, msg);
+		b = null;
+		j = joinGameBehaviour;
 	}
 
-	public static ACLMessage getChangedBoardMessage(ArrayList<AID> players, Board b){
+	public static ACLMessage getChangedBoardMessage(ArrayList<AID> players,
+			Board b) {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		
+
 		try {
 			request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 			request.setContentObject(b);
-			for( AID to: players)
+			for (AID to : players)
 				request.addReceiver(to);
 			return request;
 		} catch (IOException e) {
 			request.setPerformative(ACLMessage.FAILURE);
 			request.setContent(e.getMessage());
 			return request;
-		}	
+		}
 	}
-	
+
+	public static ACLMessage getPerceptionMessage(ArrayList<AID> p,
+			Perception perception) {
+		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+
+		try {
+			request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+			request.setContentObject(perception);
+			for (AID to : p)
+				request.addReceiver(to);
+			return request;
+		} catch (IOException e) {
+			request.setPerformative(ACLMessage.FAILURE);
+			request.setContent(e.getMessage());
+			return request;
+		}
+	}
+
 	public static ACLMessage getJoinMessage(AID to, String agentName) {
 		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
 		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
@@ -148,18 +168,16 @@ public class RequestInitiator extends AchieveREInitiator {
 		if (b == null)
 			System.out.println("Null behaviour");
 		else
-			b.handleAction(a);	
+			b.handleAction(a);
 	}
 
 	protected void handleFailure(ACLMessage failure) {
-		//System.out.println("Couldn't join!");
-		switch(failure.getContent()){
+		// System.out.println("Couldn't join!");
+		switch (failure.getContent()) {
 		case R.JOIN:
 			j.couldntJoin();
 			break;
 		}
 	}
-
-	
 
 }

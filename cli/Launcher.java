@@ -97,7 +97,7 @@ public class Launcher {
 
 			container.acceptNewAgent(names.get(3), new agents.PlayerAgent(new RandomAgent()))
 					.start();
-			container.acceptNewAgent(names.get(4), new agents.PlayerAgent(new RandomAgent()))
+			container.acceptNewAgent(names.get(4), new agents.PlayerAgent(new HumanAgent()))
 					.start();
 //			container.acceptNewAgent(names.get(5), new agents.PlayerAgent(new RandomAgent()))
 //					.start();

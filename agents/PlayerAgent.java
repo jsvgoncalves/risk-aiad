@@ -1,5 +1,9 @@
 package agents;
 
+import java.util.LinkedList;
+
+import perceptions.Perception;
+
 import util.R;
 import behaviours.playeragent.JoinGameBehaviour;
 import behaviours.playeragent.SensorBehaviour;
@@ -22,12 +26,14 @@ public class PlayerAgent extends Agent {
 	private PlayerAgentBehaviours a;
 	protected Board board;
 	protected int currentRound;
+	protected LinkedList<Perception> perceptions;
 
 	public PlayerAgent(PlayerAgentBehaviours a) {
 		this.a = a;
 		a.setPlayerAgent(this);
 		board = new Board();
 		currentRound=0;
+		perceptions= new LinkedList<Perception>();
 	}
 
 	public Board getBoard() {
@@ -73,5 +79,17 @@ public class PlayerAgent extends Agent {
 		} catch (FIPAException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public Perception getPerception(){
+		return perceptions.removeFirst();
+	}
+	
+	public void addPerception(Perception p){
+		perceptions.add(p);
+	}
+
+	public void setBoard(Board b) {
+		board=b;
 	}
 }

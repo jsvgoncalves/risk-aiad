@@ -19,13 +19,12 @@ public class SensorBehaviour extends SimpleBehaviour {
 	private static final long serialVersionUID = 6852062724207667965L;
 	
 	private PlayerAgentBehaviours a;
-	private Board b; // FIXME! isto provavelmente vai ser passado na comunicação? Mudar isto.
+	private PlayerAgent agent;
 	
 	public SensorBehaviour(Agent my,PlayerAgentBehaviours a){
 		super(my);
 		this.a = a;
-		
-		b = ((PlayerAgent)my).getBoard();
+		agent = (PlayerAgent)myAgent;
 	}
 
 	public Action respond(){
@@ -45,23 +44,23 @@ public class SensorBehaviour extends SimpleBehaviour {
 
 	public Action receive(int n) {
 		((PlayerAgent)myAgent).newRound();
-		return a.receiveSoldiers(b,n);
+		return a.receiveSoldiers(agent.getBoard(),n);
 	}
 
 	public Action atack() {
-		return a.atack(b);
+		return a.atack(agent.getBoard());
 	}
 
 	public Action fortify() {
-		return a.fortify(b);
+		return a.fortify(agent.getBoard());
 	}
 
 	public void updateBoard(Board board) {
-		b = board;
+		agent.setBoard(board);
 	}
 
 	public void addPerception(Perception p) {
-	
+		agent.addPerception(p);
 	}
 
 }

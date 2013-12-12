@@ -465,17 +465,18 @@ public class Board implements Serializable {
 		return enemyAdjacents;
 	}
 
-	public void conquer(String from, String to) {
+	public boolean conquer(String from, String to) {
 		Territory tFrom = territories.get(from);
 		Territory tTo = territories.get(to);
 
 		if (tFrom.getNumSoldiers() <= 1 || tTo.getNumSoldiers() > 0)
-			return;
+			return false;
 
 		allocations.remove(to);
 		allocations.put(to, allocations.get(from));
 
 		tFrom.conquer(tTo);
+		return true;
 	}
 
 	public String getPlayerFromTerritory(Territory t) {
@@ -564,5 +565,9 @@ public class Board implements Serializable {
 			return R.NUM_OCEANIA;
 		}
 		return 0;
+	}
+
+	public String getPlayerFromTerritory(String to) {
+		return allocations.get(to);
 	}
 }
