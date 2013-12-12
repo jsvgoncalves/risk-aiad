@@ -13,7 +13,7 @@ import actions.PerformAtackAction;
 import actions.PerformFortificationAction;
 import actions.ReceiveAction;
 
-public class RandomAgent extends PlayerAgentBehaviours {
+public class AgressiveAgent extends PlayerAgentBehaviours {
 	Random r = new Random();
 	/**
 	 * Receives soldiers and places them in territories.
@@ -50,7 +50,8 @@ public class RandomAgent extends PlayerAgentBehaviours {
 			return new DontAtackAction();
 		}
 
-		int from = r.nextInt(playerTerritories.size() + 1);
+//		int from = r.nextInt(playerTerritories.size() + 1);
+		int from = selectBestTerritory(playerTerritories, b);
 		// If the random == size, then don't attack.
 		if(from == playerTerritories.size()) {
 			return new DontAtackAction();
@@ -69,6 +70,25 @@ public class RandomAgent extends PlayerAgentBehaviours {
 		return new PerformAtackAction(playerTerritories.get(from), adjacentTerritories.get(to).getKey());
 	}
 	
+	/**
+	 * Selects the best territory from where to attack.
+	 * @param playerTerritories
+	 * @param b 
+	 * @return
+	 */
+	private int selectBestTerritory(ArrayList<String> playerTerritories, Board b) {
+		int max = 0;
+		int index = 0;
+		for (int i = 0; i < playerTerritories.size(); i++) {
+			if(b.getTerritory(playerTerritories.get(i)).getNumSoldiers() > max ) {
+				max = b.getTerritory(playerTerritories.get(i)).getNumSoldiers();
+				index = i;
+			}
+		}
+		System.err.println("Escolhi " + b.getTerritory(playerTerritories.get(index)).getName() + " " + b.getTerritory(playerTerritories.get(index)).getNumSoldiers());
+		return index;
+	}
+
 	/**
 	 * Chooses randomly where to fortify (or don't fortify)
 	 */
