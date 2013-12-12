@@ -460,6 +460,9 @@ public class Board implements Serializable{
 		Territory tFrom = territories.get(from);
 		Territory tTo = territories.get(to);
 		
+		if(tFrom.getNumSoldiers() <= 1 || tTo.getNumSoldiers() > 0 )
+			return;
+		
 		allocations.remove(to);
 		allocations.put(to, allocations.get(from));
 		

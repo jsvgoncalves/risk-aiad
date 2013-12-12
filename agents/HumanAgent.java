@@ -9,7 +9,6 @@ import java.util.Scanner;
 import logic.Board;
 import logic.Territory;
 import actions.AtackAction;
-import actions.ContinueAction;
 import actions.DontAtackAction;
 import actions.DontFortifyAction;
 import actions.FortifyAction;
@@ -60,16 +59,6 @@ public class HumanAgent extends PlayerAgentBehaviours {
 		to -= 1;
 		// Return an attack action with (from,to)
 		return new PerformAtackAction(playerTerritories.get(from), adjacentTerritories.get(to).getKey());
-	}
-
-	/* (non-Javadoc)
-	 * @see agents.PlayerAgentBehaviours#continueAtack(logic.Board, boolean, int, int)
-	 */
-	@Override
-	public ContinueAction continueAtack(Board b, boolean wonLast,
-			int mySoldiers, int hisSoldiers) {
-		// TODO Auto-generated method stub
-		return new ContinueAction(false);
 	}
 
 	/* (non-Javadoc)

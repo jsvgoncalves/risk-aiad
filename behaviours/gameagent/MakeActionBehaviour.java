@@ -2,7 +2,9 @@ package behaviours.gameagent;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Random;
 
+import actions.Action;
 import actions.PerformAtackAction;
 import actions.PerformFortificationAction;
 import actions.ReceiveAction;
@@ -26,7 +28,7 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 	private GameAgentFaseBehaviour b;
 	private FinalBehaviour f;
 	private ArrayList<AID> p;
-	AtackAndContinueFSM ata;
+	// AtackAndContinueFSM ata;
 	private Board bo;
 
 	public MakeActionBehaviour(GameAgentFaseBehaviour behaviour,
@@ -35,18 +37,17 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 		this.b = behaviour;
 		this.f = fin;
 		p = fin.getPlayers();
-		ata=null;
-		bo = ((GameAgent)myAgent).getBoard();
+		// ata=null;
+		bo = ((GameAgent) myAgent).getBoard();
 	}
 
 	@Override
 	public void action() {
-		
-		if(ata!= null){
-			return;
-		}
-			
-		
+
+		/*
+		 * if(ata!= null){ return; }
+		 */
+
 		switch (b.getAction().getClass().getName()) {
 		case R.RECEIVE_ACTION:
 			receiveAction();
@@ -74,13 +75,36 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 	}
 
 	private void atackAction() {
-		System.out.println(((PerformAtackAction) b.getAction()).getFrom()
-				+ " atacks " + ((PerformAtackAction) b.getAction()).getTo());
 
-		ata = new AtackAndContinueFSM(myAgent, b.to,
-				(PerformAtackAction) b.getAction(), p);
-		
-		myAgent.addBehaviour(ata);
+		PerformAtackAction action = (PerformAtackAction) b.getAction();
+
+		System.out.println(bo.getTerritory(action.getFrom()).getName()
+				+ " atacks " + bo.getTerritory(action.getTo()).getName());
+
+		// ata = new AtackAndContinueFSM(myAgent, b.to,
+		// (PerformAtackAction) b.getAction(), p);
+
+		// myAgent.addBehaviour(ata);
+
+		Random r = new Random();
+		int p1 = 0;
+		int p2 = 0;
+
+		p1 = r.nextInt(12) + 1;
+		p2 = r.nextInt(12) + 1;
+
+		System.out.println("Player 1 rolled: " + p1);
+		System.out.println("Player 2 rolled: " + p2);
+		System.out.println();
+
+		if (p1 > p2) {
+			bo.getTerritory(action.getTo()).removeSoldiers(1);
+			//Verificar se territorio conquistado
+			bo.conquer(action.getFrom(), action.getTo());
+		} else if (p2 >= p1) {
+			bo.getTerritory(action.getFrom()).removeSoldiers(1);
+		}
+
 	}
 
 	private void fortifyAction() {
@@ -88,10 +112,8 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 		PerformFortificationAction action = (PerformFortificationAction) b
 				.getAction();
 
-		bo.getTerritory(action.getFrom())
-				.removeSoldiers(action.getN());
-		bo.getTerritory(action.getFrom())
-				.addSoldiers(action.getN());
+		bo.getTerritory(action.getFrom()).removeSoldiers(action.getN());
+		bo.getTerritory(action.getFrom()).addSoldiers(action.getN());
 		f.setChanged();
 	}
 
@@ -105,40 +127,26 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 		Hashtable<String, Integer> soldiers = action.getSoldiersByTerritory();
 
 		for (String terr : soldiers.keySet()) {
-			bo.getTerritory(terr)
-					.addSoldiers(soldiers.get(terr));
+			bo.getTerritory(terr).addSoldiers(soldiers.get(terr));
 		}
 		f.setChanged();
 	}
 
 	@Override
 	public boolean done() {
-		if(ata!= null){
-			if( ata.e )
-				f.setChanged();
-			
-			return ata.e;
-		}
-		else
-			return true;
+		return true;
 	}
 
 	@Override
 	public int onEnd() {
 
-		if (b.getAction().getClass().getName().equals(R.PERFORM_ATACK)){
+		if (b.getAction().getClass().getName().equals(R.PERFORM_ATACK)) {
 			b.reset();
-			resetAtack();
 			return CONT;
-		}
-		else{
+		} else {
 			return FINAL;
 		}
-			
-	}
 
-	public void resetAtack() {
-		ata=null;
 	}
 
 }

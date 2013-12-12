@@ -104,14 +104,6 @@ public class RequestInitiator extends AchieveREInitiator {
 		request.addReceiver(to);
 		return request;
 	}
-	
-	public static ACLMessage getContinueMessage(AID to, boolean wonLast, int mySoldiers, int hisSoldiers) {
-		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
-		request.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-		request.setContent(R.CONTINUE + " " + wonLast + " " + mySoldiers + " " + hisSoldiers);
-		request.addReceiver(to);
-		return request;
-	}
 
 	protected void handleInform(ACLMessage inform) {
 		try {

@@ -56,10 +56,6 @@ public class SensorBehaviour extends SimpleBehaviour {
 		return a.fortify(b);
 	}
 
-	public Action cont(boolean wonLast, int mySoldiers, int hisSoldiers) {
-		return a.continueAtack(b, wonLast, mySoldiers, hisSoldiers);
-	}
-
 	public void updateBoard(Board board) {
 		b = board;
 	}

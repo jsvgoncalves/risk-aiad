@@ -6,7 +6,6 @@ import java.util.Random;
 import logic.Board;
 import logic.Territory;
 import actions.AtackAction;
-import actions.ContinueAction;
 import actions.DontAtackAction;
 import actions.DontFortifyAction;
 import actions.FortifyAction;
@@ -69,12 +68,6 @@ public class RandomAgent extends PlayerAgentBehaviours {
 		// Return an attack action with (from,to)
 		return new PerformAtackAction(playerTerritories.get(from), adjacentTerritories.get(to).getKey());
 	}
-
-	@Override
-	public ContinueAction continueAtack(Board b,boolean wonLast, int mySoldiers, int hisSoldiers) {
-		return new ContinueAction(r.nextBoolean());
-	}
-
 	
 	/**
 	 * Chooses randomly where to fortify (or don't fortify)

@@ -47,7 +47,6 @@ public class RequestActionBehaviour extends FSMBehaviour{
 	
 	public void resetCount(){
 		check.resetCount();
-		make.resetAtack();
 	}
 	
 	public void setPlayer(AID aid) {
