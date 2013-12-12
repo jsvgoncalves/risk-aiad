@@ -42,8 +42,11 @@ public class UpdateRoundBehaviour extends SimpleBehaviour {
 				.getChangedBoardMessage(players, agent.getBoard())));
 
 		if (agent.getBoard().getPlayerTerritories(
-						agent.getAgentNames().get(players.get(currentPlayer))).size() == 0)
+						agent.getAgentNames().get(players.get(currentPlayer))).size() == 0){
 			players.remove(currentPlayer);
+			if( currentPlayer >= players.size())
+				currentPlayer=0;
+		}
 
 		currentRound++;
 		System.out.println("Round " + currentRound);
