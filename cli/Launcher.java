@@ -1,6 +1,7 @@
 package cli;
 
 import gui.BoardGUI;
+import gui.GameStartGUI;
 
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
@@ -16,26 +17,53 @@ import agents.RandomAgent;
 import util.R;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
+import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
+import jade.core.Runtime;
+import jade.wrapper.AgentContainer;
 
 public class Launcher {
-
+	
+	static Runtime runtime;
+	private static AgentContainer container;
+	protected static GameAgent gameAgent;
+	private static JFrame configFrame;
+	
 	public static void main(String[] args) {
-		jade.core.Runtime runtime = jade.core.Runtime.instance();
-		Profile profile = new ProfileImpl();
-		profile.setParameter(R.GUI_CONFIG, R.GUI_ON);
-		profile.setParameter(R.PORT_CONFIG, R.PORT);
-		jade.wrapper.AgentContainer container = runtime
-				.createMainContainer(profile);
+		GameAgent gameAgent = setupJADE();
+
+		configGame();
 		
-		GameAgent gameAgent = new GameAgent();
+
+	}
+
+	private static void configGame() {
+		configFrame = new JFrame("RISK");
+		configFrame.setSize(new Dimension(400, 400));
+		configFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		final GameStartGUI startGameGui = new GameStartGUI();
+		configFrame.add(startGameGui);
+		configFrame.setVisible(true);
+	}
+
+	private static GameAgent setupJADE() {
+		runtime = jade.core.Runtime.instance();
+		Profile profile = new ProfileImpl();
+		profile.setParameter(R.GUI_CONFIG, R.GUI_OFF);
+		profile.setParameter(R.PORT_CONFIG, R.PORT);
+		container = runtime.createMainContainer(profile);
+		
+		gameAgent = new GameAgent();
 		try {
 			container.acceptNewAgent("Board", gameAgent).start();
 		} catch (StaleProxyException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
+		return gameAgent;
+	}
+	
+	public static void startGame() {
 		JFrame f = new JFrame("RISK");
 		f.setSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
 		f.setMinimumSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
@@ -89,7 +117,7 @@ public class Launcher {
 		
 		try {
 			ArrayList<String> names = util.NameGenerator.randomName(3);
-			container.acceptNewAgent(names.get(0), new agents.PlayerAgent(new RandomAgent()))
+			((ContainerController) container).acceptNewAgent(names.get(0), new agents.PlayerAgent(new RandomAgent()))
 					.start();
 			container.acceptNewAgent(names.get(1), new agents.PlayerAgent(new RandomAgent()))
 					.start();
@@ -98,7 +126,6 @@ public class Launcher {
 
 			container.acceptNewAgent(names.get(3), new agents.PlayerAgent(new RandomAgent()))
 					.start();
-			System.err.println(names.get(4) + " is agressive");
 			container.acceptNewAgent("Biolento", new agents.PlayerAgent(new AgressiveAgent()))
 					.start();
 //			container.acceptNewAgent(names.get(5), new agents.PlayerAgent(new RandomAgent()))
@@ -108,10 +135,8 @@ public class Launcher {
 			e.printStackTrace();
 		}
 
-		
-		
 		f.setVisible(true);
-
+		configFrame.setVisible(false);
 	}
 
 }
