@@ -240,7 +240,7 @@ public class BoardGUI extends JPanel{
 		initPlayerColors();
 		
 		Board b = gameAgent.getBoard();
-		writer.println("Round");
+		writer.print("Round");
 		players = gameAgent.getPlayers();
 		for (int i = 0; i < players.size(); i++) {
 			writer.print("," + players.get(i).getLocalName());
