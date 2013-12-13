@@ -27,7 +27,7 @@ import agents.GameAgent;
 import logic.Board;
 import logic.Territory;
 
-public class BoardGUI extends JPanel{
+public class BoardGUI extends ObserverGUI{
 	private static final long serialVersionUID = 8906083247845612415L;
 	
 	public static final int PANEL_WIDTH = 1004;
@@ -234,8 +234,10 @@ public class BoardGUI extends JPanel{
 			String thisColor = playerColors.get(b.getPlayerFromTerritory(t));
 			e.getValue().setPlayerColor(thisColor);
 		}
+		
 	}
 
+	@Override
 	public void notifyGameStarted() {
 		initPlayerColors();
 		
@@ -247,9 +249,11 @@ public class BoardGUI extends JPanel{
 		}
 		writer.println();
 	}
+	
 	/**
 	 * Method called by the GameAgent observable.
 	 */
+	@Override
 	public void notifyTurnEnded() {
 		updateAllTerritories();
 		printCSV();

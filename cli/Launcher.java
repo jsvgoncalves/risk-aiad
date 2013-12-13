@@ -2,6 +2,7 @@ package cli;
 
 import gui.BoardGUI;
 import gui.GameStartGUI;
+import gui.StatsGUI;
 
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
@@ -30,6 +31,8 @@ public class Launcher {
 	private static AgentContainer container;
 	protected static GameAgent gameAgent;
 	private static JFrame configFrame;
+	private static JFrame statsFrame;
+	private static JFrame gameFrame;
 	
 	public static void main(String[] args) {
 		
@@ -72,13 +75,42 @@ public class Launcher {
 	}
 	
 	public static void startGame(ArrayList<String> agentTypes) {
-		JFrame f = new JFrame("RISK");
-		f.setSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
-		f.setMinimumSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		createStatsFrame();
+		createGameFrame();
+		
+		try {
+			ArrayList<String> names = util.NameGenerator.randomName(agentTypes.size());
+			for (int i = 0; i < agentTypes.size(); i++) {
+				addAgent(names.get(i), agentTypes.get(i));
+			}
+			
+		} catch (StaleProxyException e) {
+			e.printStackTrace();
+		}
+
+		gameFrame.setVisible(true);
+		statsFrame.setVisible(true);
+		configFrame.setVisible(false);
+	}
+
+	private static void createStatsFrame() {
+		statsFrame = new JFrame("RISK");
+		statsFrame.setSize(new Dimension(StatsGUI.PANEL_WIDTH, StatsGUI.PANEL_HEIGHT));
+		statsFrame.setMinimumSize(new Dimension(StatsGUI.PANEL_WIDTH, StatsGUI.PANEL_HEIGHT));
+		statsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		final StatsGUI gui = new StatsGUI(gameAgent);
+		statsFrame.add(gui);
+		
+	}
+
+	private static void createGameFrame() {
+		gameFrame = new JFrame("RISK");
+		gameFrame.setSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
+		gameFrame.setMinimumSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
+		gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		final BoardGUI gui = new BoardGUI(gameAgent);
-		f.add(gui);
-		f.addWindowListener( new WindowListener() {
+		gameFrame.add(gui);
+		gameFrame.addWindowListener( new WindowListener() {
 			
 			@Override
 			public void windowOpened(WindowEvent e) {
@@ -122,19 +154,6 @@ public class Launcher {
 				
 			}
 		});
-		
-		try {
-			ArrayList<String> names = util.NameGenerator.randomName(agentTypes.size());
-			for (int i = 0; i < agentTypes.size(); i++) {
-				addAgent(names.get(i), agentTypes.get(i));
-			}
-			
-		} catch (StaleProxyException e) {
-			e.printStackTrace();
-		}
-
-		f.setVisible(true);
-		configFrame.setVisible(false);
 	}
 
 	private static void addAgent(String name, String type) throws StaleProxyException {

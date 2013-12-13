@@ -1,6 +1,7 @@
 package agents;
 
 import gui.BoardGUI;
+import gui.ObserverGUI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public class GameAgent extends Agent {
 	int currentPlayer = 0;
 	int gameStatus = R.GAME_WAITING;
 	private Board board;
-	private ArrayList<BoardGUI> listeners = new ArrayList<BoardGUI>();
+	private ArrayList<ObserverGUI> listeners = new ArrayList<ObserverGUI>();
 	//Maps AID -> agentName
 	private HashMap<AID, String> agentName = new HashMap<AID,String>();
 	//
@@ -105,7 +106,7 @@ public class GameAgent extends Agent {
 	 */
 	public void notifyTurnEnded() {
 
-		for (BoardGUI listener : listeners) {
+		for (ObserverGUI listener : listeners) {
 			listener.notifyTurnEnded();
 		}
 		
@@ -116,13 +117,13 @@ public class GameAgent extends Agent {
 	 */
 	public void notifyGameStarted() {
 
-		for (BoardGUI listener : listeners) {
+		for (ObserverGUI listener : listeners) {
 			listener.notifyGameStarted();
 		}
 		
 	}
 	
-	public void addListener(BoardGUI boardGUI) {
+	public void addListener(ObserverGUI boardGUI) {
 		this.listeners.add(boardGUI);
 	}
 
