@@ -37,7 +37,8 @@ public class R {
 	public static final String CONTINUE_ACTION = "actions.ContinueAction";
 	public static final Object BOARD_CLASS = "logic.Board";
 	public static final Object PERCEPTION_CLASS = "perceptions.Perception";
-	
+	public static final String PERCEPTION_ATACK = "perceptions.AtackPerception";
+	public static final String PERCEPTION_FORTIFY = "perceptions.FortifyPerception";
 	
 	// Territory keys
 
@@ -121,4 +122,13 @@ public class R {
 	public static final int NUM_ANTARTICA=1;
 	public static final int NUM_OCEANIA=2;
 	public static final int NUM_EUROPE=5;
+	public static final int NUM_TERR_NORTH_AMERICA=5;
+	public static final int NUM_TERR_SOUTH_AMERICA=3;
+	public static final int NUM_TERR_AFRICA=3;
+	public static final int NUM_TERR_ASIA=8;
+	public static final int NUM_TERR_ANTARTICA=1;
+	public static final int NUM_TERR_OCEANIA=2;
+	public static final int NUM_TERR_EUROPE=5;
+	
+	
 }

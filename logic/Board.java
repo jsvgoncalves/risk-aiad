@@ -10,6 +10,8 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import perceptions.Perception;
+
 import util.R;
 
 public class Board implements Serializable {
@@ -590,4 +592,13 @@ public class Board implements Serializable {
             }
             return playerTerritories;
     }
+
+	public ArrayList<String> canConquerContinent(String player) {
+		//Territories in the frontline
+		ArrayList<String> frontLine = getReadyPlayerTerritories(player);
+		
+		
+		
+		return frontLine;
+	}
 }
