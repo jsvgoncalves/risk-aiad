@@ -139,13 +139,13 @@ public class Launcher {
 
 	private static void addAgent(String name, String type) throws StaleProxyException {
 		if(type.equals("Random")) {
-			container.acceptNewAgent(name, new agents.PlayerAgent(new RandomAgent())).start();
+			container.acceptNewAgent(name+"-R", new agents.PlayerAgent(new RandomAgent())).start();
 		} else if(type.equals("Human")) {
-			container.acceptNewAgent(name, new agents.PlayerAgent(new HumanAgent())).start();
+			container.acceptNewAgent(name+"-H", new agents.PlayerAgent(new HumanAgent())).start();
 		} else if(type.equals("Agressive")) {
-			container.acceptNewAgent(name, new agents.PlayerAgent(new AgressiveAgent())).start();
+			container.acceptNewAgent(name+"-A", new agents.PlayerAgent(new AgressiveAgent())).start();
 		} else if(type.equals("Reactive")) {
-			container.acceptNewAgent(name, new agents.PlayerAgent(new ReactiveAgent())).start();
+			container.acceptNewAgent(name+"-RE", new agents.PlayerAgent(new ReactiveAgent())).start();
 		} 
 	}
 

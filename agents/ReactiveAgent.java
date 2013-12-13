@@ -47,7 +47,7 @@ public class ReactiveAgent extends PlayerAgentBehaviours {
 				perceptions);
 
 		// If player was atacked last round
-		if (atackedTerritories.size() != 0) {
+		if (atackedTerritories.size() > 0) {
 			// Put available soldiers in the territories that were atacked and
 			// survived
 			while (n > 0) {
@@ -56,7 +56,7 @@ public class ReactiveAgent extends PlayerAgentBehaviours {
 				n--;
 			}
 		} else {
-			ArrayList<String> territories = b.getReadyPlayerTerritories(myAgent
+			ArrayList<String> territories = b.getFortifyReadyPlayerTerritories(myAgent
 					.getLocalName());
 			// Put available soldiers in the frontline with less soldiers
 			while (n > 0) {
