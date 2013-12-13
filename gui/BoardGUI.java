@@ -49,6 +49,8 @@ public class BoardGUI extends JPanel{
 	
 	PrintWriter writer;
 	
+	ArrayList<AID> players;
+	
 	
 	public BoardGUI(GameAgent gameAgent) {
 
@@ -239,7 +241,7 @@ public class BoardGUI extends JPanel{
 		
 		Board b = gameAgent.getBoard();
 		writer.println("Round");
-		ArrayList<AID> players = gameAgent.getPlayers();
+		players = gameAgent.getPlayers();
 		for (int i = 0; i < players.size(); i++) {
 			writer.print("," + players.get(i).getLocalName());
 		}
@@ -259,7 +261,7 @@ public class BoardGUI extends JPanel{
 	private void printCSV() {
 		
 		Board b = gameAgent.getBoard();
-		ArrayList<AID> players = gameAgent.getPlayers();
+		players = gameAgent.getPlayers();
 		writer.print(gameAgent.getCurrentRound());
 		for (int i = 0; i < players.size(); i++) {
 			writer.print("," + b.getPlayerTotalSoldiers(players.get(i).getLocalName()));
