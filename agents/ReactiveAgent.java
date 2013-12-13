@@ -1,10 +1,12 @@
 package agents;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import perceptions.AtackPerception;
 import perceptions.FortifyPerception;
 import perceptions.Perception;
+import util.PossibleToAtack;
 import util.R;
 
 import logic.Board;
@@ -18,6 +20,20 @@ import actions.PerformFortificationAction;
 import actions.ReceiveAction;
 
 public class ReactiveAgent extends PlayerAgentBehaviours {
+
+	private int x;
+	private Random random;
+
+	/**
+	 * 
+	 * @param x
+	 *            The bigger x is, the smaller is the probability the agent will
+	 *            atack.
+	 */
+	public ReactiveAgent(int x) {
+		this.x = x;
+		random = new Random();
+	}
 
 	private ArrayList<Perception> getAllPerceptions() {
 		ArrayList<Perception> perceptions = new ArrayList<Perception>();
@@ -56,13 +72,15 @@ public class ReactiveAgent extends PlayerAgentBehaviours {
 				n--;
 			}
 		} else {
-			ArrayList<String> territories = b.getFortifyReadyPlayerTerritories(myAgent
-					.getLocalName());
+			ArrayList<String> territories = b
+					.getFortifyReadyPlayerTerritories(myAgent.getLocalName());
 			// Put available soldiers in the frontline with less soldiers
-			while (n > 0) {
-				String min = getMinSoldiers(b, territories);
-				receive.addSoldiersTerritory(1, min);
-				n--;
+			if (territories.size() > 0) {
+				while (n > 0) {
+					String min = getMinSoldiers(b, territories);
+					receive.addSoldiersTerritory(1, min);
+					n--;
+				}
 			}
 		}
 
@@ -109,23 +127,93 @@ public class ReactiveAgent extends PlayerAgentBehaviours {
 	public AtackAction atack(Board b) {
 		ArrayList<Perception> perceptions = getAllPerceptions();
 
+		int factor = x
+				/ (b.getTotalNumSoldiers(myAgent.getLocalName()) / b
+						.getTotalNumTerritories(myAgent.getLocalName()));
+
 		// If territory was atacked and has more soldiers than the oposing
 		// territory then atacks
 		ArrayList<AtackPerception> atacks = getValidAtackPerceptions(
 				perceptions, b);
+
+		// All the fortifications that moved soldiers away from a player's
+		// territory
+		ArrayList<FortifyPerception> fortifications = getFortifyAwayPerceptions(
+				perceptions, b);
+
 		if (atacks.size() > 0) {
-			// Atacks back
-			return new PerformAtackAction(atacks.get(0).getTo(), atacks.get(0)
-					.getFrom());
+			// Attacks back
+			int i = random.nextInt(atacks.size() + factor);
+
+			// If i is a valid index of atacks and if player's territory has
+			// more or equal number of soldiers than the opposing territory then
+			// atacks
+			if (i < atacks.size()
+					&& b.getTerritory(atacks.get(i).getTo()).getNumSoldiers() >= b
+							.getTerritory(atacks.get(i).getFrom())
+							.getNumSoldiers()) {
+				AtackPerception at = atacks.get(i);
+				perceptions.remove(i);
+				return new PerformAtackAction(at.getTo(), at.getFrom());
+			}
 		}
 
-		// TODO Atacar territorios que fortificaram de um territorio acessivel
-		// de um territorio de player para longe
+		if (fortifications.size() > 0) {
+			// If fortified away
+			ArrayList<PossibleToAtack> possibleAtacks = getPossibleAtacksFromFortifyAway(
+					b, fortifications);
 
-		// Put back the perceptions so the agent can get them in the fortify
-		// fase
+			if (possibleAtacks.size() > 0) {
+				int i = random.nextInt(possibleAtacks.size() + factor);
+
+				if (i < possibleAtacks.size()) {
+					perceptions.remove(possibleAtacks.get(i).getPerception());
+					return new PerformAtackAction(possibleAtacks.get(i)
+							.getFrom(), possibleAtacks.get(i).getTo());
+				}
+			}
+		}
+
+		// Atacks an enemy territory with some probability. Otherwise, in a game
+		// only with reactive agents, none would atack
+		ArrayList<String> terr = b.getReadyPlayerTerritories(myAgent
+				.getLocalName());
+		if (terr.size() > 0) {
+			int from = random.nextInt(terr.size() + factor);
+			if (from < terr.size()) {
+				ArrayList<Territory> enemies = b.getEnemyAdjacents(
+						b.getTerritory(terr.get(from)), myAgent.getLocalName());
+
+				if (enemies.size() > 0) {
+					int to = random.nextInt(enemies.size() + factor);
+					if (to < enemies.size()) {
+						return new PerformAtackAction(terr.get(from), enemies
+								.get(to).getKey());
+					}
+				}
+			}
+		}
+
+		// Put back the perceptions so the agent can get them in the next atack
+		// and in the fortify fase
 		putPerceptions(perceptions);
 		return new DontAtackAction();
+	}
+
+	private ArrayList<PossibleToAtack> getPossibleAtacksFromFortifyAway(
+			Board b, ArrayList<FortifyPerception> fortifications) {
+		ArrayList<PossibleToAtack> possibleAtacks = new ArrayList<PossibleToAtack>();
+		for (FortifyPerception p : fortifications) {
+			ArrayList<Territory> myAdjacents = b.getPlayerAdjacents(
+					p.getFrom(), myAgent.getLocalName());
+			for (Territory t : myAdjacents) {
+				if (t.getNumSoldiers() >= b.getTerritory(p.getFrom())
+						.getNumSoldiers())
+					possibleAtacks.add(new PossibleToAtack(t.getKey(), p
+							.getFrom(), p));
+			}
+		}
+		return possibleAtacks;
 	}
 
 	// Returns all the Perceptions that atacked this player and have less
@@ -172,6 +260,20 @@ public class ReactiveAgent extends PlayerAgentBehaviours {
 		}
 
 		return fortifications;
+	}
+
+	private ArrayList<FortifyPerception> getFortifyAwayPerceptions(
+			ArrayList<Perception> perceptions, Board b) {
+		ArrayList<FortifyPerception> fortifications = getFortifyPerceptions(perceptions);
+		ArrayList<FortifyPerception> fortifyAway = new ArrayList<FortifyPerception>();
+		
+		for (FortifyPerception p : fortifications) {
+			if (b.getEnemyAdjacents(myAgent.getLocalName()).contains(
+					p.getFrom()))
+				fortifyAway.add((FortifyPerception) p);
+		}
+
+		return fortifyAway;
 	}
 
 	@Override

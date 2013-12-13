@@ -69,7 +69,7 @@ public class GameAgent extends Agent {
 
 		fsmBehaviour.registerFirstState(new WaitingForPlayers(5), WAITING_STATE);
 		fsmBehaviour.registerState(new AllocateTerritoriesBehaviour(this), ALLOCATE);
-		fsmBehaviour.registerState(new NewRoundsBehaviour(this, players), ROUND);
+		fsmBehaviour.registerLastState(new NewRoundsBehaviour(this, players), ROUND);
 
 		fsmBehaviour.registerTransition(WAITING_STATE, ALLOCATE, 1);
 		fsmBehaviour.registerDefaultTransition(ALLOCATE, ROUND);

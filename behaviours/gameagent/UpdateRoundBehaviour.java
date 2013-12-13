@@ -17,6 +17,9 @@ public class UpdateRoundBehaviour extends SimpleBehaviour {
 	 */
 	private static final long serialVersionUID = -4252143295214188705L;
 
+	public static final int FINAL = 0;
+	public static final int CONT = 1;
+
 	private int currentRound, currentPlayer;
 	private ArrayList<AID> players;
 	private RequestActionBehaviour position, atack, fortify;
@@ -47,6 +50,9 @@ public class UpdateRoundBehaviour extends SimpleBehaviour {
 			if( currentPlayer >= players.size())
 				currentPlayer=0;
 		}
+		
+		if(players.size() <= 1)
+			return;
 
 		currentRound++;
 		System.out.println("Round " + currentRound);
@@ -74,6 +80,14 @@ public class UpdateRoundBehaviour extends SimpleBehaviour {
 	@Override
 	public boolean done() {
 		return true;
+	}
+	
+	@Override
+	public int onEnd(){
+		if(players.size() <= 1 )
+			return FINAL;
+		else 
+			return CONT;
 	}
 
 }

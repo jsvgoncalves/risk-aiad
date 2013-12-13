@@ -5,12 +5,11 @@ import jade.core.AID;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import perceptions.Perception;
 
 import util.R;
 
@@ -467,6 +466,40 @@ public class Board implements Serializable {
 		}
 		return enemyAdjacents;
 	}
+	
+	/**
+	 * Returns all enemyAdjacents of player
+	 * @param player
+	 * 			The player to look for enemies
+	 * @return ArrayList<String>
+	 * 	      	The enemy territories.
+	 */
+	public ArrayList<String> getEnemyAdjacents(String player) {
+		
+		ArrayList<String> terr = getPlayerTerritories(player);
+		HashSet<String> enemySet = new HashSet<String>();
+		
+		for(String t : terr){
+			enemySet.addAll(territoryToString(getEnemyAdjacents(territories.get(t), player)));
+		}
+		
+		return terr;
+	}
+	
+	/**
+	 * Converts an array of Territory in an array of it's String keys
+	 * @param terr
+	 * @return
+	 */
+	public static ArrayList<String> territoryToString(ArrayList<Territory> terr){
+		ArrayList<String> ret = new ArrayList<String>();
+		
+		for(Territory t: terr){
+			ret.add(t.getKey());
+		}
+		
+		return ret;
+	}
 
 	public boolean conquer(String from, String to) {
 		Territory tFrom = territories.get(from);
@@ -616,5 +649,20 @@ public class Board implements Serializable {
 		
 		
 		return frontLine;
+	}
+
+	public int getTotalNumSoldiers(String player) {
+		
+		ArrayList<Territory> terr = getPlayerTerritoriesT(player);
+		int sum =0;
+		for(Territory t: terr){
+			sum+=t.getNumSoldiers();
+		}
+		
+		return sum;
+	}
+
+	public int getTotalNumTerritories(String localName) {
+		return getPlayerTerritories(localName).size();
 	}
 }

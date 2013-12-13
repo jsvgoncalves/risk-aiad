@@ -17,6 +17,7 @@ public class NewRoundsBehaviour extends FSMBehaviour {
 	private static final String POSITION = "position";
 	private static final String ATACK = "atack";
 	private static final String FORTIFY = "fortify";
+	private static final String FINAL = "final";
 
 	public NewRoundsBehaviour(Agent a, ArrayList<AID> players) {
 		super(a);
@@ -33,8 +34,11 @@ public class NewRoundsBehaviour extends FSMBehaviour {
 		registerState(position, POSITION);
 		registerState(atack, ATACK);
 		registerState(fortify, FORTIFY);
-
-		registerDefaultTransition(UPDATE, POSITION);
+		registerLastState(new FinalBehaviour(players,true,a), FINAL);
+		
+		registerTransition(UPDATE, FINAL, UpdateRoundBehaviour.FINAL);
+		registerTransition(UPDATE, POSITION, UpdateRoundBehaviour.CONT);
+		//registerDefaultTransition(UPDATE, POSITION);
 		registerDefaultTransition(POSITION, ATACK);
 		registerDefaultTransition(ATACK, FORTIFY);
 		registerDefaultTransition(FORTIFY, UPDATE);
