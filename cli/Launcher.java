@@ -9,11 +9,13 @@ import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.UIManager;
 
 import agents.AgressiveAgent;
 import agents.GameAgent;
 import agents.HumanAgent;
 import agents.RandomAgent;
+import agents.ReactiveAgent;
 import util.R;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -30,6 +32,12 @@ public class Launcher {
 	private static JFrame configFrame;
 	
 	public static void main(String[] args) {
+		
+		try { // Set System L&F 
+			UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName()); 
+		} catch (Exception e) {
+			// handle exception
+		}
 		GameAgent gameAgent = setupJADE();
 
 		configGame();
@@ -116,27 +124,29 @@ public class Launcher {
 		});
 		
 		try {
-			ArrayList<String> names = util.NameGenerator.randomName(3);
-			container.acceptNewAgent(names.get(0), new agents.PlayerAgent(new RandomAgent()))
-					.start();
-			container.acceptNewAgent(names.get(1), new agents.PlayerAgent(new RandomAgent()))
-					.start();
-			container.acceptNewAgent(names.get(2), new agents.PlayerAgent(new RandomAgent()))
-					.start();
-
-			container.acceptNewAgent(names.get(3), new agents.PlayerAgent(new RandomAgent()))
-					.start();
-			container.acceptNewAgent("Biolento", new agents.PlayerAgent(new AgressiveAgent()))
-					.start();
-//			container.acceptNewAgent(names.get(5), new agents.PlayerAgent(new RandomAgent()))
-//					.start();
-
+			ArrayList<String> names = util.NameGenerator.randomName(agentTypes.size());
+			for (int i = 0; i < agentTypes.size(); i++) {
+				addAgent(names.get(i), agentTypes.get(i));
+			}
+			
 		} catch (StaleProxyException e) {
 			e.printStackTrace();
 		}
 
 		f.setVisible(true);
 		configFrame.setVisible(false);
+	}
+
+	private static void addAgent(String name, String type) throws StaleProxyException {
+		if(type.equals("Random")) {
+			container.acceptNewAgent(name, new agents.PlayerAgent(new RandomAgent())).start();
+		} else if(type.equals("Human")) {
+			container.acceptNewAgent(name, new agents.PlayerAgent(new HumanAgent())).start();
+		} else if(type.equals("Agressive")) {
+			container.acceptNewAgent(name, new agents.PlayerAgent(new AgressiveAgent())).start();
+		} else if(type.equals("Reactive")) {
+			container.acceptNewAgent(name, new agents.PlayerAgent(new ReactiveAgent())).start();
+		} 
 	}
 
 }
