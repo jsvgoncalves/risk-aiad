@@ -63,7 +63,7 @@ public class Launcher {
 		return gameAgent;
 	}
 	
-	public static void startGame() {
+	public static void startGame(ArrayList<String> agentTypes) {
 		JFrame f = new JFrame("RISK");
 		f.setSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
 		f.setMinimumSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
@@ -117,7 +117,7 @@ public class Launcher {
 		
 		try {
 			ArrayList<String> names = util.NameGenerator.randomName(3);
-			((ContainerController) container).acceptNewAgent(names.get(0), new agents.PlayerAgent(new RandomAgent()))
+			container.acceptNewAgent(names.get(0), new agents.PlayerAgent(new RandomAgent()))
 					.start();
 			container.acceptNewAgent(names.get(1), new agents.PlayerAgent(new RandomAgent()))
 					.start();
