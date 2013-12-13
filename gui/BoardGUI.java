@@ -27,7 +27,7 @@ import agents.GameAgent;
 import logic.Board;
 import logic.Territory;
 
-public class BoardGUI extends JPanel{
+public class BoardGUI extends ObserverGUI{
 	private static final long serialVersionUID = 8906083247845612415L;
 	
 	public static final int PANEL_WIDTH = 1004;
@@ -47,8 +47,6 @@ public class BoardGUI extends JPanel{
 	// The current gameAgent being observed.
 	private GameAgent gameAgent;
 	
-	PrintWriter writer;
-	
 	ArrayList<AID> players;
 	
 	
@@ -64,12 +62,7 @@ public class BoardGUI extends JPanel{
 		}
 		
 		this.setLayout(null);
-		try {
-			writer = new PrintWriter("result.csv", "UTF-8");
-		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		initBoardLabels();
 		gameAgent.addListener(this);
 		
@@ -229,49 +222,35 @@ public class BoardGUI extends JPanel{
 		Board b = gameAgent.getBoard();
 
 		for(Entry<String, BoardLabel> e: labels.entrySet()) {
+			// Convert to Territory type
 			Territory t = b.getTerritory(e.getKey());
-			e.getValue().setText(t.getNumSoldiers() + "");
+			// Update the color with the current player
 			String thisColor = playerColors.get(b.getPlayerFromTerritory(t));
 			e.getValue().setPlayerColor(thisColor);
+			// Updates the total number of soldiers
+			e.getValue().setText(t.getNumSoldiers() + "");
+			// Forces repaint
+			e.getValue().revalidate();
+			e.getValue().repaint();
 		}
+		
 	}
 
+	@Override
 	public void notifyGameStarted() {
 		initPlayerColors();
 		
 		Board b = gameAgent.getBoard();
-		writer.print("Round");
-		players = gameAgent.getPlayers();
-		for (int i = 0; i < players.size(); i++) {
-			writer.print("," + players.get(i).getLocalName());
-		}
-		writer.println();
 	}
+	
 	/**
 	 * Method called by the GameAgent observable.
 	 */
+	@Override
 	public void notifyTurnEnded() {
 		updateAllTerritories();
-		printCSV();
+		
 	}
 
-	/** 
-	 * Every round prints a nice CSV formatted output
-	 */
-	private void printCSV() {
-		
-		Board b = gameAgent.getBoard();
-		players = gameAgent.getPlayers();
-		writer.print(gameAgent.getCurrentRound());
-		for (int i = 0; i < players.size(); i++) {
-			writer.print("," + b.getPlayerTotalSoldiers(players.get(i).getLocalName()));
-		}
-		writer.println("");
-		
-	}
 	
-	public void close() {
-		writer.close();
-		
-	}
 }

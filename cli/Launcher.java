@@ -1,7 +1,9 @@
 package cli;
 
 import gui.BoardGUI;
+import gui.FileExporter;
 import gui.GameStartGUI;
+import gui.StatsGUI;
 
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
@@ -30,6 +32,9 @@ public class Launcher {
 	private static AgentContainer container;
 	protected static GameAgent gameAgent;
 	private static JFrame configFrame;
+	private static JFrame statsFrame;
+	private static JFrame gameFrame;
+	private static JFrame fileFrame;
 	
 	public static void main(String[] args) {
 		
@@ -71,57 +76,10 @@ public class Launcher {
 		return gameAgent;
 	}
 	
-	public static void startGame(ArrayList<String> agentTypes) {
-		JFrame f = new JFrame("RISK");
-		f.setSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
-		f.setMinimumSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		final BoardGUI gui = new BoardGUI(gameAgent);
-		f.add(gui);
-		f.addWindowListener( new WindowListener() {
-			
-			@Override
-			public void windowOpened(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowIconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowClosing(WindowEvent e) {
-				// TODO Auto-generated method stub
-				gui.close();
-			}
-			
-			@Override
-			public void windowClosed(WindowEvent e) {
-				// TODO Auto-generated method stub
-				gui.close();
-			}
-			
-			@Override
-			public void windowActivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+	public static void startGame(ArrayList<String> agentTypes, String filePrefix) {
+		createStatsFrame();
+		createGameFrame();
+		createFilePrinter(filePrefix);
 		
 		try {
 			ArrayList<String> names = util.NameGenerator.randomName(agentTypes.size());
@@ -133,8 +91,40 @@ public class Launcher {
 			e.printStackTrace();
 		}
 
-		f.setVisible(true);
+		gameFrame.setVisible(true);
+		statsFrame.setVisible(true);
 		configFrame.setVisible(false);
+	}
+
+	private static void createFilePrinter(String filePrefix) {
+		fileFrame = new JFrame("RISK");
+		fileFrame.setSize(new Dimension(StatsGUI.PANEL_WIDTH, StatsGUI.PANEL_HEIGHT));
+		fileFrame.setMinimumSize(new Dimension(StatsGUI.PANEL_WIDTH, StatsGUI.PANEL_HEIGHT));
+		fileFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		final FileExporter gui = new FileExporter(gameAgent, filePrefix);
+		fileFrame.add(gui);
+		fileFrame.setVisible(false);
+		
+	}
+
+	private static void createStatsFrame() {
+		statsFrame = new JFrame("RISK");
+		statsFrame.setSize(new Dimension(StatsGUI.PANEL_WIDTH, StatsGUI.PANEL_HEIGHT));
+		statsFrame.setMinimumSize(new Dimension(StatsGUI.PANEL_WIDTH, StatsGUI.PANEL_HEIGHT));
+		statsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		final StatsGUI gui = new StatsGUI(gameAgent);
+		statsFrame.add(gui);
+		
+	}
+
+	private static void createGameFrame() {
+		gameFrame = new JFrame("RISK");
+		gameFrame.setSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
+		gameFrame.setMinimumSize(new Dimension(BoardGUI.PANEL_WIDTH, BoardGUI.PANEL_HEIGHT));
+		gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		final BoardGUI gui = new BoardGUI(gameAgent);
+		gameFrame.add(gui);
+		
 	}
 
 	private static void addAgent(String name, String type) throws StaleProxyException {

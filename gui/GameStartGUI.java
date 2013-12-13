@@ -1,9 +1,11 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.LayoutManager;
+import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -16,6 +18,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -31,6 +34,7 @@ public class GameStartGUI extends JPanel
 	ArrayList<JComboBox> agentCombos = new ArrayList<JComboBox>();
 	String[] agentTypes = { "Random", "Agressive", "Reactive", "Human" };
 	private BufferedImage board_img;
+	private TextField filePrefix;
 	
 	public GameStartGUI() {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -43,7 +47,20 @@ public class GameStartGUI extends JPanel
 		for (int i = 0; i < 5; i++) {
 			addComboBox(i);
 		}
+		addFilePrefixTextField();
+		add(Box.createVerticalStrut(15));
 		addStartButton();
+	}
+
+	private void addFilePrefixTextField() {
+		JLabel label = new JLabel("CSV files prefix");
+		label.setForeground(Color.white);
+		add(label);
+		filePrefix = new TextField("risk");
+		filePrefix.setSize(new Dimension(400, 30));
+		filePrefix.setMinimumSize(new Dimension(400, 30));
+		filePrefix.setMaximumSize(new Dimension(400, 30));
+		add(filePrefix);
 	}
 
 	private void addComboBox(int i) {
@@ -74,12 +91,10 @@ public class GameStartGUI extends JPanel
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if ("start".equals(e.getActionCommand())) {
-			System.err.println("starting");
 			ArrayList<String> agentTypes = compactAgentTypes();
-			Launcher.startGame(agentTypes);
+			Launcher.startGame(agentTypes, filePrefix.getText());
 		} else if ("combo".equals(e.getActionCommand())) {
 			JComboBox cb = (JComboBox)e.getSource();
-	        System.err.println(cb.getSelectedItem());
 
 		}
 	}
