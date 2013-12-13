@@ -49,11 +49,7 @@ public class AgressiveAgent extends PlayerAgentBehaviours {
 
 //		int from = r.nextInt(playerTerritories.size() + 1);
 		int from = selectBestTerritory(playerTerritories, b);
-		// If the random == size, then don't attack.
-		if(from == playerTerritories.size()) {
-			return new DontAtackAction();
-		}
-
+		
 		// Choose an adjacent territory to attack.
 		Territory terr = b.getTerritory(playerTerritories.get(from));
 		ArrayList<Territory> adjacentTerritories = b.getEnemyAdjacents(terr, myAgent.getLocalName());
@@ -68,7 +64,7 @@ public class AgressiveAgent extends PlayerAgentBehaviours {
 	}
 	
 	/**
-	 * Selects the best territory from where to attack.
+	 * Selects the best territory from where to attack (maximum players).
 	 * @param playerTerritories
 	 * @param b 
 	 * @return
