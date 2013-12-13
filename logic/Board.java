@@ -575,7 +575,7 @@ public class Board implements Serializable {
 	}
 
 	/**
-     * Returns only the player territories with more than 1 soldier.
+     * Returns only the player territories with more than 1 soldier and enemy adjacents.
      * @param localName
      * @return
      */
@@ -587,6 +587,22 @@ public class Board implements Serializable {
                     	&& territories.get(t.getKey()).getNumSoldiers() > 1
                     	&& getEnemyAdjacents(t, player).size() >= 1
                     		) {
+                            playerTerritories.add(e.getKey());
+                    }
+            }
+            return playerTerritories;
+    }
+    
+    /**
+     * Returns only the player territories with enemy adjacencies.
+     * @param localName
+     * @return
+     */
+    public ArrayList<String> getFortifyReadyPlayerTerritories(String player) {
+            ArrayList<String> playerTerritories = new ArrayList<String>();
+            for(Entry<String, String> e: allocations.entrySet()) {
+            		Territory t = getTerritory(e.getKey());
+                    if(	e.getValue().equals(player) && getEnemyAdjacents(t, player).size() >= 1 ) {
                             playerTerritories.add(e.getKey());
                     }
             }

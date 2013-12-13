@@ -84,7 +84,7 @@ public class RandomAgent extends PlayerAgentBehaviours {
 		// If random number is equal to size, don't fortify.
 		int from = r.nextInt(playerTerritories.size());
 		// If the random == size, then don't fortify.
-		if(from == playerTerritories.size()) {
+		if(from == playerTerritories.size() || b.getTerritory(playerTerritories.get(from)).getNumSoldiers() <= 1 ) {
 			return new DontFortifyAction();
 		}
 		// Get a random territory with route from the previously selected territory
