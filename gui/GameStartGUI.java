@@ -34,6 +34,7 @@ public class GameStartGUI extends JPanel
 	ArrayList<JComboBox> agentCombos = new ArrayList<JComboBox>();
 	String[] agentTypes = { "Random", "Agressive", "Reactive", "Human" };
 	private BufferedImage board_img;
+	private TextField filePrefix;
 	
 	public GameStartGUI() {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -55,7 +56,7 @@ public class GameStartGUI extends JPanel
 		JLabel label = new JLabel("CSV files prefix");
 		label.setForeground(Color.white);
 		add(label);
-		TextField filePrefix = new TextField("risk");
+		filePrefix = new TextField("risk");
 		filePrefix.setSize(new Dimension(400, 30));
 		filePrefix.setMinimumSize(new Dimension(400, 30));
 		filePrefix.setMaximumSize(new Dimension(400, 30));
@@ -90,12 +91,10 @@ public class GameStartGUI extends JPanel
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if ("start".equals(e.getActionCommand())) {
-			System.err.println("starting");
 			ArrayList<String> agentTypes = compactAgentTypes();
-			Launcher.startGame(agentTypes);
+			Launcher.startGame(agentTypes, filePrefix.getText());
 		} else if ("combo".equals(e.getActionCommand())) {
 			JComboBox cb = (JComboBox)e.getSource();
-	        System.err.println(cb.getSelectedItem());
 
 		}
 	}

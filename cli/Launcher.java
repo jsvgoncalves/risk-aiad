@@ -1,6 +1,7 @@
 package cli;
 
 import gui.BoardGUI;
+import gui.FileExporter;
 import gui.GameStartGUI;
 import gui.StatsGUI;
 
@@ -33,6 +34,7 @@ public class Launcher {
 	private static JFrame configFrame;
 	private static JFrame statsFrame;
 	private static JFrame gameFrame;
+	private static JFrame fileFrame;
 	
 	public static void main(String[] args) {
 		
@@ -74,9 +76,10 @@ public class Launcher {
 		return gameAgent;
 	}
 	
-	public static void startGame(ArrayList<String> agentTypes) {
+	public static void startGame(ArrayList<String> agentTypes, String filePrefix) {
 		createStatsFrame();
 		createGameFrame();
+		createFilePrinter(filePrefix);
 		
 		try {
 			ArrayList<String> names = util.NameGenerator.randomName(agentTypes.size());
@@ -91,6 +94,17 @@ public class Launcher {
 		gameFrame.setVisible(true);
 		statsFrame.setVisible(true);
 		configFrame.setVisible(false);
+	}
+
+	private static void createFilePrinter(String filePrefix) {
+		fileFrame = new JFrame("RISK");
+		fileFrame.setSize(new Dimension(StatsGUI.PANEL_WIDTH, StatsGUI.PANEL_HEIGHT));
+		fileFrame.setMinimumSize(new Dimension(StatsGUI.PANEL_WIDTH, StatsGUI.PANEL_HEIGHT));
+		fileFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		final FileExporter gui = new FileExporter(gameAgent, filePrefix);
+		fileFrame.add(gui);
+		fileFrame.setVisible(false);
+		
 	}
 
 	private static void createStatsFrame() {
@@ -110,50 +124,7 @@ public class Launcher {
 		gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		final BoardGUI gui = new BoardGUI(gameAgent);
 		gameFrame.add(gui);
-		gameFrame.addWindowListener( new WindowListener() {
-			
-			@Override
-			public void windowOpened(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowIconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowClosing(WindowEvent e) {
-				// TODO Auto-generated method stub
-				gui.close();
-			}
-			
-			@Override
-			public void windowClosed(WindowEvent e) {
-				// TODO Auto-generated method stub
-				gui.close();
-			}
-			
-			@Override
-			public void windowActivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+		
 	}
 
 	private static void addAgent(String name, String type) throws StaleProxyException {

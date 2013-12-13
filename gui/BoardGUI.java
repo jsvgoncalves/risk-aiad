@@ -47,8 +47,6 @@ public class BoardGUI extends ObserverGUI{
 	// The current gameAgent being observed.
 	private GameAgent gameAgent;
 	
-	PrintWriter writer;
-	
 	ArrayList<AID> players;
 	
 	
@@ -64,12 +62,7 @@ public class BoardGUI extends ObserverGUI{
 		}
 		
 		this.setLayout(null);
-		try {
-			writer = new PrintWriter("result.csv", "UTF-8");
-		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		initBoardLabels();
 		gameAgent.addListener(this);
 		
@@ -248,12 +241,6 @@ public class BoardGUI extends ObserverGUI{
 		initPlayerColors();
 		
 		Board b = gameAgent.getBoard();
-		writer.print("Round");
-		players = gameAgent.getPlayers();
-		for (int i = 0; i < players.size(); i++) {
-			writer.print("," + players.get(i).getLocalName());
-		}
-		writer.println();
 	}
 	
 	/**
@@ -262,25 +249,8 @@ public class BoardGUI extends ObserverGUI{
 	@Override
 	public void notifyTurnEnded() {
 		updateAllTerritories();
-		printTotalSoldiersCSV();
+		
 	}
 
-	/** 
-	 * Every round prints a nice CSV formatted output
-	 */
-	private void printTotalSoldiersCSV() {
-		
-		Board b = gameAgent.getBoard();
-		players = gameAgent.getPlayers();
-		writer.print(gameAgent.getCurrentRound());
-		for (int i = 0; i < players.size(); i++) {
-			writer.print("," + b.getPlayerTotalSoldiers(players.get(i).getLocalName()));
-		}
-		writer.println("");
-	}
 	
-	public void close() {
-		writer.close();
-		
-	}
 }
