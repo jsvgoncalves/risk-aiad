@@ -229,10 +229,16 @@ public class BoardGUI extends ObserverGUI{
 		Board b = gameAgent.getBoard();
 
 		for(Entry<String, BoardLabel> e: labels.entrySet()) {
+			// Convert to Territory type
 			Territory t = b.getTerritory(e.getKey());
-			e.getValue().setText(t.getNumSoldiers() + "");
+			// Update the color with the current player
 			String thisColor = playerColors.get(b.getPlayerFromTerritory(t));
 			e.getValue().setPlayerColor(thisColor);
+			// Updates the total number of soldiers
+			e.getValue().setText(t.getNumSoldiers() + "");
+			// Forces repaint
+			e.getValue().revalidate();
+			e.getValue().repaint();
 		}
 		
 	}
@@ -256,13 +262,13 @@ public class BoardGUI extends ObserverGUI{
 	@Override
 	public void notifyTurnEnded() {
 		updateAllTerritories();
-		printCSV();
+		printTotalSoldiersCSV();
 	}
 
 	/** 
 	 * Every round prints a nice CSV formatted output
 	 */
-	private void printCSV() {
+	private void printTotalSoldiersCSV() {
 		
 		Board b = gameAgent.getBoard();
 		players = gameAgent.getPlayers();
@@ -271,7 +277,6 @@ public class BoardGUI extends ObserverGUI{
 			writer.print("," + b.getPlayerTotalSoldiers(players.get(i).getLocalName()));
 		}
 		writer.println("");
-		
 	}
 	
 	public void close() {
