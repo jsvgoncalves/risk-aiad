@@ -44,7 +44,7 @@ public class GameAgent extends Agent {
 	private ArrayList<ObserverGUI> listeners = new ArrayList<ObserverGUI>();
 	//Maps AID -> agentName
 	private HashMap<AID, String> agentName = new HashMap<AID,String>();
-	//
+	
 	private boolean closed;
 	
 	protected void setup() {
@@ -95,6 +95,16 @@ public class GameAgent extends Agent {
 		return agentName;
 	}
 
+	public ArrayList<String> getAllAgentNames(){
+		ArrayList<String> allAgentNames = new ArrayList<String>();
+		
+		for(AID a:agentName.keySet()){
+			allAgentNames.add(agentName.get(a));
+		}
+		
+		return allAgentNames;
+	}
+	
 	private void printHeadMessage(String message) {
 		System.out.println("#############");
 		System.out.println(message);

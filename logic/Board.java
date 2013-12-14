@@ -206,6 +206,7 @@ public class Board implements Serializable {
 		AS_YAM.setAdjacent(AS_SAK);
 		AS_YAM.setAdjacent(EU_RUS);
 		AS_YAM.setAdjacent(AS_MON);
+		AS_YAM.setAdjacent(AS_CHI);
 		AS_STA.setAdjacent(AS_CHI);
 		AS_STA.setAdjacent(AS_MEA);
 		AS_STA.setAdjacent(EU_RUS);
@@ -224,6 +225,7 @@ public class Board implements Serializable {
 		AS_CHI.setAdjacent(AS_JAP);
 		AS_JAP.setAdjacent(AS_MAC);
 		AS_JAP.setAdjacent(AS_CHU);
+		AS_IND.setAdjacent(AS_INO);
 
 		// Oceania
 		OC_BOR.setAdjacent(AS_INO);
@@ -263,6 +265,7 @@ public class Board implements Serializable {
 		SA_BOL.setAdjacent(SA_PER);
 		SA_COL.setAdjacent(SA_AMA);
 		SA_COL.setAdjacent(SA_PER);
+		SA_PER.setAdjacent(SA_AMA);
 
 		// North America
 		NA_MEX.setAdjacent(SA_COL);

@@ -86,6 +86,8 @@ public class PlayerAgent extends Agent {
 	}
 	
 	public void addPerception(Perception p){
+		if(perceptions.size() > 1000)
+			getPerception();
 		perceptions.add(p);
 	}
 	

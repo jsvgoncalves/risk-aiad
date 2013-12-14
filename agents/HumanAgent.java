@@ -49,7 +49,7 @@ public class HumanAgent extends PlayerAgentBehaviours {
 			}
 
 			System.err
-					.println("Enter the territory wher you want to put the soldiers:");
+					.println("Enter the territory where you want to put the soldiers:");
 			int from = reader.nextInt();
 
 			int num = n + 1;
