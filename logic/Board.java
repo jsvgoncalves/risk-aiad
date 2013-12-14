@@ -548,6 +548,28 @@ public class Board implements Serializable {
 		}
 		return t;
 	}
+	
+	/**
+	 * returns de num of territories in the given continent that player possesses
+	 * @param player
+	 * 		the name of the player
+	 * @param continent
+	 * 		the name of the continent. Use the ones in class R (i.e. R.EUROPE)
+	 * @param territory 
+	 * @return
+	 */
+	public int numTerritoriesContinent(String player, String continent, Territory territory){
+		ArrayList<String> listContinent = getContinent(continent);
+		int sum=0;
+		
+		for(String t:listContinent){
+			if(allocations.get(t).equals(player) || t.equals(territory.getKey())){
+				sum++;
+			}
+		}
+		
+		return sum;
+	}
 
 	public int getContinentBonus(String player) {
 
@@ -575,7 +597,7 @@ public class Board implements Serializable {
 		return nCont;
 	}
 
-	private ArrayList<String> getContinentList() {
+	public ArrayList<String> getContinentList() {
 		ArrayList<String> continents = new ArrayList<String>();
 		continents.add(R.EUROPE);
 		continents.add(R.NORTH_AMERICA);
@@ -588,7 +610,7 @@ public class Board implements Serializable {
 	}
 
 	// Recebe um continete e devolve o seu valor em numero de soldados
-	private int getContinentValue(String cont) {
+	public int getContinentValue(String cont) {
 		switch (cont) {
 		case R.AFRICA:
 			return R.NUM_AFRICA;
@@ -650,13 +672,6 @@ public class Board implements Serializable {
 		return playerTerritories;
 	}
 
-	public ArrayList<String> canConquerContinent(String player) {
-		// Territories in the frontline
-		ArrayList<String> frontLine = getReadyPlayerTerritories(player);
-
-		return frontLine;
-	}
-
 	public int getTotalNumSoldiers(String player) {
 
 		ArrayList<Territory> terr = getPlayerTerritoriesT(player);
@@ -711,5 +726,13 @@ public class Board implements Serializable {
 			sum+=t1.getNumSoldiers();
 		}
 		return sum;
+	}
+
+	public boolean isOfContinent(Territory territory, String continent) {
+		for(String t: getContinent(continent)){
+			if(t.equals(territory.getKey()))
+				return true;
+		}
+		return false;
 	}
 }

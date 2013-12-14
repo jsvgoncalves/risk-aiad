@@ -91,4 +91,24 @@ public class UserBehaviours {
 		}
 		
 	}
+
+	public boolean isAgressive(User user) {
+		if(range_alone.getRange(user.getValue_alone()) == LOT)
+			return true;
+		return false;
+	}
+	
+	public boolean isReactive(User user){
+		if(range_alone.getRange(user.getValue_alone()) == FEW && 
+				range_back.getRange(user.getValue_back()) == LOT)
+			return true;
+		return false;
+	}
+	
+	public boolean isRandom(User user){
+		if( !isAgressive(user) && !isReactive(user))
+			return true;
+		
+		return false;
+	}
 }
