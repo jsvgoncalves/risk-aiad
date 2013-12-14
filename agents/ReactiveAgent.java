@@ -16,6 +16,7 @@ import actions.DontAtackAction;
 import actions.DontFortifyAction;
 import actions.FortifyAction;
 import actions.PerformAtackAction;
+import actions.PerformFortificationAction;
 import actions.ReceiveAction;
 
 public class ReactiveAgent extends PlayerAgentBehaviours {
@@ -84,10 +85,12 @@ public class ReactiveAgent extends PlayerAgentBehaviours {
 
 			if (possibleFortify.size() > 0) {
 				while (n > 0) {
-					// Gets the territory that was attacked and is most vulnerable
+					// Gets the territory that was attacked and is most
+					// vulnerable
 					String min = getMaxDifSoldiers(b, possibleFortify);
 					receive.addSoldiersTerritory(1, min);
-					// Updates board so it doesn't always choose the same territory
+					// Updates board so it doesn't always choose the same
+					// territory
 					b.getTerritory(min).addSoldiers(1);
 					n--;
 				}
@@ -248,7 +251,6 @@ public class ReactiveAgent extends PlayerAgentBehaviours {
 			// If i is a valid index of atacks and if player's territory has
 			// more or equal number of soldiers than the opposing territory then
 			// atacks
-			//TODO Verificar se soma de soldados do territorio a volta tem mais soldados
 			if (i < atacks.size()) {
 				AtackPerception at = atacks.get(i);
 				perceptions.remove(i);
@@ -318,24 +320,33 @@ public class ReactiveAgent extends PlayerAgentBehaviours {
 		return possibleAtacks;
 	}
 
+	/**
+	 * Name is not the best
+	 * 
+	 * @param b
+	 *            Board
+	 * @param fortifications
+	 *            Array with fortifications close to the agent
+	 * @return Returns all the possible moves that an agent can make in order to
+	 *         fortify close to the territories in danger
+	 */
 	private ArrayList<PossibleToAtack> getPossibleAtacksFromFortifyClose(
 			Board b, ArrayList<FortifyPerception> fortifications) {
 		ArrayList<PossibleToAtack> possibleAtacks = new ArrayList<PossibleToAtack>();
-		//Forall fortification Perceptions that fortified close
+		// Forall fortification Perceptions that fortified close
 		for (FortifyPerception p : fortifications) {
-			//Get my adjacent territories
+			// Get my adjacent territories
 			ArrayList<Territory> myAdjacents = b.getPlayerAdjacents(p.getTo(),
 					myAgent.getLocalName());
-			
-			//TODO pesquisar entre os adjacentes de t e guardar aqueles que tem mais do que 1 soldado
+
 			for (Territory t : myAdjacents) {
-				for(Territory t2: b.getPlayerAdjacents(t.getKey(), myAgent.getLocalName())){
-					
+				// Get all the adjacents with more than 1 soldier
+				for (Territory t2 : b.getPlayerAdjacents(t.getKey(),
+						myAgent.getLocalName())) {
+					if (t2.getNumSoldiers() > 1)
+						possibleAtacks.add(new PossibleToAtack(t2.getKey(), t
+								.getKey(), p));
 				}
-				if (t.getNumSoldiers() >= b.getTerritory(p.getTo())
-						.getNumSoldiers())
-					possibleAtacks.add(new PossibleToAtack(t.getKey(), p
-							.getTo(), p));
 			}
 		}
 		return possibleAtacks;
@@ -345,12 +356,14 @@ public class ReactiveAgent extends PlayerAgentBehaviours {
 			ArrayList<FortifyPerception> fortifications) {
 		ArrayList<String> possibleFortify = new ArrayList<String>();
 		for (FortifyPerception p : fortifications) {
-			ArrayList<Territory> myAdjacents = b.getPlayerAdjacents(p.getTo(),
-					myAgent.getLocalName());
-			for (Territory t : myAdjacents) {
-				if (t.getNumSoldiers() < b.getTerritory(p.getTo())
-						.getNumSoldiers())
-					possibleFortify.add(t.getKey());
+			if (!b.isPlayersTerritory(myAgent.getLocalName(), p.getFrom())) {
+				ArrayList<Territory> myAdjacents = b.getPlayerAdjacents(
+						p.getTo(), myAgent.getLocalName());
+				for (Territory t : myAdjacents) {
+					if (t.getNumSoldiers() < b.getTerritory(p.getTo())
+							.getNumSoldiers())
+						possibleFortify.add(t.getKey());
+				}
 			}
 		}
 		return possibleFortify;
@@ -370,8 +383,7 @@ public class ReactiveAgent extends PlayerAgentBehaviours {
 			if (b.isPlayersTerritory(myAgent.getLocalName(), p.getTo())
 					&& !b.isPlayersTerritory(myAgent.getLocalName(),
 							p.getFrom())
-					&& b.getTerritory(p.getFrom()).getNumSoldiers() < b
-							.getTerritory(p.getTo()).getNumSoldiers()) {
+					&& b.numSoldiersAround(p.getFrom(),myAgent.getLocalName()) > b.getTerritory(p.getFrom()).getNumSoldiers()) {
 				ret.add(p);
 			}
 		}
@@ -434,25 +446,111 @@ public class ReactiveAgent extends PlayerAgentBehaviours {
 		// No need to put the perceptions back
 		ArrayList<Perception> perceptions = getAllPerceptions();
 
+		ArrayList<String> insideTerritories = b.getInsideTerritories(myAgent
+				.getLocalName());
+		if (insideTerritories.size() > 0) {
+			String max = getMaxSoldiers(insideTerritories, b);
+			String min = getMinSoldiersClose(max, b);
+			int n = b.getTerritory(max).getNumSoldiers() - 1;
+			return new PerformFortificationAction(max, min, n);
+		}
+
 		ArrayList<FortifyPerception> fortifications = getFortifyClosePerceptions(
 				perceptions, b);
 
 		if (fortifications.size() == 0)
 			return new DontFortifyAction();
 
-		// TODO Optimizar fortificacao. Tem que encntrar territorio que nao faz
-		// fronteira com p.getTo() e que tenha maior numero de soldados
 		if (fortifications.size() > 0) {
 			// If fortified close
 			ArrayList<PossibleToAtack> possibleMoves = getPossibleAtacksFromFortifyClose(
 					b, fortifications);
 
+			// Verificar qual o melhor movimento. Tem que verificar qual tem
+			// maior diferenca
 			if (possibleMoves.size() > 0) {
-
+				PossibleToAtack move = getBestFortifyMove(possibleMoves, b);
+				int n = b.getTerritory(move.getFrom()).getNumSoldiers() - 1;
+				return new PerformFortificationAction(move.getFrom(),
+						move.getTo(), n);
 			}
 		}
 
 		return new DontFortifyAction();
+	}
+
+	/**
+	 * Returns the territory that has less number of soldiers from the adjacents
+	 * of max
+	 * 
+	 * @param insideTerritories
+	 * @param b
+	 * @return
+	 */
+	private String getMinSoldiersClose(String max, Board b) {
+
+		int minS = Integer.MAX_VALUE;
+		String min = null;
+
+		for (Territory t : b.getPlayerAdjacents(max, myAgent.getLocalName())) {
+			if (t.getNumSoldiers() < minS) {
+				minS = t.getNumSoldiers();
+				min = t.getKey();
+			}
+		}
+
+		return min;
+
+	}
+
+	/**
+	 * Returns the territory that has the most number of soldiers from the list
+	 * 
+	 * @param insideTerritories
+	 * @param b
+	 * @return
+	 */
+	private String getMaxSoldiers(ArrayList<String> insideTerritories, Board b) {
+
+		int maxS = Integer.MIN_VALUE;
+		String max = insideTerritories.get(0);
+
+		for (String t : insideTerritories) {
+			if (b.getTerritory(t).getNumSoldiers() > maxS) {
+				maxS = b.getTerritory(t).getNumSoldiers();
+				max = b.getTerritory(t).getKey();
+			}
+		}
+
+		return max;
+	}
+
+	/**
+	 * 
+	 * @param possibleMoves
+	 *            all possible fortification moves
+	 * @param b
+	 *            Board
+	 * @return Returns the move with the biggest diference between the soldiers
+	 *         of the frontline territory and the opposing territory
+	 */
+	private PossibleToAtack getBestFortifyMove(
+			ArrayList<PossibleToAtack> possibleMoves, Board b) {
+
+		PossibleToAtack min = possibleMoves.get(0);
+		int maxDif = Integer.MIN_VALUE;
+
+		for (PossibleToAtack p : possibleMoves) {
+			if (b.getTerritory(p.getPerception().getTo()).getNumSoldiers()
+					- b.getTerritory(p.getTo()).getNumSoldiers() > maxDif) {
+				min = p;
+				maxDif = b.getTerritory(p.getPerception().getTo())
+						.getNumSoldiers()
+						- b.getTerritory(p.getTo()).getNumSoldiers();
+			}
+		}
+
+		return min;
 	}
 
 }

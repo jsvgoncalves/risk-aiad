@@ -77,8 +77,8 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 
 		PerformAtackAction action = (PerformAtackAction) b.getAction();
 
-		System.out.println(bo.getTerritory(action.getFrom()).getName()
-				+ " atacks " + bo.getTerritory(action.getTo()).getName());
+		/*System.out.println(bo.getTerritory(action.getFrom()).getName()
+				+ " atacks " + bo.getTerritory(action.getTo()).getName());*/
 
 		Random r = new Random();
 		int p1 = 0;
@@ -87,9 +87,9 @@ public class MakeActionBehaviour extends SimpleBehaviour {
 		p1 = r.nextInt(12) + 1;
 		p2 = r.nextInt(12) + 1;
 
-		System.out.println("Player 1 rolled: " + p1);
+		/*System.out.println("Player 1 rolled: " + p1);
 		System.out.println("Player 2 rolled: " + p2);
-		System.out.println();
+		System.out.println();*/
 		int initSoldFrom, initSoldTo, finalSoldTo, finalSoldFrom;
 		initSoldFrom = bo.getTerritory(action.getFrom()).getNumSoldiers();
 		initSoldTo = bo.getTerritory(action.getTo()).getNumSoldiers();

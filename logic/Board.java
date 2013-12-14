@@ -469,38 +469,40 @@ public class Board implements Serializable {
 		}
 		return enemyAdjacents;
 	}
-	
+
 	/**
 	 * Returns all enemyAdjacents of player
+	 * 
 	 * @param player
-	 * 			The player to look for enemies
-	 * @return ArrayList<String>
-	 * 	      	The enemy territories.
+	 *            The player to look for enemies
+	 * @return ArrayList<String> The enemy territories.
 	 */
 	public ArrayList<String> getEnemyAdjacents(String player) {
-		
+
 		ArrayList<String> terr = getPlayerTerritories(player);
 		HashSet<String> enemySet = new HashSet<String>();
-		
-		for(String t : terr){
-			enemySet.addAll(territoryToString(getEnemyAdjacents(territories.get(t), player)));
+
+		for (String t : terr) {
+			enemySet.addAll(territoryToString(getEnemyAdjacents(
+					territories.get(t), player)));
 		}
-		
+
 		return terr;
 	}
-	
+
 	/**
 	 * Converts an array of Territory in an array of it's String keys
+	 * 
 	 * @param terr
 	 * @return
 	 */
-	public static ArrayList<String> territoryToString(ArrayList<Territory> terr){
+	public static ArrayList<String> territoryToString(ArrayList<Territory> terr) {
 		ArrayList<String> ret = new ArrayList<String>();
-		
-		for(Territory t: terr){
+
+		for (Territory t : terr) {
 			ret.add(t.getKey());
 		}
-		
+
 		return ret;
 	}
 
@@ -611,61 +613,103 @@ public class Board implements Serializable {
 	}
 
 	/**
-     * Returns only the player territories with more than 1 soldier and enemy adjacents.
-     * @param localName
-     * @return
-     */
-    public ArrayList<String> getReadyPlayerTerritories(String player) {
-            ArrayList<String> playerTerritories = new ArrayList<String>();
-            for(Entry<String, String> e: allocations.entrySet()) {
-            		Territory t = getTerritory(e.getKey());
-                    if(	e.getValue().equals(player)
-                    	&& territories.get(t.getKey()).getNumSoldiers() > 1
-                    	&& getEnemyAdjacents(t, player).size() >= 1
-                    		) {
-                            playerTerritories.add(e.getKey());
-                    }
-            }
-            return playerTerritories;
-    }
-    
-    /**
-     * Returns only the player territories with enemy adjacencies.
-     * @param localName
-     * @return
-     */
-    public ArrayList<String> getFortifyReadyPlayerTerritories(String player) {
-            ArrayList<String> playerTerritories = new ArrayList<String>();
-            for(Entry<String, String> e: allocations.entrySet()) {
-            		Territory t = getTerritory(e.getKey());
-                    if(	e.getValue().equals(player) && getEnemyAdjacents(t, player).size() >= 1 ) {
-                            playerTerritories.add(e.getKey());
-                    }
-            }
-            return playerTerritories;
-    }
+	 * Returns only the player territories with more than 1 soldier and enemy
+	 * adjacents.
+	 * 
+	 * @param localName
+	 * @return
+	 */
+	public ArrayList<String> getReadyPlayerTerritories(String player) {
+		ArrayList<String> playerTerritories = new ArrayList<String>();
+		for (Entry<String, String> e : allocations.entrySet()) {
+			Territory t = getTerritory(e.getKey());
+			if (e.getValue().equals(player)
+					&& territories.get(t.getKey()).getNumSoldiers() > 1
+					&& getEnemyAdjacents(t, player).size() >= 1) {
+				playerTerritories.add(e.getKey());
+			}
+		}
+		return playerTerritories;
+	}
+
+	/**
+	 * Returns only the player territories with enemy adjacencies.
+	 * 
+	 * @param localName
+	 * @return
+	 */
+	public ArrayList<String> getFortifyReadyPlayerTerritories(String player) {
+		ArrayList<String> playerTerritories = new ArrayList<String>();
+		for (Entry<String, String> e : allocations.entrySet()) {
+			Territory t = getTerritory(e.getKey());
+			if (e.getValue().equals(player)
+					&& getEnemyAdjacents(t, player).size() >= 1) {
+				playerTerritories.add(e.getKey());
+			}
+		}
+		return playerTerritories;
+	}
 
 	public ArrayList<String> canConquerContinent(String player) {
-		//Territories in the frontline
+		// Territories in the frontline
 		ArrayList<String> frontLine = getReadyPlayerTerritories(player);
-		
-		
-		
+
 		return frontLine;
 	}
 
 	public int getTotalNumSoldiers(String player) {
-		
+
 		ArrayList<Territory> terr = getPlayerTerritoriesT(player);
-		int sum =0;
-		for(Territory t: terr){
-			sum+=t.getNumSoldiers();
+		int sum = 0;
+		for (Territory t : terr) {
+			sum += t.getNumSoldiers();
 		}
-		
+
 		return sum;
 	}
 
 	public int getTotalNumTerritories(String localName) {
 		return getPlayerTerritories(localName).size();
+	}
+
+	/**
+	 * Returns all the territories that only have friends as adjacents
+	 * 
+	 * @param player
+	 * @return ArrayList<String> insideTerritories
+	 */
+	public ArrayList<String> getInsideTerritories(String player) {
+		ArrayList<String> allTerr = getPlayerTerritories(player);
+		ArrayList<String> inside = new ArrayList<String>();
+
+		for (String t : allTerr) {
+			Territory terr = territories.get(t);
+			boolean isInside = true;
+			for (Territory adj : terr.getAdjacents()) {
+				if (!allocations.get(adj.getKey()).equals(player)) {
+					isInside = false;
+				}
+			}
+			if (isInside)
+				inside.add(t);
+		}
+
+		return inside;
+	}
+
+	/**
+	 * Returns the number of soldiers that otherPlayer has around territory terr
+	 * @param terr
+	 * @param otherPlayer
+	 * @return
+	 */
+	public int numSoldiersAround(String terr, String otherPlayer) {
+		ArrayList<Territory> t = getPlayerAdjacents(terr, otherPlayer);
+		int sum =0;
+		
+		for(Territory t1:t){
+			sum+=t1.getNumSoldiers();
+		}
+		return sum;
 	}
 }
