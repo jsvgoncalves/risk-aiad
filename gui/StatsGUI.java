@@ -59,7 +59,7 @@ public class StatsGUI extends ObserverGUI {
 	}
 
 	private void updatePlayers(Board b) {
-		players = gameAgent.getPlayers();
+		players = gameAgent.getAllAgentNames();
 		for (int i = 0; i < players.size(); i++) {
 			String playerName = players.get(i).getLocalName();
 			String playerText = "<html><font color='" + colors.get(i) + "'>" + playerName + ": "
