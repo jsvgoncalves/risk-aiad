@@ -43,7 +43,7 @@ public class FileExporter extends ObserverGUI {
 		try {
 			openWriter();
 			writer.print("Round");
-			players = gameAgent.getPlayers();
+			players = gameAgent.getAllAgentNames();
 			for (int i = 0; i < players.size(); i++) {
 				writer.print("," + players.get(i).getLocalName());
 			}

@@ -78,7 +78,7 @@ public class BoardGUI extends ObserverGUI{
 		colors.add("red");
 		colors.add("yellow");
 		System.err.println("Setting colors.");
-		ArrayList<AID> players = gameAgent.getPlayers();
+		ArrayList<AID> players = gameAgent.getAllAgentNames();
 		System.err.println("Players count: " + players.size());
 		for (int i = 0; i < players.size(); i++) {
 			System.err.println(players.get(i).getLocalName() + " is " + colors.get(i));
