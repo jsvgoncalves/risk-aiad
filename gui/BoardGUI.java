@@ -164,9 +164,9 @@ public class BoardGUI extends ObserverGUI{
 		this.add(labels.get(R.OC_BOR_KEY));
 		labels.put(R.OC_EAS_KEY, new BoardLabel("1", 862, 393, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
 		this.add(labels.get(R.OC_EAS_KEY));
-		labels.put(R.OC_OUT_KEY, new BoardLabel("1", 847, 468, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
+		labels.put(R.OC_OUT_KEY, new BoardLabel("1", 761, 476, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
 		this.add(labels.get(R.OC_OUT_KEY));
-		labels.put(R.OC_AUS_KEY, new BoardLabel("1", 761, 476, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
+		labels.put(R.OC_AUS_KEY, new BoardLabel("1", 847, 468, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
 		this.add(labels.get(R.OC_AUS_KEY));
 		labels.put(R.OC_NEW_KEY, new BoardLabel("1", 939, 500, LABEL_WIDTH, LABEL_HEIGHT, Color.red, LABEL_BORDER_COLOR));
 		this.add(labels.get(R.OC_NEW_KEY));
