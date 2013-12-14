@@ -95,11 +95,11 @@ public class GameAgent extends Agent {
 		return agentName;
 	}
 
-	public ArrayList<String> getAllAgentNames(){
-		ArrayList<String> allAgentNames = new ArrayList<String>();
+	public ArrayList<AID> getAllAgentNames(){
+		ArrayList<AID> allAgentNames = new ArrayList<AID>();
 		
 		for(AID a:agentName.keySet()){
-			allAgentNames.add(agentName.get(a));
+			allAgentNames.add(a);
 		}
 		
 		return allAgentNames;
