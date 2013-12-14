@@ -135,7 +135,7 @@ public class Launcher {
 		} else if(type.equals("Agressive")) {
 			container.acceptNewAgent(name + "-A", new agents.PlayerAgent(new AgressiveAgent())).start();
 		} else if(type.equals("Reactive")) {
-			container.acceptNewAgent(name + "-React", new agents.PlayerAgent(new ReactiveAgent(3))).start();
+			container.acceptNewAgent(name + "-React", new agents.PlayerAgent(new ReactiveAgent(5))).start();
 		} 
 	}
 

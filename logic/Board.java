@@ -317,7 +317,7 @@ public class Board implements Serializable {
 
 	public ArrayList<String> getPlayerTerritories(String player) {
 		ArrayList<String> playerTerritories = new ArrayList<String>();
-		// TODO Auto-generated method stub
+		
 		for (Entry<String, String> e : allocations.entrySet()) {
 			if (e.getValue().equals(player)) {
 				playerTerritories.add(e.getKey());

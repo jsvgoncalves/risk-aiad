@@ -1,6 +1,7 @@
 package perceptions;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public abstract class Perception implements Serializable {
 
@@ -12,4 +13,10 @@ public abstract class Perception implements Serializable {
 	public Perception(){
 	}
 
+	/**
+	 * returns the players involved in the perception except the player passed as argument
+	 * @param player
+	 * @return
+	 */
+	public abstract ArrayList<String> getAllPlayersInvolved(String player);
 }

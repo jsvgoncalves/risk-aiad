@@ -1,6 +1,7 @@
 package perceptions;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class FortifyPerception extends Perception implements Serializable {
 
@@ -44,5 +45,13 @@ public class FortifyPerception extends Perception implements Serializable {
 
 	public int getMovedSold() {
 		return movedSold;
+	}
+
+	@Override
+	public ArrayList<String> getAllPlayersInvolved(String player2) {
+		ArrayList<String> players = new ArrayList<String>();
+		if( !player2.equals(player))
+			players.add(player);
+		return players;
 	}
 }
