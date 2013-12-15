@@ -42,6 +42,7 @@ public class GameAgent extends Agent {
 	int gameStatus = R.GAME_WAITING;
 	private Board board;
 	private ArrayList<ObserverGUI> listeners = new ArrayList<ObserverGUI>();
+	private ArrayList<AID> initialIDs = new ArrayList<AID>();
 	//Maps AID -> agentName
 	private HashMap<AID, String> agentName = new HashMap<AID,String>();
 	
@@ -79,6 +80,10 @@ public class GameAgent extends Agent {
 
 	}
 
+	public void addID(AID id){
+		initialIDs.add(id);
+	}
+	
 	public void close(){
 		closed=true;
 	}
@@ -96,13 +101,7 @@ public class GameAgent extends Agent {
 	}
 
 	public ArrayList<AID> getAllAgentNames(){
-		ArrayList<AID> allAgentNames = new ArrayList<AID>();
-		
-		for(AID a:agentName.keySet()){
-			allAgentNames.add(a);
-		}
-		
-		return allAgentNames;
+		return initialIDs;
 	}
 	
 	private void printHeadMessage(String message) {
