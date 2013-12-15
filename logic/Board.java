@@ -570,6 +570,19 @@ public class Board implements Serializable {
 		
 		return sum;
 	}
+	
+	public int numTerritoriesContinent(String player, String continent) {
+		ArrayList<String> listContinent = getContinent(continent);
+		int sum=0;
+		
+		for(String t:listContinent){
+			if(allocations.get(t).equals(player)){
+				sum++;
+			}
+		}
+		
+		return sum;
+	}
 
 	public int getContinentBonus(String player) {
 
