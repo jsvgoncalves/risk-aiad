@@ -279,6 +279,7 @@ public class Board implements Serializable {
 		NA_PLA.setAdjacent(NA_PAC);
 		NA_PLA.setAdjacent(NA_LAW);
 		NA_PLA.setAdjacent(NA_EAS);
+		NA_PLA.setAdjacent(NA_NUN);
 		NA_LAW.setAdjacent(NA_EAS);
 		NA_LAW.setAdjacent(NA_NUN);
 		NA_LAW.setAdjacent(NA_GRE);
@@ -685,6 +686,7 @@ public class Board implements Serializable {
 		return playerTerritories;
 	}
 
+	
 	public int getTotalNumSoldiers(String player) {
 
 		ArrayList<Territory> terr = getPlayerTerritoriesT(player);
@@ -748,4 +750,25 @@ public class Board implements Serializable {
 		}
 		return false;
 	}
+
+	/**
+	 * Returns the player territories with at least i units.
+	 * @param localName
+	 * @param i
+	 * @return
+	 */
+	public ArrayList<String> getPlayerTerritories(String player, int i) {
+		ArrayList<String> playerTerritories = new ArrayList<String>();
+		
+		for (Entry<String, String> e : allocations.entrySet()) {
+			Territory t = getTerritory(e.getKey());
+			if (e.getValue().equals(player)
+					&& t.getNumSoldiers() >= i) {
+				playerTerritories.add(e.getKey());
+			}
+		}
+		return playerTerritories;
+	}
+	
+	
 }

@@ -26,21 +26,16 @@ public class HumanAgent extends PlayerAgentBehaviours {
 	 * @see agents.PlayerAgentBehaviours#receiveSoldiers(logic.Board, int)
 	 */
 	@Override
-	public ReceiveAction receiveSoldiers(Board b, int n) {
+	public ReceiveAction receiveSoldiers(Board b, int availableSoldiers) {
 		ReceiveAction receive = new ReceiveAction();
-
-		ArrayList<String> playerTerritories = b.getPlayerTerritories(myAgent
-				.getLocalName());
-
-		int sum = 0;
-
-		while (sum < n) {
-			System.err
-					.println("You have " + (n - sum) + " soldiers available!");
+		ArrayList<String> playerTerritories = b.getPlayerTerritories(myAgent.getLocalName());
+		int placedSoldiers = 0;
+		
+		while (placedSoldiers < availableSoldiers) {
+			System.err.println("You have " + (availableSoldiers - placedSoldiers) + " soldiers available!");
 
 			for (int i = 0; i < playerTerritories.size(); i++) {
-				System.err.println(i
-						+ 1
+				System.err.println( (i + 1)
 						+ " - "
 						+ b.getTerritory(playerTerritories.get(i)).getName()
 						+ " ( "
@@ -48,19 +43,20 @@ public class HumanAgent extends PlayerAgentBehaviours {
 								.getNumSoldiers() + " ) ");
 			}
 
-			System.err
-					.println("Enter the territory where you want to put the soldiers:");
+			System.err.println("Enter the territory where you want to put the soldiers:");
 			int from = reader.nextInt();
 
-			int num = n + 1;
-			while (num > n - sum) {
-				System.err.println("Insert soldier's number:");
-				num = reader.nextInt();
-				if (num > n - 1)
+			int currentNum = availableSoldiers + 1;
+			while (currentNum > availableSoldiers - placedSoldiers) {
+				System.err.println("Insert number of soldiers:");
+				currentNum = reader.nextInt();
+				if (currentNum > availableSoldiers) {
 					System.err.println("Invalid number of soldiers!");
+				}
 			}
-			sum += num;
-			receive.addSoldiersTerritory(num, playerTerritories.get(from - 1));
+			placedSoldiers += currentNum;
+			// Add the soldiers to the action and adjust the territory index.
+			receive.addSoldiersTerritory(currentNum, playerTerritories.get(from - 1));
 		}
 
 		return receive;
@@ -117,8 +113,7 @@ public class HumanAgent extends PlayerAgentBehaviours {
 	@Override
 	public FortifyAction fortify(Board b) {
 
-		ArrayList<String> playerTerritories = b.getPlayerTerritories(myAgent
-				.getLocalName());
+		ArrayList<String> playerTerritories = b.getPlayerTerritories(myAgent.getLocalName(), 2);
 
 		System.err.println("0 - Don't fortify");
 
@@ -130,8 +125,7 @@ public class HumanAgent extends PlayerAgentBehaviours {
 					+ " )");
 		}
 
-		System.err
-				.println("Enter the territory from which you want to move soldiers:");
+		System.err.println("Enter the territory from which you want to move soldiers:");
 		int from = reader.nextInt();
 
 		if (from == 0)
