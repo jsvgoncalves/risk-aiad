@@ -384,7 +384,7 @@ public class DeliberativeAgent extends PlayerAgentBehaviours {
 		double maxFA = avaliateFortification(b, 0);
 		
 		for (String front : fortifyReady) {
-			ArrayList<Territory> possible = b.getPlayerAdjacents(front, player);
+			ArrayList<Territory> possible = b.getReachables(b.getTerritory(front), player);
 			for (Territory p : possible) {
 				for (int n = 1; n < p.getNumSoldiers(); n++) {
 					double fa = faFortify(p, front, n, b);

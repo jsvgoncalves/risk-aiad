@@ -771,4 +771,22 @@ public class Board implements Serializable {
 	}
 	
 	
+	/**
+	 * Returns territories from which it is possible to fortify (has adjancencies and numSoldiers > 1).
+	 * @param player
+	 * @param i
+	 * @return
+	 */
+	public ArrayList<String> getPlayerTerritoriesFortifyFrom(String player) {
+		ArrayList<String> playerTerritories = getPlayerTerritories(player, 2);
+		ArrayList<String> result = new ArrayList<String>();
+		for (String t : playerTerritories) {
+			if(getTerritory(t).getAdjacents().size() >= 1) {
+				result.add(t);
+			}
+		}
+		return result;
+	}
+	
+	
 }

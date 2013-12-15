@@ -58,9 +58,8 @@ public class ValidateAction {
 				|| !b
 						.isPlayersTerritory(name, action.getTo()))
 			return false;
-
-		for (Territory t : b.getTerritory(action.getFrom())
-				.getAdjacents()) {
+//b.getTerritory(action.getFrom()).getAdjacents()
+		for (Territory t : b.getReachables(b.getTerritory(action.getFrom()), name)) {
 			if (t.getKey().equals(action.getTo())
 					&& b.getTerritory(action.getFrom())
 							.getNumSoldiers() > action.getN())

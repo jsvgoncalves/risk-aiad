@@ -346,7 +346,7 @@ public class ReactiveAgent extends PlayerAgentBehaviours {
 
 			for (Territory t : myAdjacents) {
 				// Get all the adjacents with more than 1 soldier
-				for (Territory t2 : b.getPlayerAdjacents(t.getKey(),
+				for (Territory t2 : b.getReachables(t,
 						myAgent.getLocalName())) {
 					if (t2.getNumSoldiers() > 1)
 						possibleAtacks.add(new PossibleToAtack(t2.getKey(), t

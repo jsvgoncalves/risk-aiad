@@ -113,7 +113,7 @@ public class HumanAgent extends PlayerAgentBehaviours {
 	@Override
 	public FortifyAction fortify(Board b) {
 
-		ArrayList<String> playerTerritories = b.getPlayerTerritories(myAgent.getLocalName(), 2);
+		ArrayList<String> playerTerritories = b.getPlayerTerritoriesFortifyFrom(myAgent.getLocalName());
 
 		System.err.println("0 - Don't fortify");
 
