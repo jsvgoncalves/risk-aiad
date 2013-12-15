@@ -73,7 +73,7 @@ public class HumanAgent extends PlayerAgentBehaviours {
 	 */
 	@Override
 	public AtackAction atack(Board b) {
-		ArrayList<String> playerTerritories = b.getPlayerTerritories(myAgent
+		ArrayList<String> playerTerritories = b.getReadyPlayerTerritories(myAgent
 				.getLocalName());
 
 		System.err.println("0 - Don't attack");
@@ -139,7 +139,7 @@ public class HumanAgent extends PlayerAgentBehaviours {
 		
 		// Choose an adjacent territory to attack.
 		Territory terr = b.getTerritory(playerTerritories.get(from-1));
-		ArrayList<Territory> adjacentTerritories = b.getPlayerAdjacents(terr.getKey(),
+		ArrayList<Territory> adjacentTerritories = b.getReachables(terr,
 				myAgent.getLocalName());
 		System.err.println("Enter the territory to move:");
 		for (int i = 0; i < adjacentTerritories.size(); i++) {

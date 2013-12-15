@@ -35,16 +35,17 @@ public class GameStartGUI extends JPanel
 	String[] agentTypes = { "Random", "Agressive", "Reactive", "Human" };
 	private BufferedImage board_img;
 	private TextField filePrefix;
+	private String appType;
 	
-	public GameStartGUI() {
+	public GameStartGUI(int numOfAgents, String appType) {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		
+		this.appType = appType;
 		try {
 		    board_img = ImageIO.read(BoardGUI.class.getResource("res/config.jpg"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < numOfAgents; i++) {
 			addComboBox(i);
 		}
 		addFilePrefixTextField();
@@ -92,7 +93,11 @@ public class GameStartGUI extends JPanel
 	public void actionPerformed(ActionEvent e) {
 		if ("start".equals(e.getActionCommand())) {
 			ArrayList<String> agentTypes = compactAgentTypes();
-			Launcher.startGame(agentTypes, filePrefix.getText());
+			if(appType.equals("server")) {
+				Launcher.startServer(agentTypes, filePrefix.getText());				
+			} else {
+				Launcher.startClient(agentTypes, filePrefix.getText());
+			}
 		} else if ("combo".equals(e.getActionCommand())) {
 			JComboBox cb = (JComboBox)e.getSource();
 

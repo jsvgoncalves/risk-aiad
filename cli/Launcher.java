@@ -2,6 +2,7 @@ package cli;
 
 import gui.BoardGUI;
 import gui.FileExporter;
+import gui.GameStartChooserGUI;
 import gui.GameStartGUI;
 import gui.StatsGUI;
 
@@ -32,6 +33,7 @@ public class Launcher {
 	private static AgentContainer container;
 	protected static GameAgent gameAgent;
 	private static JFrame configFrame;
+	private static JFrame initFrame;
 	private static JFrame statsFrame;
 	private static JFrame gameFrame;
 	private static JFrame fileFrame;
@@ -43,19 +45,29 @@ public class Launcher {
 		} catch (Exception e) {
 			// handle exception
 		}
-		GameAgent gameAgent = setupJADE();
 
-		configGame();
+		initConfigs();
+//		configGame();
 		
 
 	}
 
-	private static void configGame() {
+	private static void initConfigs() {
+		initFrame = new JFrame("RISK");
+		initFrame.setSize(new Dimension(400, 400));
+		initFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		final GameStartChooserGUI startGameGui = new GameStartChooserGUI();
+		initFrame.add(startGameGui);
+		initFrame.setVisible(true);
+	}
+
+	private static void configGame(int numOfAgents, String appType) {
 		configFrame = new JFrame("RISK");
 		configFrame.setSize(new Dimension(400, 400));
 		configFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		final GameStartGUI startGameGui = new GameStartGUI();
+		final GameStartGUI startGameGui = new GameStartGUI(numOfAgents, appType);
 		configFrame.add(startGameGui);
+		initFrame.setVisible(false);
 		configFrame.setVisible(true);
 	}
 
@@ -76,7 +88,7 @@ public class Launcher {
 		return gameAgent;
 	}
 	
-	public static void startGame(ArrayList<String> agentTypes, String filePrefix) {
+	public static void startServer(ArrayList<String> agentTypes, String filePrefix) {
 		createStatsFrame();
 		createGameFrame();
 		createFilePrinter(filePrefix);
@@ -136,7 +148,39 @@ public class Launcher {
 			container.acceptNewAgent(name + "-A", new agents.PlayerAgent(new AgressiveAgent())).start();
 		} else if(type.equals("Reactive")) {
 			container.acceptNewAgent(name + "-React", new agents.PlayerAgent(new ReactiveAgent(3))).start();
-		} 
+		}
+	}
+
+	public static void setupClient(int numOfAgents, String ip, String port) {
+		setupClientJADE(ip, port);
+		configGame(numOfAgents, "client");
+	}
+
+	private static void setupClientJADE(String ip, String port) {
+		runtime = jade.core.Runtime.instance();
+		Profile profile = new ProfileImpl();
+		profile.setParameter(R.GUI_CONFIG, R.GUI_ON);
+		profile.setParameter(R.PORT_CONFIG, port);
+		profile.setParameter("host", ip);
+		profile.setParameter("port", port);
+		container = runtime.createAgentContainer(profile);
+	}
+
+	public static void setupServer(int numOfAgents) {
+		GameAgent gameAgent = setupJADE();
+		configGame(numOfAgents, "server");
+	}
+
+	public static void startClient(ArrayList<String> agentTypes, String text) {
+		try {
+			ArrayList<String> names = util.NameGenerator.randomName(agentTypes.size());
+			for (int i = 0; i < agentTypes.size(); i++) {
+				addAgent("Client-" + names.get(i), agentTypes.get(i));
+			}
+			
+		} catch (StaleProxyException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
