@@ -148,6 +148,10 @@ public class DeliberativeAgent extends PlayerAgentBehaviours {
 			ArrayList<String> agressive, ArrayList<String> reactive,
 			ArrayList<String> random) {
 
+		
+		if (!b.isOfContinent(b.getTerritory(territory), continent))
+			return 0;
+		
 		double fa = 0;
 
 		ArrayList<Territory> enemies = b.getEnemyAdjacents(
