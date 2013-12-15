@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 
 import agents.AgressiveAgent;
+import agents.DeliberativeAgent;
 import agents.GameAgent;
 import agents.HumanAgent;
 import agents.RandomAgent;
@@ -136,7 +137,9 @@ public class Launcher {
 			container.acceptNewAgent(name + "-A", new agents.PlayerAgent(new AgressiveAgent())).start();
 		} else if(type.equals("Reactive")) {
 			container.acceptNewAgent(name + "-React", new agents.PlayerAgent(new ReactiveAgent(5))).start();
-		} 
+		} else if(type.equals("Deliberative")){
+			container.acceptNewAgent(name + "-D", new agents.PlayerAgent(new DeliberativeAgent())).start();
+		}
 	}
 
 }

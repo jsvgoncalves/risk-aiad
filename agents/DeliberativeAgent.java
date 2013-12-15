@@ -2,10 +2,12 @@ package agents;
 
 import java.util.ArrayList;
 
+import perceptions.AtackPerception;
 import perceptions.Perception;
 
 import userbehaviours.User;
 import userbehaviours.UserBehaviours;
+import util.R;
 
 import logic.Board;
 import logic.Territory;
@@ -26,8 +28,14 @@ public class DeliberativeAgent extends PlayerAgentBehaviours {
 	private final double RECEIVE_RANDOM = 1;
 
 	private ArrayList<User> players = new ArrayList<User>();
-	private UserBehaviours userB = new UserBehaviours(players);
-	private String player = myAgent.getLocalName();
+	private UserBehaviours userB;
+	private String player;
+	private ArrayList<String> lastRoundAtacked;
+	
+	public DeliberativeAgent(){
+		userB = new UserBehaviours(players);
+		lastRoundAtacked = new ArrayList<String>();
+	}
 
 	private boolean isNewPlayer(String player) {
 		for (User user : players) {
@@ -52,15 +60,30 @@ public class DeliberativeAgent extends PlayerAgentBehaviours {
 	public ReceiveAction receiveSoldiers(Board b, int n) {
 		ArrayList<Perception> perceptions = getAllPerceptions();
 		ReceiveAction receive = new ReceiveAction();
+		player = myAgent.getLocalName();
 
 		// Updates other playerInformation
-		checkNewPlayers(perceptions);
+		checkNewPlayers(perceptions,b);
 		userB = new UserBehaviours(players);
+		
+		
 
 		// Sort players by their behaviours
 		ArrayList<String> agressive = getAgressivePlayers();
 		ArrayList<String> random = getRandomPlayers();
 		ArrayList<String> reactive = getReactivePlayers();
+		
+		System.err.println("Agressive");
+		for(String ag:agressive)
+			System.err.println(ag);
+		
+		System.err.println("Random");
+		for(String ag:random)
+			System.err.println(ag);
+		
+		System.err.println("Reactive");
+		for(String ag:reactive)
+			System.err.println(ag);
 
 		// Get all the frontlineTerritories
 		ArrayList<String> readyTerritories = b
@@ -148,7 +171,7 @@ public class DeliberativeAgent extends PlayerAgentBehaviours {
 	 * @param perceptions
 	 *            all perceptions
 	 */
-	private void checkNewPlayers(ArrayList<Perception> perceptions) {
+	private void checkNewPlayers(ArrayList<Perception> perceptions,Board b) {
 		for (Perception p : perceptions) {
 			ArrayList<String> ps = p.getAllPlayersInvolved(myAgent
 					.getLocalName());
@@ -157,7 +180,60 @@ public class DeliberativeAgent extends PlayerAgentBehaviours {
 					this.players.add(new User(player));
 			}
 		}
+		
+		if(lastRoundAtacked.size() == 0)
+			return;
+		
+		ArrayList<AtackPerception> atacks = getMyAtacks(perceptions,b);
+		for(AtackPerception a: atacks){
+			if(atackedLastRound(a.getFrom()) && a.getPlayerTo().equals(player)){
+				userAtackedBack(a.getPlayerFrom());
+			}else if( !atackedLastRound(a.getFrom()) && a.getPlayerTo().equals(player))
+				userAtackedAlone(a.getPlayerFrom());
+		}
+		
+	}
 
+	private void userAtackedAlone(String playerFrom) {
+		for(User user:players){
+			if( user.getName().equals(playerFrom)){
+				user.addAtackAlone();
+			}
+		}
+	}
+
+	private void userAtackedBack(String playerFrom) {
+		for(User user:players){
+			if( user.getName().equals(playerFrom)){
+				user.addAtackBack();
+			}
+		}
+		
+	}
+
+	private boolean atackedLastRound(String from) {
+		for(String l:lastRoundAtacked){
+			if(l.equals(from))
+				return true;
+		}
+		return false;
+	}
+
+	private ArrayList<AtackPerception> getMyAtacks(
+			ArrayList<Perception> perceptions,Board b) {
+		
+		ArrayList<AtackPerception> ata = new ArrayList<AtackPerception>();
+		
+		for(Perception p:perceptions){
+			if( p.getClass().getName().equals(R.PERCEPTION_ATACK))
+			{
+				AtackPerception a = (AtackPerception)p;
+				if( b.isPlayersTerritory(player, a.getTo()))
+					ata.add(a);
+			}
+		}
+		
+		return ata;
 	}
 
 	@Override
@@ -197,6 +273,7 @@ public class DeliberativeAgent extends PlayerAgentBehaviours {
 		ArrayList<Territory> enemyAdjacents = b.getEnemyAdjacents(
 				b.getTerritory(from), player);
 		String to = enemyAdjacents.get(posJ).getKey(); 
+		lastRoundAtacked.add(to);
 		
 		return new PerformAtackAction(from, to);
 	}
