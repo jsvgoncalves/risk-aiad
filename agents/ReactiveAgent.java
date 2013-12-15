@@ -227,8 +227,13 @@ public class ReactiveAgent extends PlayerAgentBehaviours {
 	public AtackAction atack(Board b) {
 		ArrayList<Perception> perceptions = getAllPerceptions();
 
-		int div = (b.getTotalNumSoldiers(myAgent.getLocalName()) / b
-				.getTotalNumTerritories(myAgent.getLocalName()));
+		int div;
+
+		if (b.getTotalNumTerritories(myAgent.getLocalName()) == 0)
+			div = 1;
+		else
+			div = b.getTotalNumSoldiers(myAgent.getLocalName())
+					/ b.getTotalNumTerritories(myAgent.getLocalName());
 
 		if (div == 0)
 			div = 1;
@@ -383,7 +388,8 @@ public class ReactiveAgent extends PlayerAgentBehaviours {
 			if (b.isPlayersTerritory(myAgent.getLocalName(), p.getTo())
 					&& !b.isPlayersTerritory(myAgent.getLocalName(),
 							p.getFrom())
-					&& b.numSoldiersAround(p.getFrom(),myAgent.getLocalName()) > b.getTerritory(p.getFrom()).getNumSoldiers()) {
+					&& b.numSoldiersAround(p.getFrom(), myAgent.getLocalName()) > b
+							.getTerritory(p.getFrom()).getNumSoldiers()) {
 				ret.add(p);
 			}
 		}

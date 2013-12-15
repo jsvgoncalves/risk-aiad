@@ -32,7 +32,7 @@ public class GameStartGUI extends JPanel
 	private static final long serialVersionUID = -269374791210838235L;
 	private JButton b1;
 	ArrayList<JComboBox> agentCombos = new ArrayList<JComboBox>();
-	String[] agentTypes = { "Random", "Agressive", "Reactive", "Human" };
+	String[] agentTypes = { "Random", "Agressive", "Reactive", "Human", "Deliberative" };
 	private BufferedImage board_img;
 	private TextField filePrefix;
 	private String appType;

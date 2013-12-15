@@ -62,6 +62,7 @@ public class RequestResponder extends AchieveREResponder {
 			AID sender = request.getSender();
 			p.add(sender);
 			agentName.put(sender, request.getContent().split(" ")[1]);
+			((GameAgent)myAgent).addID(sender);
 		}
 		else{
 			join.setPerformative(ACLMessage.FAILURE);

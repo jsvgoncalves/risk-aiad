@@ -1,6 +1,7 @@
 package perceptions;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class AtackPerception extends Perception implements Serializable {
 
@@ -97,6 +98,18 @@ public class AtackPerception extends Perception implements Serializable {
 
 	private void setConquered(boolean conquered) {
 		this.conquered = conquered;
+	}
+
+	@Override
+	public ArrayList<String> getAllPlayersInvolved(String player) {
+		ArrayList<String> players = new ArrayList<String>();
+		
+		if(!player.equals(playerFrom))
+			players.add(playerFrom);
+		
+		if(!player.equals(playerTo))
+			players.add(playerTo);
+		return players;
 	}
 
 }

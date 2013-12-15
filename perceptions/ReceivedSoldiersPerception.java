@@ -1,6 +1,7 @@
 package perceptions;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class ReceivedSoldiersPerception extends Perception implements
@@ -38,6 +39,14 @@ public class ReceivedSoldiersPerception extends Perception implements
 
 	public Hashtable<String, Integer> getInitial() {
 		return initial;
+	}
+
+	@Override
+	public ArrayList<String> getAllPlayersInvolved(String player2) {
+		ArrayList<String> players = new ArrayList<String>();
+		if (!player2.equals(player))
+			players.add(player);
+		return players;
 	}
 
 }
