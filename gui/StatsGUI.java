@@ -15,7 +15,7 @@ import logic.Board;
 public class StatsGUI extends ObserverGUI {
 	
 	public static final int PANEL_WIDTH = 200;
-	public static final int PANEL_HEIGHT = 200;
+	public static final int PANEL_HEIGHT = 400;
 	private ArrayList<String> colors = new ArrayList<String>();
 	// Maps the players to a color.
 	private HashMap<String, String> playerColors = new HashMap<String, String>();
@@ -49,7 +49,9 @@ public class StatsGUI extends ObserverGUI {
 		colors.add("yellow");
 		players = gameAgent.getPlayers();
 		for (int i = 0; i < players.size(); i++) {
-			String playerText = "<html><font color='" + colors.get(i) + "'>" + players.get(i).getLocalName() + "</font></html>";
+			String playerText = "<html><div style='color:" + colors.get(i) + "; width: 200px'><b>"
+								+ players.get(i).getLocalName() 
+								+ "</b></div></html>";
 			PlayersLabel playerLabel = new PlayersLabel(playerText);
 			playerLabel.setBackground(colors.get(i));
 			playerLabels.add(playerLabel);
@@ -62,9 +64,11 @@ public class StatsGUI extends ObserverGUI {
 		players = gameAgent.getAllAgentNames();
 		for (int i = 0; i < players.size(); i++) {
 			String playerName = players.get(i).getLocalName();
-			String playerText = "<html><font color='" + colors.get(i) + "'>" + playerName + ": "
-								+ b.getPlayerTotalSoldiers(playerName)+ " (" +
-								+ b.getPlayerTerritories(playerName).size()  + ")</font></html>";
+			String playerText = "<html><div style='color:" + colors.get(i) + "; width: 200px; border-bottom: 1px solid black;'>"
+								+ "<b> " + playerName + " </b><br> "
+								+ "  Soldados: " + b.getPlayerTotalSoldiers(playerName)+ " <br>"
+								+ "  Territórios: " + b.getPlayerTerritories(playerName).size()  + "<br> "
+								+ "  Bónus: " + b.getContinentBonus(playerName) + "</div></html>";
 			playerLabels.get(i).revalidate();
 			playerLabels.get(i).repaint();
 			playerLabels.get(i).setText(playerText);

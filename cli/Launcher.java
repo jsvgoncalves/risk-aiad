@@ -118,7 +118,7 @@ public class Launcher {
 	}
 
 	private static void createStatsFrame() {
-		statsFrame = new JFrame("RISK");
+		statsFrame = new JFrame("RISK - Stats");
 		statsFrame.setSize(new Dimension(StatsGUI.PANEL_WIDTH, StatsGUI.PANEL_HEIGHT));
 		statsFrame.setMinimumSize(new Dimension(StatsGUI.PANEL_WIDTH, StatsGUI.PANEL_HEIGHT));
 		statsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
