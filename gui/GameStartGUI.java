@@ -96,6 +96,7 @@ public class GameStartGUI extends JPanel
 			if(appType.equals("server")) {
 				Launcher.startServer(agentTypes, filePrefix.getText());				
 			} else {
+				// In this case the filePrefix will act as the clientTag
 				Launcher.startClient(agentTypes, filePrefix.getText());
 			}
 		} else if ("combo".equals(e.getActionCommand())) {

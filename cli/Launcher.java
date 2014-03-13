@@ -171,11 +171,18 @@ public class Launcher {
 		configGame(numOfAgents, "server");
 	}
 
-	public static void startClient(ArrayList<String> agentTypes, String text) {
+	/**
+	 * Starts the game in client mode.
+	 * @param agentTypes The list with agent types.
+	 * @param clientTag The tagName from the host the agents are running.
+	 * 
+	 * The clientTag helps preventing name clash
+	 */
+	public static void startClient(ArrayList<String> agentTypes, String clientTag) {
 		try {
 			ArrayList<String> names = util.NameGenerator.randomName(agentTypes.size());
 			for (int i = 0; i < agentTypes.size(); i++) {
-				addAgent("Client-" + names.get(i), agentTypes.get(i));
+				addAgent(clientTag + " - " + names.get(i), agentTypes.get(i));
 			}
 			
 		} catch (StaleProxyException e) {
