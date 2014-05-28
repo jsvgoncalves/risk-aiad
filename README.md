@@ -1,5 +1,6 @@
 Multi-Agent-based Risk
 =========
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.10179.png)](https://zenodo.org/record/10179)
 
 A version of the RISK board game developed in the "Agents and Distributed Inteligence" Course at FEUP. 
 
